@@ -10,13 +10,22 @@ import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
 import reactor.test.test
+import javax.annotation.PostConstruct
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ApiTest(@LocalServerPort port: Int) {
+class ApiTest {
 
-    // TODO Migrate to WebTestClient when https://youtrack.jetbrains.com/issue/KT-5464 will be fixed
-    private val client = WebClient.create("http://localhost:$port")
+    @LocalServerPort
+    private var port: Int? = null
+    private lateinit var client: WebClient
+
+    @PostConstruct
+    fun postConstruct() {
+        println("random port = $port")
+        // TODO Migrate to WebTestClient when https://youtrack.jetbrains.com/issue/KT-5464 will be fixed
+        client = WebClient.create("http://localhost:$port")
+    }
 
     @Test
     fun `Verify find by name JSON API`() {
