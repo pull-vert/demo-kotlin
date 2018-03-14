@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.bodyToFlux
 import org.springframework.web.reactive.function.client.bodyToMono
 import reactor.test.test
 import javax.annotation.PostConstruct
@@ -28,12 +29,20 @@ class ApiTest {
     }
 
     @Test
-    fun `Verify find by name JSON API`() {
+    fun `Verify findByName JSON API returns Margerite`() {
         client.get().uri("/api/cows/Marguerite").retrieve().bodyToMono<Cow>()
                 .test()
                 .consumeNextWith {
                     Assertions.assertThat(it.name).isEqualTo("Marguerite")
                     Assertions.assertThat(it.lastCalvingDate).isNotNull()
                 }.verifyComplete()
+    }
+
+    @Test
+    fun `Verify findAll JSON API returns 2 Cows`() {
+        client.get().uri("/api/cows/").retrieve().bodyToFlux<Cow>()
+                .test()
+                .expectNextCount(2)
+                .verifyComplete()
     }
 }

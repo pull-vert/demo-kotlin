@@ -16,7 +16,7 @@ class CowRepositoryTest {
     private lateinit var cowRepository: CowRepository
 
     @Test
-    fun `Assert findByName returns existing Marguerite Cow`() {
+    fun `Verify findByName returns existing Marguerite Cow`() {
         cowRepository.findByName("Marguerite")
                 .test()
                 .consumeNextWith {
@@ -27,9 +27,17 @@ class CowRepositoryTest {
     }
 
     @Test
-    fun `Assert findByName returns no Paquerette Cow`() {
+    fun `Verify findByName returns no Paquerette Cow`() {
         cowRepository.findByName("Paquerette")
                 .test()
+                .verifyComplete()
+    }
+
+    @Test
+    fun `Verify findAll returns 2 Cows`() {
+        cowRepository.findAll()
+                .test()
+                .expectNextCount(2)
                 .verifyComplete()
     }
 }
