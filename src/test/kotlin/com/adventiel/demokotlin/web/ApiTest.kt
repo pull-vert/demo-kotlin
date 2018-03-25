@@ -1,7 +1,7 @@
 package com.adventiel.demokotlin.web
 
 import com.adventiel.demokotlin.model.Cow
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.boot.test.context.SpringBootTest
@@ -34,8 +34,8 @@ class ApiTest {
                 .bodyToMono<Cow>()
                 .test()
                 .consumeNextWith {
-                    Assertions.assertThat(it.name).isEqualTo("Marguerite")
-                    Assertions.assertThat(it.lastCalvingDate).isNotNull()
+                    assertThat(it.name).isEqualTo("Marguerite")
+                    assertThat(it.lastCalvingDate).isNotNull()
                 }.verifyComplete()
     }
 
