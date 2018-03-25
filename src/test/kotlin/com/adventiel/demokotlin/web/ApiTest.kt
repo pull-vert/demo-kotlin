@@ -30,7 +30,8 @@ class ApiTest {
 
     @Test
     fun `Verify findByName JSON API returns Margerite`() {
-        client.get().uri("/api/cows/Marguerite").retrieve().bodyToMono<Cow>()
+        client.get().uri("/api/cows/Marguerite").retrieve()
+                .bodyToMono<Cow>()
                 .test()
                 .consumeNextWith {
                     Assertions.assertThat(it.name).isEqualTo("Marguerite")
@@ -40,7 +41,8 @@ class ApiTest {
 
     @Test
     fun `Verify findAll JSON API returns 2 Cows`() {
-        client.get().uri("/api/cows/").retrieve().bodyToFlux<Cow>()
+        client.get().uri("/api/cows/").retrieve()
+                .bodyToFlux<Cow>()
                 .test()
                 .expectNextCount(2)
                 .verifyComplete()
