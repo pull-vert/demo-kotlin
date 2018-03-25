@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository
 import reactor.core.publisher.Mono
 import java.util.*
 
-@Repository
-interface CowRepository : ReactiveMongoRepository<Cow, UUID> {
-    fun findByName(name: String): Mono<Cow>
-}
+//@Repository
+//interface CowRepository : ReactiveMongoRepository<Cow, UUID> {
+//    fun findByName(name: String): Mono<Cow>
+//}
