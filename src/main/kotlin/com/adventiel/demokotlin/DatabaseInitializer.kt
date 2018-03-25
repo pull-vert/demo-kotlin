@@ -15,8 +15,9 @@ class DatabaseInitializer(
         val marguerite = Cow("Marguerite", LocalDateTime.of(2017, 9, 28, 13, 30))
         val laNoiraude = Cow("La Noiraude")
 
-        cowRepository.deleteAll()
-                .block()
+        // uncomment if targetting a real MongoDB Database (not embedded)
+//        cowRepository.deleteAll()
+//                .block()
 
         listOf(marguerite, laNoiraude)
                 .toFlux()
