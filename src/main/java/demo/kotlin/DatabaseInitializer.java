@@ -1,7 +1,7 @@
-package com.adventiel.demokotlin;
+package demo.kotlin;
 
-import com.adventiel.demokotlin.model.Cow;
-import com.adventiel.demokotlin.repository.CowRepository;
+import demo.kotlin.model.Cow;
+import demo.kotlin.repository.CowRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 

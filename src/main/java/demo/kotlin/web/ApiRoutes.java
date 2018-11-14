@@ -1,4 +1,4 @@
-package com.adventiel.demokotlin.web;
+package demo.kotlin.web;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

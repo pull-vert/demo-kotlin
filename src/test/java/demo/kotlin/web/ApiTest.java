@@ -1,6 +1,7 @@
-package com.adventiel.demokotlin.web;
+package demo.kotlin.web;
 
-import com.adventiel.demokotlin.model.Cow;
+import demo.kotlin.model.Cow;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ApiTest {
+class ApiTest {
 
     @Autowired
     private WebTestClient client;
 
+    @DisplayName("Verify findByName JSON API returns Margerite")
     @Test
-    public void verifyFindByNameJSONAPIReturnsMargerite() {
+    void verifyFindByNameJSONAPIReturnsMargerite() {
         client.get().uri("/api/cows/Marguerite")
                 .exchange()
                 .expectBody(Cow.class)
@@ -29,8 +31,9 @@ public class ApiTest {
         });
     }
 
+    @DisplayName("Verify findAll JSON API returns 2 Cows")
     @Test
-    public void verifyFindAllJSONAPIReturns2Cows() {
+    void verifyFindAllJSONAPIReturns2Cows() {
         client.get().uri("/api/cows/")
                 .exchange()
                 .expectBodyList(Cow.class)

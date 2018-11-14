@@ -1,5 +1,6 @@
-package com.adventiel.demokotlin.repository;
+package demo.kotlin.repository;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +12,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class CowRepositoryTest {
+class CowRepositoryTest {
     @Autowired
     private CowRepository cowRepository;
 
+    @DisplayName("Verify findByName returns existing Marguerite Cow")
     @Test
-    public void verifyFindByNameReturnsExistingMargueriteCow() {
+    void verifyFindByNameReturnsExistingMargueriteCow() {
         StepVerifier.create(cowRepository.findByName("Marguerite"))
                 .consumeNextWith(next -> {
                     assertThat(next.getName()).isEqualTo("Marguerite");
@@ -25,14 +27,16 @@ public class CowRepositoryTest {
                 }).verifyComplete();
     }
 
+    @DisplayName("Verify findByName returns no Paquerette Cow")
     @Test
-    public void verifyFindByNameReturnsNoPaqueretteCow() {
+    void verifyFindByNameReturnsNoPaqueretteCow() {
         StepVerifier.create(cowRepository.findByName("Paquerette"))
                 .verifyComplete();
     }
 
+    @DisplayName("Verify findAll returns 2 Cows")
     @Test
-    public void verifyFindAllReturns2Cows() {
+    void verifyFindAllReturns2Cows() {
         StepVerifier.create(cowRepository.findAll())
                 .expectNextCount(2)
                 .verifyComplete();

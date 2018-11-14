@@ -1,4 +1,4 @@
-package com.adventiel.demokotlin.model;
+package demo.kotlin.model;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
