@@ -1,47 +1,39 @@
 package com.adventiel.demokotlin.web;
 
 import com.adventiel.demokotlin.model.Cow;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.test.StepVerifier;
-
-import javax.annotation.PostConstruct;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ApiTest {
 
-    @LocalServerPort
-    private Integer port;
-    private WebClient client;
-
-    @PostConstruct
-    public void postConstruct() {
-        System.out.println("random port = " + port);
-        client = WebClient.create("http://localhost:" + port);
-    }
+    @Autowired
+    private WebTestClient client;
 
     @Test
     public void verifyFindByNameJSONAPIReturnsMargerite() {
-        StepVerifier.create(client.get().uri("/api/cows/Marguerite").retrieve()
-                .bodyToMono(Cow.class))
-                .consumeNextWith(next -> {
-            assertThat(next.getName()).isEqualTo("Marguerite");
-            assertThat(next.getLastCalvingDate()).isNotNull();
-        }).verifyComplete();
+        client.get().uri("/api/cows/Marguerite")
+                .exchange()
+                .expectBody(Cow.class)
+                .consumeWith(next -> {
+                    final Cow cow = next.getResponseBody();
+            assertThat(cow.getName()).isEqualTo("Marguerite");
+            assertThat(cow.getLastCalvingDate()).isNotNull();
+        });
     }
 
     @Test
     public void verifyFindAllJSONAPIReturns2Cows() {
-        StepVerifier.create(client.get().uri("/api/cows/").retrieve()
-                .bodyToFlux(Cow.class))
-                .expectNextCount(2)
-                .verifyComplete();
+        client.get().uri("/api/cows/")
+                .exchange()
+                .expectBodyList(Cow.class)
+                .hasSize(2);
     }
 }
