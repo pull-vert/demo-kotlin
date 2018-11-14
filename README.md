@@ -20,3 +20,6 @@ MongoDB app is complete (end of live coding) :
 * ApiTest uses WebTestClient to call real Http REST API
 
 ## [step 2 in java](https://github.com/pull-vert/demo-kotlin/tree/step2-mongo-reactive-java)
+
+## [step 3 : functional bean registration](https://github.com/pull-vert/demo-kotlin/tree/step3-functional-bean-registration)
+inspired by : [kofu-reactive-mongodb-sample](https://github.com/spring-projects/spring-fu/tree/master/samples/kofu-reactive-mongodb)

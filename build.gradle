@@ -37,6 +37,8 @@ compileTestKotlin {
 
 repositories {
 	mavenCentral()
+    maven { url "https://repo.spring.io/milestone" }
+    maven { url "https://repo.spring.io/snapshot" }
 }
 
 
@@ -47,6 +49,7 @@ dependencies {
 	compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	compile("org.jetbrains.kotlin:kotlin-reflect")
 	compile('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
+    compile('org.springframework.fu:spring-fu-kofu:0.0.3.BUILD-SNAPSHOT')
 	testCompile("org.springframework.boot:spring-boot-starter-test") {
         exclude group: 'junit', module: 'junit'
     }
