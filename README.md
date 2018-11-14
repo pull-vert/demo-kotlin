@@ -1,13 +1,15 @@
 # demo-kotlin
+This is an example of a Spring boot reactive (Webflux) in Kotlin.
+Each step adds new features.
 
-## [step 0](https://github.com/pull-vert/demo-kotlin/tree/master)
+## [step 0 : initializr](https://github.com/pull-vert/demo-kotlin/tree/master)
 Direct commit from Spring Initializr
 
-## [step 1](https://github.com/pull-vert/demo-kotlin/tree/step1-skeleton)
+## [step 1 : project skeleton](https://github.com/pull-vert/demo-kotlin/tree/step1-skeleton)
 Empty files for the demo
 
-## [step 2](https://github.com/pull-vert/demo-kotlin/tree/step2-mongo-reactive)
-MongoDB app is complete :
+## [step 2 : mongo reactive](https://github.com/pull-vert/demo-kotlin/tree/step2-mongo-reactive)
+MongoDB app is complete (end of live coding) :
 * classic Spring annotations (@Service, @Repository...)
 * Cow entity (data class entity)
 * CowRepository Spring Data Interface
@@ -16,3 +18,5 @@ MongoDB app is complete :
 * DatabaseInitializer initializes the embedded MongoDB with test datas
 * CowRepositoryTest provides JUnit tests for CowRepository
 * ApiTest uses WebTestClient to call real Http REST API
+
+## [step 2 in java](https://github.com/pull-vert/demo-kotlin/tree/step2-mongo-reactive-java)
