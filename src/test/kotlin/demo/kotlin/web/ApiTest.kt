@@ -1,6 +1,6 @@
-package com.adventiel.demokotlin.web
+package demo.kotlin.web
 
-import com.adventiel.demokotlin.model.Cow
+import demo.kotlin.model.Cow
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
