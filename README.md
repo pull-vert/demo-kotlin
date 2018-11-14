@@ -1,6 +1,6 @@
 # demo-kotlin
-This is an example of a Spring boot reactive (Webflux) in Kotlin.
-Each step adds new features.
+This is an example of a Spring boot reactive (Webflux) app in Kotlin, made at first for a live coding and completed since then with new steps.
+Every step adds new features.
 
 ## [step 0 : initializr](https://github.com/pull-vert/demo-kotlin/tree/master)
 Direct commit from Spring Initializr
