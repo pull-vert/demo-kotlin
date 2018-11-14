@@ -1,6 +1,6 @@
-package com.adventiel.demokotlin.web
+package demo.kotlin.web
 
-import com.adventiel.demokotlin.repository.CowRepository
+import demo.kotlin.repository.CowRepository
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse.ok

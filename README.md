@@ -1,6 +1,4 @@
 # demo-kotlin
-This is an example of a Spring boot reactive (Webflux) app in Kotlin, made at first for a live coding and completed since then with new steps.
-Every step adds new features.
 
 ## Kotlin with Spring annotations (@Service, @Repository...)
 

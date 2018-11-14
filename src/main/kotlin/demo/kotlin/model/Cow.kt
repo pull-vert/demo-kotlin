@@ -1,4 +1,4 @@
-package com.adventiel.demokotlin.model
+package demo.kotlin.model
 
 import org.springframework.data.annotation.Id
 import java.time.LocalDateTime
