@@ -2,16 +2,13 @@ package demo.kotlin
 
 import demo.kotlin.model.Cow
 import demo.kotlin.repository.CowRepository
-import org.springframework.boot.CommandLineRunner
-import org.springframework.stereotype.Component
 import reactor.core.publisher.toFlux
 import java.time.LocalDateTime
 
-@Component
-class DatabaseInitializer(
+internal class DatabaseInitializer(
         private val cowRepository: CowRepository
-) : CommandLineRunner {
-    override fun run(vararg args: String) {
+) {
+    fun init() {
         val marguerite = Cow("Marguerite", LocalDateTime.of(2017, 9, 28, 13, 30))
         val laNoiraude = Cow("La Noiraude")
 

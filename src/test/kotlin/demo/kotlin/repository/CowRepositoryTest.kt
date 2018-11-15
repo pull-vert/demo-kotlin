@@ -1,18 +1,42 @@
 package demo.kotlin.repository
 
+import demo.kotlin.app
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.junit.jupiter.api.TestInstance
+import org.springframework.beans.factory.getBean
+import org.springframework.context.ConfigurableApplicationContext
 import reactor.test.test
 
-@ExtendWith(SpringExtension::class)
-@SpringBootTest
+//private val simplifiedWebConfig = configuration {
+//    server {
+//        port = if (profiles.contains("test")) 8181 else 8080
+//    }
+//}
+//
+//private val dataApp = application {
+//    import(dataConfig)
+//    import(simplifiedWebConfig)
+//}
+
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CowRepositoryTest {
-    @Autowired
+
+    private lateinit var context: ConfigurableApplicationContext
     private lateinit var cowRepository: CowRepository
+
+    @BeforeAll
+    fun beforeAll() {
+        context = app.run(profiles = "test")
+        cowRepository = context.getBean()
+    }
+
+    @AfterAll
+    fun afterAll() {
+        context.close()
+    }
 
     @Test
     fun `Verify findByName returns existing Marguerite Cow`() {

@@ -1,11 +1,12 @@
 package demo.kotlin
 
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
+import org.springframework.fu.kofu.application
 
-@SpringBootApplication
-class DemoKotlinApplication
+internal val app = application {
+    import(dataConfig)
+    import(webConfig)
+}
 
 fun main() {
-    runApplication<DemoKotlinApplication>()
+    app.run()
 }

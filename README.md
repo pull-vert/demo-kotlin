@@ -23,3 +23,5 @@ MongoDB app is complete (end of live coding) :
 
 ## [step 3 : functional bean registration](https://github.com/pull-vert/demo-kotlin/tree/step3-functional-bean-registration)
 inspired by : [kofu-reactive-mongodb-sample](https://github.com/spring-projects/spring-fu/tree/master/samples/kofu-reactive-mongodb)
+* No more Spring annotations
+* Configuration.kt : declare functional bean registration
