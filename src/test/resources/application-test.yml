@@ -1,0 +1,4 @@
+#server:
+#  ssl:
+#    trust-store: classpath:truststore.jks
+#    trust-store-password: secret
