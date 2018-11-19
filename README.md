@@ -28,33 +28,12 @@ inspired by : [kofu-reactive-mongodb-sample](https://github.com/spring-projects/
 2018-11-16 : Code is working, but kofu is too limited for now, will give it a try later
 
 ## step 3 : HTTP/2
-* Create the Keystore and generate a self signed certificate
+* Generate a self signed Keystore
 ```bash
- keytool -genkey -noprompt -trustcacerts -keyalg RSA -alias selfsigned -keypass secret -keystore keystore.jks -storepass secret -dname CN=localhost -validity 360 -keysize 2048
+keytool -genkey -keyalg RSA -alias selfsigned -keystore keystore.jks -storepass secret -dname CN=localhost -validity 360 -keysize 2048
 ```
-* Create a certificate signing request (csr)
-```bash
-keytool -certreq -alias selfsigned -file keystore.csr -keystore keystore.jks
-```
-*
-openssl  x509  -req  -CA ca-certificate.pem.txt -CAkey ca-key.pem.txt -in keystore.csr -out keystore.cer  -days 365  -CAcreateserial
-* Export a certificate from a Keystore
-```bash
-keytool -export -alias selfsigned -file keystore.crt -keystore keystore.jks
-Enter keystore password:  secret
-Certificate stored in file <keystore.crt>
-```
-* Create a Truststore with that certificate
-```bash
-keytool -import -v -trustcacerts -alias selfsigned -file keystore.crt -keystore truststore.jks
-Enter keystore password:  secret
-Re-enter new password: secret
-Owner: CN=Unknown, OU=Unknown, O=Unknown, L=Unknown, ST=Unknown, C=Unknown
-Issuer: CN=Unknown, OU=Unknown, O=Unknown, L=Unknown, ST=Unknown, C=Unknown
-...
-Trust this certificate? [no]:  yes
-Certificate was added to keystore
-[Storing truststore.jks]
-```
-* add HTTP/2 and SSL configuration in application.yaml
-* todo : make a POST endpoint with login/password + let's encrypt challenge fields
+* store this keystore in src/main/resources
+* add HTTP/2 and SSL configuration in application.yml
+* change ApiTest (InsecureTrustManagerFactory.INSTANCE) to communicate with self signed server keystore
+* netty-tcnative-boringssl-static dependency is only required for Java 8, since java 9 ALPN is natively supported
+* For production : make a POST and a GET endpoint for let's encrypt HTTP challenge
