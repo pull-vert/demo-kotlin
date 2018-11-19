@@ -2,9 +2,6 @@ buildscript {
 	ext {
 		netty_tcnative_version = '2.0.12.Final'
 	}
-	repositories {
-		mavenCentral()
-	}
 }
 
 plugins {
@@ -16,21 +13,6 @@ plugins {
 
 group = 'demo.kotlin'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 1.8
-
-compileKotlin {
-	kotlinOptions {
-		freeCompilerArgs = ["-Xjsr305=strict"]
-		jvmTarget = "1.8"
-	}
-}
-
-compileTestKotlin {
-	kotlinOptions {
-		freeCompilerArgs = ["-Xjsr305=strict"]
-		jvmTarget = "1.8"
-	}
-}
 
 repositories {
 	mavenCentral()
@@ -44,7 +26,7 @@ dependencies {
 	compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	compile("org.jetbrains.kotlin:kotlin-reflect")
 	compile('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
-	compile("io.netty:netty-tcnative-boringssl-static:$netty_tcnative_version")
+	compile("io.netty:netty-tcnative-boringssl-static:$netty_tcnative_version") // this dependency is only required for Java 8, since java 9 ALPN is natively supported
 	testCompile("org.springframework.boot:spring-boot-starter-test") {
         exclude group: 'junit', module: 'junit'
     }
@@ -52,6 +34,19 @@ dependencies {
     testCompile('org.junit.jupiter:junit-jupiter-params')
 	testCompile('org.junit.jupiter:junit-jupiter-api')
     testRuntime('org.junit.jupiter:junit-jupiter-engine')
+}
+
+compileKotlin {
+	kotlinOptions {
+		freeCompilerArgs = ["-Xjsr305=strict"]
+		jvmTarget = "1.8"
+	}
+}
+compileTestKotlin {
+	kotlinOptions {
+		freeCompilerArgs = ["-Xjsr305=strict"]
+		jvmTarget = "1.8"
+	}
 }
 
 test {

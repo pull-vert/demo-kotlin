@@ -1,8 +1,7 @@
-#server:
-#  ssl:
-#    enabled: true
-#    key-store: keystore.p12
-#    key-store-password: password
-#    key-store-type: PKCS12
-#  http2:
-#    enabled: true
+server:
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.jks
+    key-store-password: secret
+  http2:
+    enabled: true
