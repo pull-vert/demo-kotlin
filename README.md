@@ -57,3 +57,4 @@ Certificate was added to keystore
 [Storing truststore.jks]
 ```
 * add HTTP/2 and SSL configuration in application.yaml
+* todo : make a POST endpoint with login/password + let's encrypt challenge fields
