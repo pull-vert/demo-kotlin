@@ -1,4 +1,5 @@
 server:
+  port: 8443
   ssl:
     enabled: true
     key-store: classpath:keystore.jks

@@ -7,5 +7,5 @@ import java.util.*
 data class Cow(
         val name: String,
         val lastCalvingDate: LocalDateTime? = null,
-        @Id internal val id: UUID = UUID.randomUUID()
+        @Id val id: UUID = UUID.randomUUID()
 )
