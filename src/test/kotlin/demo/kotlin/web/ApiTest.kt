@@ -1,7 +1,7 @@
 package demo.kotlin.web
 
 import demo.kotlin.model.Cow
-import io.netty.handler.ssl.*
+import io.netty.handler.ssl.SslContextBuilder
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -36,24 +36,6 @@ class ApiTest(
 
     @BeforeEach
     fun beforeAll(restDocumentation: RestDocumentationContextProvider) {
-//        val provider = if (OpenSsl.isAlpnSupported())
-//            io.netty.handler.ssl.SslProvider.OPENSSL
-//        else
-//            io.netty.handler.ssl.SslProvider.JDK
-//        // trust any CA, to communicate with self signed server keystore
-//        val sslContext = SslContextBuilder.forClient()
-//                .sslProvider(provider)
-//                .ciphers(Http2SecurityUtil.CIPHERS, SupportedCipherSuiteFilter.INSTANCE)
-//                .applicationProtocolConfig(ApplicationProtocolConfig(
-//                        ApplicationProtocolConfig.Protocol.ALPN,
-//                        ApplicationProtocolConfig.SelectorFailureBehavior.NO_ADVERTISE,
-//                        ApplicationProtocolConfig.SelectedListenerFailureBehavior.ACCEPT,
-//                        ApplicationProtocolNames.HTTP_2))
-//                .trustManager(InsecureTrustManagerFactory.INSTANCE).build()
-//
-//        val tcpClient = TcpClient.create().secure{ t -> t.sslContext(sslContext) }
-//        val httpClient = HttpClient.from(tcpClient).protocol(HttpProtocol.H2)
-
         val sslContext = SslContextBuilder.forClient()
                 .trustManager(InsecureTrustManagerFactory.INSTANCE).build()
         val httpClient = HttpClient.create().secure{ t -> t.sslContext(sslContext) }
