@@ -25,4 +25,5 @@ MongoDB app is complete (end of live coding) :
 inspired by : [kofu-reactive-mongodb-sample](https://github.com/spring-projects/spring-fu/tree/master/samples/kofu-reactive-mongodb)
 * No more Spring annotations
 * Configuration.kt : declare functional bean registration
+
 2018-11-16 : Code is working, but kofu is too limited for now, will give it a try later
