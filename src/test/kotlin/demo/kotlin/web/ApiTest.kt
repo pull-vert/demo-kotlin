@@ -1,8 +1,7 @@
 package demo.kotlin.web
 
 import demo.kotlin.model.Cow
-import io.netty.handler.codec.http2.Http2SecurityUtil
-import io.netty.handler.ssl.*
+import io.netty.handler.ssl.SslContextBuilder
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -23,7 +22,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.expectBody
 import org.springframework.test.web.reactive.server.expectBodyList
-import reactor.netty.http.HttpProtocol
 import reactor.netty.http.client.HttpClient
 
 
@@ -38,27 +36,11 @@ class ApiTest(
 
     @BeforeEach
     fun beforeAll(restDocumentation: RestDocumentationContextProvider) {
-        val provider = if (OpenSsl.isAlpnSupported())
-            io.netty.handler.ssl.SslProvider.OPENSSL
-        else
-            io.netty.handler.ssl.SslProvider.JDK
-        // trust any CA, to communicate with self signed server keystore
         val sslContext = SslContextBuilder.forClient()
-                .sslProvider(provider)
-                .ciphers(Http2SecurityUtil.CIPHERS, SupportedCipherSuiteFilter.INSTANCE)
-                .applicationProtocolConfig(ApplicationProtocolConfig(
-                        ApplicationProtocolConfig.Protocol.ALPN,
-                        ApplicationProtocolConfig.SelectorFailureBehavior.NO_ADVERTISE,
-                        ApplicationProtocolConfig.SelectedListenerFailureBehavior.ACCEPT,
-                        ApplicationProtocolNames.HTTP_2))
-                .trustManager(InsecureTrustManagerFactory.INSTANCE)
-
-//        val sslContext = SslContextBuilder.forClient()
-//                .trustManager(InsecureTrustManagerFactory.INSTANCE)
-
-
-        val httpClient = HttpClient.create().secure{ t -> t.sslContext(sslContext) }.protocol(HttpProtocol.H2)
+                .trustManager(InsecureTrustManagerFactory.INSTANCE).build()
+        val httpClient = HttpClient.create().secure{ t -> t.sslContext(sslContext) }
         val httpConnector = ReactorClientHttpConnector(httpClient)
+
         client = WebTestClient.bindToServer(httpConnector).baseUrl("https://localhost:$port")
                 .filter(documentationConfiguration(restDocumentation)
                         .operationPreprocessors()
