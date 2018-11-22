@@ -1,0 +1,7 @@
+= demo-kotlin API doc
+
+This is the documentation for the API, with curl command, request and response format for each endpoint:
+
+operation::findAllCows[snippets='curl-request,http-request,http-response,response-fields']
+
+operation::findByNameCow[snippets='curl-request,http-request,http-response,response-fields']
