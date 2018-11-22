@@ -25,6 +25,7 @@ MongoDB app is complete (end of live coding) :
 inspired by : [kofu-reactive-mongodb-sample](https://github.com/spring-projects/spring-fu/tree/master/samples/kofu-reactive-mongodb)
 * No more Spring annotations
 * Configuration.kt : declare functional bean registration
+
 2018-11-16 : Code is working, but kofu is too limited for now, will give it a try later
 
 ## step 3 : HTTP/2
@@ -37,3 +38,8 @@ keytool -genkey -keyalg RSA -alias selfsigned -keystore keystore.jks -storepass 
 * change ApiTest (InsecureTrustManagerFactory.INSTANCE) to communicate with self signed server keystore
 * netty-tcnative-boringssl-static dependency is only required for Java 8, since java 9 ALPN is natively supported
 * For production : make a POST and a GET endpoint for let's encrypt HTTP challenge
+
+## step 4 : Spring Restdocs
+* Modify build.gradle to add asciidoc and Spring Resdocs
+* Modify ApiTest to generate doc
+* add index.adoc to expose all API documentation
