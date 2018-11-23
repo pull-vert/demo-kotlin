@@ -43,3 +43,8 @@ keytool -genkey -keyalg RSA -alias selfsigned -keystore keystore.jks -storepass 
 * Modify build.gradle to add asciidoc and Spring Resdocs
 * Modify ApiTest to generate doc
 * add index.adoc to expose all API documentation
+
+## [step 5 : Spring security with JWT](https://github.com/pull-vert/demo-kotlin/tree/step5-spring-security)
+* Followed this tutorial : [jwt-on-spring-webflux](https://medium.com/@ard333/authentication-and-authorization-using-jwt-on-spring-webflux-29b81f813e78)
+* https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#reactive-applications
+* https://spring.io/guides/topicals/spring-security-architecture
