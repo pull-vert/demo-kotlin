@@ -24,12 +24,14 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
     compile('org.springframework.boot:spring-boot-starter-webflux')
     compile('com.fasterxml.jackson.module:jackson-module-kotlin')
-    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    compile("org.jetbrains.kotlin:kotlin-reflect")
+    compile('org.jetbrains.kotlin:kotlin-stdlib-jdk8')
+    compile('org.jetbrains.kotlin:kotlin-reflect')
     compile('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
     compile("io.netty:netty-tcnative-boringssl-static:$netty_tcnative_version") // this dependency is only required for Java 8, since java 9 ALPN is natively supported
+    compile('org.springframework.boot:spring-boot-starter-security')
+    compile('io.jsonwebtoken:jjwt:0.9.1')
     asciidoctor('org.springframework.restdocs:spring-restdocs-asciidoctor')
-    testCompile("org.springframework.boot:spring-boot-starter-test") {
+    testCompile('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'junit', module: 'junit'
     }
     testCompile('io.projectreactor:reactor-test')
