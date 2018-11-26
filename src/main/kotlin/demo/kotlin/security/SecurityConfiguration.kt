@@ -11,7 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder
 
 @Configuration
 @EnableWebFluxSecurity
-//@EnableReactiveMethodSecurity
 class SecurityConfiguration(
         private val authenticationManager: AuthenticationManager,
         private val securityContextRepository: SecurityContextRepository
@@ -36,6 +35,7 @@ class SecurityConfiguration(
                     .authorizeExchange()
                     .pathMatchers(HttpMethod.OPTIONS).permitAll()
                     .pathMatchers("/auth").permitAll()
+                    .pathMatchers("/api").hasRole("USER")
                     .anyExchange().authenticated()
                     .and().build()
 }

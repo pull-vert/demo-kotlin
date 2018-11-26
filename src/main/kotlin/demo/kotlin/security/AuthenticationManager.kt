@@ -6,6 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
+import reactor.core.publisher.toMono
 
 
 @Component
@@ -27,8 +28,7 @@ class AuthenticationManager(
             val claims = jwtUtil.getAllClaimsFromToken(authToken)
             val roles = claims.get("roles", List::class.java)
                     .map { Role.valueOf(it as String) }
-            val auth = UsernamePasswordAuthenticationToken(username, null, roles)
-            return Mono.just(auth)
+            return UsernamePasswordAuthenticationToken(username, null, roles).toMono()
         } else {
             return Mono.empty()
         }

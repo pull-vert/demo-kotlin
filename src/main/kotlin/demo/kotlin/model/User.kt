@@ -7,7 +7,7 @@ import java.util.*
 class User(
         username: String,
         password: String,
-        var roles: MutableList<Role> = mutableListOf(Role.USER), // Default Role : USER
+        var roles: MutableList<Role> = mutableListOf(Role.ROLE_USER), // Default Role : USER
         var active: Boolean = true,
         @Id val id: UUID = UUID.randomUUID()
 ) : UserDetails {
@@ -28,4 +28,8 @@ class User(
     override fun isAccountNonExpired() = false
 
     override fun isAccountNonLocked() = false
+
+    fun setPassword(password: String) {
+        this.password = password
+    }
 }
