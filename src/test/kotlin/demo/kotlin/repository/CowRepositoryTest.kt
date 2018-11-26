@@ -10,9 +10,7 @@ import reactor.test.test
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
-class CowRepositoryTest {
-    @Autowired
-    private lateinit var cowRepository: CowRepository
+class CowRepositoryTest(@Autowired private val cowRepository: CowRepository) {
 
     @Test
     fun `Verify findByName returns existing Marguerite Cow`() {

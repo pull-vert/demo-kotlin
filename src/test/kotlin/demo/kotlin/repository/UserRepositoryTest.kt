@@ -11,9 +11,7 @@ import reactor.test.test
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
-class UserRepositoryTest {
-    @Autowired
-    private lateinit var userRepository: UserRepository
+class UserRepositoryTest(@Autowired private val userRepository: UserRepository) {
 
     @Test
     fun `Verify findByUsername returns existing Fred User`() {
