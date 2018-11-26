@@ -7,7 +7,6 @@ import demo.kotlin.repository.UserRepository
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Component
 import reactor.core.publisher.toFlux
-import reactor.core.publisher.toMono
 import java.time.LocalDateTime
 
 @Component
