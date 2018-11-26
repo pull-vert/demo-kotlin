@@ -4,6 +4,7 @@ import demo.kotlin.model.User
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -20,9 +21,9 @@ class JWTUtil(
 
     fun getExpirationDateFromToken(token: String) = getAllClaimsFromToken(token).expiration
 
-    fun generateToken(user: User): String {
+    fun generateToken(user: UserDetails): String {
         val claims = mutableMapOf<String, Any>()
-        claims["roles"] = user.roles.map { it.authority }
+        claims["roles"] = user.authorities
         claims["enable"] = user.isEnabled
         return doGenerateToken(claims, user.getUsername())
     }
