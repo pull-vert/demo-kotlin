@@ -17,7 +17,7 @@ class AuthenticationHandler(
         private val passwordEncoder: PasswordEncoder,
         private val userRepository: UserRepository
 ) {
-    fun auth(req: ServerRequest)=
+    fun auth(req: ServerRequest) =
             req.bodyToMono<AuthRequest>()
             .flatMap { ar -> userRepository.findByUsername(ar.username).map { ud -> Pair(ud, ar.password) } }
                     .flatMap { pair -> if (passwordEncoder.matches(pair.second, pair.first.getPassword())) {

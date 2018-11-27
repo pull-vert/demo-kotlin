@@ -24,12 +24,12 @@ class JWTUtil(
         val claims = mutableMapOf<String, Any>()
         claims["roles"] = user.authorities
         claims["enable"] = user.isEnabled
-        return doGenerateToken(claims, user.getUsername())
+        return doGenerateToken(user.getUsername(), claims)
     }
 
     fun validateToken(token: String) = !isTokenExpired(token)
 
-    private fun doGenerateToken(claims: Map<String, Any>, username: String): String {
+    private fun doGenerateToken(username: String, claims: Map<String, Any>): String {
         val expirationTimeLong = expirationTime.toLong() //in second
 
         val createdDate = Date()

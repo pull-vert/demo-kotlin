@@ -1,15 +1,20 @@
 package demo.kotlin.web
 
+import demo.kotlin.dto.AuthRequest
+import demo.kotlin.dto.AuthResponse
 import demo.kotlin.model.Cow
+import demo.kotlin.security.JWTUtil
 import io.netty.handler.ssl.SslContextBuilder
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.http.MediaType
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
@@ -29,7 +34,8 @@ import reactor.netty.http.client.HttpClient
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureRestDocs(uriScheme = "https", uriPort = 8443)
 class ApiTest(
-        @LocalServerPort val port: Int
+        @LocalServerPort private val port: Int,
+        @Autowired private val jwtUtil: JWTUtil
 ) {
 
     lateinit var client: WebTestClient
@@ -50,37 +56,41 @@ class ApiTest(
     }
 
     @Test
-    fun `Verify findByName JSON API returns Margerite`() {
+    fun `Verify findByName returns Margerite`() {
         client.get().uri("/api/cows/Marguerite")
                 .exchange()
+                .expectStatus().isOk
                 .expectBody<Cow>()
                 .consumeWith {
-                    val cow = it.responseBody
-                    assertThat(cow?.name).isEqualTo("Marguerite")
-                    assertThat(cow?.lastCalvingDate).isNotNull()
+                    val cow = it.responseBody!!
+                    assertThat(cow.name).isEqualTo("Marguerite")
+                    assertThat(cow.lastCalvingDate).isNotNull()
                 }
     }
 
     @Test
-    fun `Verify findAll JSON API returns 2 Cows`() {
+    fun `Verify findAll returns 2 Cows`() {
         client.get().uri("/api/cows/")
                 .exchange()
+                .expectStatus().isOk
                 .expectBodyList<Cow>()
                 .hasSize(2)
     }
 
     @Test
-    fun `Verify findByName JSON API doc`() {
+    fun `Verify findByName doc`() {
         client.get().uri("/api/cows/{name}", "Marguerite")
                 .exchange()
+                .expectStatus().isOk
                 .expectBody()
                 .consumeWith(document("findByNameCow", responseFields(*cowFields())))
     }
 
     @Test
-    fun `Verify findAll JSON API doc`() {
+    fun `Verify findAll doc`() {
         client.get().uri("/api/cows/")
                 .exchange()
+                .expectStatus().isOk
                 .expectBody()
                 .consumeWith(document("findAllCows",
                         responseFields(
@@ -98,4 +108,18 @@ class ApiTest(
             fieldWithPath("lastCalvingDate").description("Last calving date of the Cow").optional(),
             fieldWithPath("id").description("ID of the Cow document")
     )
+
+    @Test
+    fun `Verify auth ok`() {
+        client.post().uri("/auth/")
+                .syncBody(AuthRequest("Fred", "password"))
+                .exchange()
+                .expectStatus().isOk
+                .expectBody<AuthResponse>()
+                .consumeWith {
+                    val authResponse = it.responseBody!!
+                    assertThat(authResponse.token).isNotEmpty()
+                    assertThat(jwtUtil.validateToken(authResponse.token)).isTrue()
+                }
+    }
 }
