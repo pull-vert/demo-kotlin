@@ -1,55 +1,61 @@
 buildscript {
-    ext {
-        netty_tcnative_version = '2.0.12.Final'
-    }
+	ext {
+		netty_tcnative_version = '2.0.20.Final'
+	}
+	repositories {
+		mavenCentral()
+	}
 }
 
 plugins {
-    id('org.jetbrains.kotlin.jvm') version '1.3.10'
-    id('org.jetbrains.kotlin.plugin.spring') version '1.3.10'
-    id('io.spring.dependency-management') version '1.0.6.RELEASE'
-    id('org.springframework.boot') version '2.1.0.RELEASE'
+	id('org.jetbrains.kotlin.jvm') version '1.3.11'
+	id('org.jetbrains.kotlin.plugin.spring') version '1.3.11'
+	id('io.spring.dependency-management') version '1.0.6.RELEASE'
+	id('org.springframework.boot') version '2.1.1.RELEASE'
     id('org.asciidoctor.convert') version '1.5.3'
 }
 
+
 group = 'demo.kotlin'
 version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+compileKotlin {
+	kotlinOptions {
+		freeCompilerArgs = ["-Xjsr305=strict"]
+		jvmTarget = "1.8"
+	}
+}
+
+compileTestKotlin {
+	kotlinOptions {
+		freeCompilerArgs = ["-Xjsr305=strict"]
+		jvmTarget = "1.8"
+	}
+}
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
-    compile('org.springframework.boot:spring-boot-starter-webflux')
-    compile('com.fasterxml.jackson.module:jackson-module-kotlin')
-    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    compile("org.jetbrains.kotlin:kotlin-reflect")
-    compile('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
-    compile("io.netty:netty-tcnative-boringssl-static:$netty_tcnative_version") // this dependency is only required for Java 8, since java 9 ALPN is natively supported
-    asciidoctor('org.springframework.restdocs:spring-restdocs-asciidoctor')
-    testCompile("org.springframework.boot:spring-boot-starter-test") {
+	compile('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
+	compile('org.springframework.boot:spring-boot-starter-webflux')
+	compile('com.fasterxml.jackson.module:jackson-module-kotlin')
+	compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	compile("org.jetbrains.kotlin:kotlin-reflect")
+	compile('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
+	compile("io.netty:netty-tcnative-boringssl-static:$netty_tcnative_version") // this dependency is only required for Java 8, since java 9 ALPN is natively supported
+	asciidoctor('org.springframework.restdocs:spring-restdocs-asciidoctor')
+	testCompile("org.springframework.boot:spring-boot-starter-test") {
         exclude group: 'junit', module: 'junit'
     }
-    testCompile('io.projectreactor:reactor-test')
+	testCompile('io.projectreactor:reactor-test')
     testCompile('org.junit.jupiter:junit-jupiter-params')
-    testCompile('org.junit.jupiter:junit-jupiter-api')
+    testImplementation('org.junit.jupiter:junit-jupiter-api')
     testRuntime('org.junit.jupiter:junit-jupiter-engine')
     testCompile('org.springframework.restdocs:spring-restdocs-webtestclient')
-}
-
-compileKotlin {
-    kotlinOptions {
-        freeCompilerArgs = ["-Xjsr305=strict"]
-        jvmTarget = "1.8"
-    }
-}
-compileTestKotlin {
-    kotlinOptions {
-        freeCompilerArgs = ["-Xjsr305=strict"]
-        jvmTarget = "1.8"
-    }
 }
 
 ext {
@@ -57,10 +63,10 @@ ext {
 }
 
 test {
-    useJUnitPlatform()
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
+	useJUnitPlatform()
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
 }
 
 asciidoctor {
@@ -77,6 +83,6 @@ bootJar {
 
 // execute ./gradlew wrapper then remove .gradle directory when version change
 wrapper {
-    gradleVersion='4.10.2'
-    distributionType=Wrapper.DistributionType.ALL
+	gradleVersion='5.0'
+	distributionType=Wrapper.DistributionType.ALL
 }
