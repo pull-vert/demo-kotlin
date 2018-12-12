@@ -1,23 +1,18 @@
 buildscript {
-	ext {
-		springBootVersion = '2.1.0.RELEASE'
-	}
 	repositories {
 		mavenCentral()
 	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
 }
 
-apply plugin: 'java' // added for java branch
-apply plugin: 'eclipse'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
+plugins {
+	id('java')
+	id('io.spring.dependency-management') version '1.0.6.RELEASE'
+	id('org.springframework.boot') version '2.1.1.RELEASE'
+}
+
 
 group = 'demo.kotlin'
 version = '0.0.1-SNAPSHOT'
-
 sourceCompatibility = 1.8
 
 repositories {
@@ -40,6 +35,6 @@ dependencies {
 
 // execute ./gradlew wrapper then remove .gradle directory when version change
 wrapper {
-	gradleVersion='4.10.2'
+	gradleVersion='5.0'
 	distributionType=Wrapper.DistributionType.ALL
 }
