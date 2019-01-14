@@ -14,7 +14,7 @@ class JWTUtil(
         @Value("\${jwt.expiration}") private val expirationTime: String
 ) {
 
-    fun getAllClaimsFromToken(token: String) = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).body
+    fun getAllClaimsFromToken(token: String) = Jwts.parser().setSigningKey(secret.toByteArray()).parseClaimsJws(token).body
 
     fun getUsernameFromToken(token: String): String = getAllClaimsFromToken(token).subject
 
@@ -27,7 +27,7 @@ class JWTUtil(
         return doGenerateToken(user.getUsername(), claims)
     }
 
-    fun validateToken(token: String) = !isTokenExpired(token)
+    fun validateToken(token: String) = !isTokenExpired(token, Date())
 
     private fun doGenerateToken(username: String, claims: Map<String, Any>): String {
         val expirationTimeLong = expirationTime.toLong() //in second
@@ -39,12 +39,12 @@ class JWTUtil(
                 .setSubject(username)
                 .setIssuedAt(createdDate)
                 .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS512, secret)
+                .signWith(SignatureAlgorithm.HS512, secret.toByteArray())
                 .compact()
     }
 
-    private fun isTokenExpired(token: String): Boolean {
+    internal fun isTokenExpired(token: String, date: Date): Boolean {
         val expiration = getExpirationDateFromToken(token)
-        return expiration.before(Date())
+        return expiration.before(date)
     }
 }

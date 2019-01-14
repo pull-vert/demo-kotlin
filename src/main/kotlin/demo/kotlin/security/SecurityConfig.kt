@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 
 @Configuration
 @EnableWebFluxSecurity
-class SecurityConfiguration(
+class SecurityConfig(
         private val authenticationManager: AuthenticationManager,
         private val securityContextRepository: SecurityContextRepository
 ) {

@@ -19,11 +19,15 @@ class AuthenticationHandler(
 ) {
     fun auth(req: ServerRequest) =
             req.bodyToMono<AuthRequest>()
-            .flatMap { ar -> userRepository.findByUsername(ar.username).map { ud -> Pair(ud, ar.password) } }
-                    .flatMap { pair -> if (passwordEncoder.matches(pair.second, pair.first.getPassword())) {
-                                ServerResponse.ok().syncBody(AuthResponse(jwtUtil.generateToken(pair.first)))
-                            } else {
-                                ServerResponse.status(HttpStatus.UNAUTHORIZED).build()
-                            }
+                    .flatMap { ar ->
+                        userRepository.findByUsername(ar.username)
+                                .map { ud -> Pair(ud, ar.password) }
+                    }
+                    .flatMap { pair ->
+                        if (passwordEncoder.matches(pair.second, pair.first.getPassword())) {
+                            ServerResponse.ok().syncBody(AuthResponse(jwtUtil.generateToken(pair.first)))
+                        } else {
+                            ServerResponse.status(HttpStatus.UNAUTHORIZED).build()
                         }
+                    }
 }

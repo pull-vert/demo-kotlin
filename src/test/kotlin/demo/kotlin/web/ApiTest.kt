@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
-import org.springframework.http.MediaType
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
@@ -58,6 +57,7 @@ class ApiTest(
     @Test
     fun `Verify findByName returns Margerite`() {
         client.get().uri("/api/cows/Marguerite")
+                .addAuthHeader(jwtUtil)
                 .exchange()
                 .expectStatus().isOk
                 .expectBody<Cow>()
@@ -71,6 +71,7 @@ class ApiTest(
     @Test
     fun `Verify findAll returns 2 Cows`() {
         client.get().uri("/api/cows/")
+                .addAuthHeader(jwtUtil)
                 .exchange()
                 .expectStatus().isOk
                 .expectBodyList<Cow>()
@@ -80,6 +81,7 @@ class ApiTest(
     @Test
     fun `Verify findByName doc`() {
         client.get().uri("/api/cows/{name}", "Marguerite")
+                .addAuthHeader(jwtUtil)
                 .exchange()
                 .expectStatus().isOk
                 .expectBody()
@@ -89,6 +91,7 @@ class ApiTest(
     @Test
     fun `Verify findAll doc`() {
         client.get().uri("/api/cows/")
+                .addAuthHeader(jwtUtil)
                 .exchange()
                 .expectStatus().isOk
                 .expectBody()
