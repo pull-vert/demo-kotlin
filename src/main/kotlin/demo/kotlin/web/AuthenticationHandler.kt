@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.bodyToMono
+import reactor.core.publisher.switchIfEmpty
 
 @Component
 class AuthenticationHandler(
@@ -19,15 +20,16 @@ class AuthenticationHandler(
 ) {
     fun auth(req: ServerRequest) =
             req.bodyToMono<AuthRequest>()
-                    .flatMap { ar ->
-                        userRepository.findByUsername(ar.username)
-                                .map { ud -> Pair(ud, ar.password) }
+                    .flatMap { authRequest ->
+                        userRepository.findByUsername(authRequest.username)
+                                .flatMap { user ->
+                                    if (passwordEncoder.matches(authRequest.password, user.getPassword())) {
+                                        ServerResponse.ok().syncBody(AuthResponse(jwtUtil.generateToken(user)))
+                                    } else {
+                                        ServerResponse.status(HttpStatus.UNAUTHORIZED).build()
+                                    }
+                                }
                     }
-                    .flatMap { pair ->
-                        if (passwordEncoder.matches(pair.second, pair.first.getPassword())) {
-                            ServerResponse.ok().syncBody(AuthResponse(jwtUtil.generateToken(pair.first)))
-                        } else {
-                            ServerResponse.status(HttpStatus.UNAUTHORIZED).build()
-                        }
-                    }
+                    // if no user is found by userRepository.findByUsername
+                    .switchIfEmpty { ServerResponse.status(HttpStatus.UNAUTHORIZED).build() }
 }

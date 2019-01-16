@@ -7,3 +7,6 @@ operation::findAllCows[snippets='curl-request,http-request,http-response,respons
 
 == GET cow by name
 operation::findByNameCow[snippets='curl-request,http-request,http-response,response-fields']
+
+== POST auth
+operation::auth[snippets='curl-request,http-request,http-response,request-fields,response-fields']
