@@ -8,17 +8,21 @@ import org.springframework.web.reactive.function.server.router
 
 @Configuration
 class ApiRoutes(
-        val cowHandler: CowHandler,
-        val authenticationHandler: AuthenticationHandler
+        private val cowHandler: CowHandler,
+        private val authenticationHandler: AuthenticationHandler,
+        private val userHandler: UserHandler
 ) {
 
     @Bean
-    fun appRouter(/*httpsRedirectFilter: HandlerFilterFunction<ServerResponse, ServerResponse>*/) = router {
+    fun appRouter() = router {
         accept(APPLICATION_JSON).nest {
             "/api".nest {
                 "/cows".nest {
                     GET("/{name}", cowHandler::findByName)
                     GET("/", cowHandler::findAll)
+                }
+                "/users".nest {
+                    DELETE("/{userId}", userHandler::delete)
                 }
             }
             "/auth".nest {

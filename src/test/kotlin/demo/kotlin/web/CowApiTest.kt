@@ -19,7 +19,7 @@ internal class CowApiTest(
 
     @Test
     fun `Verify findByName returns Margerite`() {
-        client.get().uri("/api/cows/Marguerite")
+        client.get().uri("/api/cows/{name}", "Marguerite")
                 .addAuthHeader()
                 .exchange()
                 .expectStatus().isOk
