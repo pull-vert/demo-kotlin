@@ -2,13 +2,14 @@ package demo.kotlin.security
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.config.CorsRegistry
-import org.springframework.web.reactive.config.EnableWebFlux
 import org.springframework.web.reactive.config.WebFluxConfigurer
 
 @Configuration
-@EnableWebFlux
 class CORSConfig : WebFluxConfigurer {
 
+    /**
+     * For dev only : avoid CORS errors for local tests
+     */
     override fun addCorsMappings(registry: CorsRegistry) {
         registry
                 .addMapping("/**")
