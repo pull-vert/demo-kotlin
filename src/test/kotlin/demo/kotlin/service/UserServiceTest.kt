@@ -29,9 +29,7 @@ class UserServiceTest(
                     assertThat(it.username).isEqualTo(name)
                     assertThat(it.password)
                             .isNotEqualTo(rawPassword)
-                            .satisfies {
-                                assertThat(passwordEncoder.matches(rawPassword, it)).isTrue()
-                            }
+                            .matches { passwordEncoder.matches(rawPassword, it) }
                 }.verifyComplete()
     }
 

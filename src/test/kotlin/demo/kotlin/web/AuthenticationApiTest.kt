@@ -2,6 +2,7 @@ package demo.kotlin.web
 
 import demo.kotlin.dto.AuthRequest
 import demo.kotlin.dto.AuthResponse
+import demo.kotlin.model.Role
 import demo.kotlin.security.JWTUtil
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -30,6 +31,12 @@ internal class AuthenticationApiTest(
                     assertThat(authResponse.token)
                             .isNotEmpty()
                             .matches { jwtUtil.validateToken(it) }
+                            .satisfies {
+                                val claims = jwtUtil.getAllClaimsFromToken(it)
+                                val roles = claims.get("roles", List::class.java)
+                                        .map { Role.valueOf(it as String) }
+                                assertThat(roles).containsOnly(Role.ROLE_USER)
+                            }
                 }
     }
 
