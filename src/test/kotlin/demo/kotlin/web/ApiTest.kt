@@ -21,6 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.WebTestClient
 import reactor.netty.http.client.HttpClient
 
+internal typealias ServerResponseError = Map<String, Any>
 
 @ExtendWith(RestDocumentationExtension::class, SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

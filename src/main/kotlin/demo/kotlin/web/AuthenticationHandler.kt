@@ -17,7 +17,7 @@ class AuthenticationHandler(
         private val jwtUtil: JWTUtil,
         private val passwordEncoder: PasswordEncoder,
         private val userRepository: UserRepository
-) {
+) : ApiHandler() {
     fun auth(req: ServerRequest) =
             req.bodyToMono<AuthRequest>()
                     .flatMap { authRequest ->

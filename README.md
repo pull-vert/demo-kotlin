@@ -38,7 +38,8 @@ keytool -genkey -keyalg RSA -alias selfsigned -keystore keystore.jks -storepass 
 
 ### [step 5 : Spring security with JWT](https://github.com/pull-vert/demo-kotlin/tree/step5-spring-security)
 * Create package demo.kotlin.security
-* Add a User entity, associated with UserRepository and UserService
+* Security and Roles for endpoints is configured in SecurityConfig class
+* Add a User entity, with UserRepository and UserService
 * New AuthenticationHandler for POST /auth
 * Followed these tutorials : [jwt-on-spring-webflux](https://medium.com/@ard333/authentication-and-authorization-using-jwt-on-spring-webflux-29b81f813e78)
 * https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#reactive-applications
