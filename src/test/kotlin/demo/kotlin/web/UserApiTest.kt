@@ -28,7 +28,7 @@ internal class UserApiTest(
         client.delete().uri("/api/users/{userId}", USER_FRED_UUID)
                 .addAuthHeader(ROLE_ADMIN)
                 .exchange()
-                .expectStatus().isOk
+                .expectStatus().isNoContent
     }
 
     @Test
@@ -54,7 +54,7 @@ internal class UserApiTest(
        client.delete().uri("/api/users/{userId}", UUID.randomUUID())
                 .addAuthHeader(ROLE_ADMIN)
                 .exchange()
-                .expectStatus().isNotFound
+                .expectStatus().isNoContent
     }
 
     // todo : test for restDocs (+ adoc)
