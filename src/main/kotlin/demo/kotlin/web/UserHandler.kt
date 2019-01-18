@@ -1,19 +1,14 @@
 package demo.kotlin.web
 
-import demo.kotlin.repository.UserRepository
+import demo.kotlin.service.UserService
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
-import org.springframework.web.reactive.function.server.ServerResponse.notFound
 import org.springframework.web.reactive.function.server.ServerResponse.ok
-import reactor.core.publisher.toMono
+import org.springframework.web.reactive.function.server.body
 
 @Component
-class UserHandler(private val userRepository: UserRepository) : ApiHandler() {
+class UserHandler(private val userService: UserService) {
 
-    fun delete(req: ServerRequest) =
-        req.pathVariable("userId").toMono()
-                .map { it.toUuid() } // throws ResponseStatusException
-                .flatMap { userRepository.deleteById(it) }
-                .then(ok().build())
-                .switchIfEmpty(notFound().build())
+    // todo add save handler
+    fun delete(req: ServerRequest) = ok().body(userService.deleteById(req.pathVariable("userId")))
 }

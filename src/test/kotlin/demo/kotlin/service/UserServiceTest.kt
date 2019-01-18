@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import reactor.test.test
-import java.util.*
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
@@ -35,7 +34,7 @@ class UserServiceTest(
 
     @Test
     fun `Verify deleteById is working`() {
-        userService.deleteById(UUID.fromString(USER_FRED_UUID))
+        userService.deleteById(USER_FRED_UUID)
                 .test()
                 .verifyComplete()
     }

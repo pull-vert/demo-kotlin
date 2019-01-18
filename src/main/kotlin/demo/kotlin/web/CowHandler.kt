@@ -7,7 +7,7 @@ import org.springframework.web.reactive.function.server.ServerResponse.ok
 import org.springframework.web.reactive.function.server.body
 
 @Component
-class CowHandler(private val cowRepository: CowRepository) : ApiHandler() {
+class CowHandler(private val cowRepository: CowRepository) {
 
     fun findByName(req: ServerRequest)= ok().body(cowRepository.findByName(req.pathVariable("name")))
 
