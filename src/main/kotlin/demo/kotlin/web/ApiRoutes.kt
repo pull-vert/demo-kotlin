@@ -1,5 +1,8 @@
 package demo.kotlin.web
 
+import demo.kotlin.web.handlers.AuthenticationHandler
+import demo.kotlin.web.handlers.CowHandler
+import demo.kotlin.web.handlers.UserHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType.APPLICATION_JSON

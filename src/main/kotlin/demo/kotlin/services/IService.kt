@@ -1,4 +1,4 @@
-package demo.kotlin.service
+package demo.kotlin.services
 
 import demo.kotlin.web.BadRequestStatusException
 import demo.kotlin.web.NotFoundStatusException

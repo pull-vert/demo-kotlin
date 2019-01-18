@@ -1,9 +1,9 @@
-package demo.kotlin.service
+package demo.kotlin.services
 
-import demo.kotlin.dto.AuthRequest
-import demo.kotlin.dto.AuthResponse
-import demo.kotlin.model.User
-import demo.kotlin.repository.UserRepository
+import demo.kotlin.web.dtos.AuthRequest
+import demo.kotlin.web.dtos.AuthResponse
+import demo.kotlin.model.entities.User
+import demo.kotlin.repositories.UserRepository
 import demo.kotlin.security.JWTUtil
 import demo.kotlin.web.UnauthorizedStatusException
 import org.springframework.security.crypto.password.PasswordEncoder

@@ -5,7 +5,7 @@ import demo.kotlin.security.JWTUtil
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.web.server.LocalServerPort
-import demo.kotlin.model.Role.ROLE_ADMIN
+import demo.kotlin.model.entities.Role.ROLE_ADMIN
 import org.assertj.core.api.Assertions
 import org.springframework.test.web.reactive.server.expectBody
 import java.util.*

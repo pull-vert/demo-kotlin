@@ -1,7 +1,7 @@
-package demo.kotlin.service
+package demo.kotlin.services
 
 import demo.kotlin.USER_FRED_UUID
-import demo.kotlin.model.User
+import demo.kotlin.model.entities.User
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

@@ -1,4 +1,4 @@
-package demo.kotlin.repository
+package demo.kotlin.repositories
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

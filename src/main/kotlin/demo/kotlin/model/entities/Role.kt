@@ -1,4 +1,4 @@
-package demo.kotlin.model
+package demo.kotlin.model.entities
 
 import org.springframework.security.core.GrantedAuthority
 

@@ -1,3 +1,3 @@
-package demo.kotlin.dto
+package demo.kotlin.web.dtos
 
 data class AuthResponse(val token: String)

@@ -1,6 +1,6 @@
 package demo.kotlin.web
 
-import demo.kotlin.model.Cow
+import demo.kotlin.model.entities.Cow
 import demo.kotlin.security.JWTUtil
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

@@ -1,6 +1,6 @@
-package demo.kotlin.repository
+package demo.kotlin.repositories
 
-import demo.kotlin.model.Cow
+import demo.kotlin.model.entities.Cow
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 import org.springframework.stereotype.Repository
 import reactor.core.publisher.Mono

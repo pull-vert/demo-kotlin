@@ -1,9 +1,9 @@
 package demo.kotlin
 
-import demo.kotlin.model.Cow
-import demo.kotlin.model.User
-import demo.kotlin.repository.CowRepository
-import demo.kotlin.service.UserService
+import demo.kotlin.model.entities.Cow
+import demo.kotlin.model.entities.User
+import demo.kotlin.repositories.CowRepository
+import demo.kotlin.services.UserService
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Component
 import reactor.core.publisher.toFlux

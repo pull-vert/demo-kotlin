@@ -1,6 +1,6 @@
-package demo.kotlin.web
+package demo.kotlin.web.handlers
 
-import demo.kotlin.service.CowService
+import demo.kotlin.services.CowService
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse.ok
