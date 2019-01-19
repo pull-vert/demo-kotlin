@@ -25,7 +25,8 @@ class ApiRoutes(
                     GET("/", cowHandler::findAll)
                 }
                 "/users".nest {
-                    DELETE("/{userId}", userHandler::delete)
+                    GET("/{id}", userHandler::findById)
+                    DELETE("/{id}", userHandler::deleteById)
                 }
             }
             "/auth".nest {

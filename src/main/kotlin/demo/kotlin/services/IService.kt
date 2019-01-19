@@ -1,14 +1,15 @@
 package demo.kotlin.services
 
+import demo.kotlin.model.entities.IEntity
+import demo.kotlin.repositories.IRepository
 import demo.kotlin.web.BadRequestStatusException
 import demo.kotlin.web.NotFoundStatusException
-import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 import reactor.core.publisher.switchIfEmpty
 import java.util.*
 
-interface IService<T> {
+interface IService<T : IEntity> {
 
-    val repository: ReactiveMongoRepository<T, UUID>
+    val repository: IRepository<T>
 
     fun findById(id: String) =
             repository.findById(id.toUuid())

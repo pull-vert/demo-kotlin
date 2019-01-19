@@ -1,19 +1,15 @@
 package demo.kotlin.model.entities
 
-import org.springframework.data.annotation.Id
 import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
 
 class User(
-        username: String,
-        password: String,
+        private var username: String,
+        private var password: String,
         var roles: MutableList<Role> = mutableListOf(Role.ROLE_USER), // Default Role : USER
         var active: Boolean = true,
-        @Id val id: UUID = UUID.randomUUID()
-) : UserDetails {
-
-    private var username = username
-    private var password = password
+        override val id: UUID = UUID.randomUUID()
+) : IEntity, UserDetails {
 
     override fun getUsername() = this.username
 

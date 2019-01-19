@@ -18,7 +18,7 @@ internal class CowApiTest(
     : ApiTest(port, jwtUtil) {
 
     @Test
-    fun `Verify findByName returns Margerite`() {
+    fun `Verify findByName returns expected cow`() {
         client.get().uri("/api/cows/{name}", "Marguerite")
                 .addAuthHeader()
                 .exchange()

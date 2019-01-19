@@ -11,6 +11,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 internal const val USER_FRED_UUID = "79e9eb45-2835-49c8-ad3b-c951b591bc7f"
+internal const val USER_BOSS_UUID = "67d4306e-d99d-4e54-8b1d-5b1e92691a4e"
 
 @Component
 class DatabaseInitializer(
@@ -34,7 +35,7 @@ class DatabaseInitializer(
                 }.blockLast()
 
         val fred = User("Fred", "password", id = UUID.fromString(USER_FRED_UUID))
-        val boss = User("Boss", "secured_password")
+        val boss = User("Boss", "secured_password", id = UUID.fromString(USER_BOSS_UUID))
         listOf(fred, boss)
                 .toFlux()
                 .flatMap {

@@ -1,34 +1,38 @@
 package demo.kotlin.web
 
+import demo.kotlin.USER_BOSS_UUID
 import demo.kotlin.USER_FRED_UUID
+import demo.kotlin.model.entities.Role.ROLE_ADMIN
+import demo.kotlin.model.entities.User
 import demo.kotlin.security.JWTUtil
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.web.server.LocalServerPort
-import demo.kotlin.model.entities.Role.ROLE_ADMIN
-import org.assertj.core.api.Assertions
+import org.springframework.test.annotation.Rollback
 import org.springframework.test.web.reactive.server.expectBody
 import java.util.*
 
 internal class UserApiTest(
         @LocalServerPort private val port: Int,
-        @Autowired private val jwtUtil: JWTUtil)
-    : ApiTest(port, jwtUtil) {
+        @Autowired private val jwtUtil: JWTUtil
+) : ApiTest(port, jwtUtil) {
 
-    @Test
-    fun `Verify delete with authenticated USER role fails`() {
-        client.delete().uri("/api/users/{userId}", USER_FRED_UUID)
-                .addAuthHeader()
-                .exchange()
-                .expectStatus().isForbidden
-    }
-
+    @Rollback
     @Test
     fun `Verify delete with authenticated ADMIN role works`() {
         client.delete().uri("/api/users/{userId}", USER_FRED_UUID)
                 .addAuthHeader(ROLE_ADMIN)
                 .exchange()
                 .expectStatus().isNoContent
+    }
+
+    @Test
+    fun `Verify delete with authenticated USER role fails`() {
+        client.delete().uri("/api/users/{userId}", USER_BOSS_UUID)
+                .addAuthHeader()
+                .exchange()
+                .expectStatus().isForbidden
     }
 
     @Test
@@ -41,11 +45,11 @@ internal class UserApiTest(
                 .expectBody<ServerResponseError>()
                 .consumeWith {
                     val error = it.responseBody!!
-                    Assertions.assertThat(error["message"]).isEqualTo("Invalid UUID string: $invalidUuid")
-                    Assertions.assertThat(error["path"]).isEqualTo("/api/users/$invalidUuid")
-                    Assertions.assertThat(error["timestamp"]).isNotNull
-                    Assertions.assertThat(error["status"]).isEqualTo(400)
-                    Assertions.assertThat(error["error"]).isEqualTo("Bad Request")
+                    assertThat(error["message"]).isEqualTo("Invalid UUID string: $invalidUuid")
+                    assertThat(error["path"]).isEqualTo("/api/users/$invalidUuid")
+                    assertThat(error["timestamp"]).isNotNull
+                    assertThat(error["status"]).isEqualTo(400)
+                    assertThat(error["error"]).isEqualTo("Bad Request")
                 }
     }
 
@@ -55,6 +59,19 @@ internal class UserApiTest(
                 .addAuthHeader(ROLE_ADMIN)
                 .exchange()
                 .expectStatus().isNoContent
+    }
+
+    @Test
+    fun `Verify findById returns expected user`() {
+        client.get().uri("/api/users/{id}", USER_BOSS_UUID)
+                .addAuthHeader()
+                .exchange()
+                .expectStatus().isOk
+                .expectBody<User>()
+                .consumeWith {
+                    val user = it.responseBody!!
+                    assertThat(user.username).isEqualTo("Boss")
+                }
     }
 
     // todo : test for restDocs (+ adoc)
