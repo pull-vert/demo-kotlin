@@ -26,7 +26,7 @@ class AuthenticationManager(
 
         if (null != username && jwtUtil.validateToken(authToken)) {
             val claims = jwtUtil.getAllClaimsFromToken(authToken)
-            val roles = claims.get("roles", List::class.java)
+            val roles = claims.get("authorities", List::class.java)
                     .map { Role.valueOf(it as String) }
             return UsernamePasswordAuthenticationToken(username, null, roles).toMono()
         } else {

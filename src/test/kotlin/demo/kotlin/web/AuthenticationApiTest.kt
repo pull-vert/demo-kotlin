@@ -33,7 +33,7 @@ internal class AuthenticationApiTest(
                             .matches { jwtUtil.validateToken(it) }
                             .satisfies {
                                 val claims = jwtUtil.getAllClaimsFromToken(it)
-                                val roles = claims.get("roles", List::class.java)
+                                val roles = claims.get("authorities", List::class.java)
                                         .map { Role.valueOf(it as String) }
                                 assertThat(roles).containsOnly(Role.ROLE_USER)
                             }

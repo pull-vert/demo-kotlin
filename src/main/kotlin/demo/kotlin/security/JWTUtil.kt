@@ -25,7 +25,7 @@ class JWTUtil(
 
     fun generateToken(user: UserDetails): String {
         val claims = mutableMapOf<String, Any>()
-        claims["roles"] = user.authorities
+        claims["authorities"] = user.authorities
         claims["enable"] = user.isEnabled
         return doGenerateToken(user.getUsername(), claims)
     }

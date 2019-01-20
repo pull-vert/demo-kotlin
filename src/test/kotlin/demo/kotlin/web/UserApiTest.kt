@@ -36,7 +36,7 @@ internal class UserApiTest(
     }
 
     @Test
-    fun `Verify delete with invalid uuid as uri var fails`() {
+    fun `Verify delete with invalid uuid uri param fails`() {
         val invalidUuid = "invalid_uuid"
         client.delete().uri("/api/users/{userId}", invalidUuid)
                 .addAuthHeader(ROLE_ADMIN)
@@ -71,7 +71,33 @@ internal class UserApiTest(
                 .consumeWith {
                     val user = it.responseBody!!
                     assertThat(user.username).isEqualTo("Boss")
+                    assertThat(user.id).isEqualTo(UUID.fromString(USER_BOSS_UUID))
                 }
+    }
+
+    @Test
+    fun `Verify findById with no JWT Token fails`() {
+        client.get().uri("/api/users/{id}", USER_BOSS_UUID)
+                .exchange()
+                .expectStatus().isUnauthorized
+    }
+
+    @Test
+    fun `Verify findById with invalid uuid uri param fails`() {
+        val invalidUuid = "invalid_uuid"
+        client.get().uri("/api/users/{id}", invalidUuid)
+                .addAuthHeader()
+                .exchange()
+                .expectStatus().isBadRequest
+    }
+
+    @Test
+    fun `Verify save ok`() {
+        client.post().uri("/api/users/")
+                .syncBody(User("William", "password_again"))
+                .addAuthHeader()
+                .exchange()
+                .expectStatus().isCreated
     }
 
     // todo : test for restDocs (+ adoc)
