@@ -7,5 +7,5 @@ import org.springframework.stereotype.Component
 @Component
 class UserHandler(override val service: UserService): IHandler<User> {
 
-    override val findByIdUrl: String = "/api/users/"
+    override val findByIdUrl: String = "/api/users"
 }

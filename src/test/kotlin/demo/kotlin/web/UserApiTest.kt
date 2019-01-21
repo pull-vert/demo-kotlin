@@ -93,11 +93,26 @@ internal class UserApiTest(
 
     @Test
     fun `Verify save ok`() {
+        val userToInsert = User("William", "password_again");
         client.post().uri("/api/users/")
-                .syncBody(User("William", "password_again"))
+                .syncBody(userToInsert)
                 .addAuthHeader()
                 .exchange()
                 .expectStatus().isCreated
+                .expectHeader().value("location") {
+                    assertThat(it).startsWith("/api/users/")
+                    // Then call the returned uri and verify the it returns saved User resource
+                    client.get().uri(it)
+                            .addAuthHeader()
+                            .exchange()
+                            .expectStatus().isOk
+                            .expectBody<User>()
+                            .consumeWith {
+                                val user = it.responseBody!!
+                                assertThat(user.username).isEqualTo("William")
+                                assertThat(user.id).isEqualTo(userToInsert.id)
+                            }
+                }
     }
 
     // todo : test for restDocs (+ adoc)
