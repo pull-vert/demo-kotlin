@@ -46,5 +46,5 @@ class JWTUtilTest {
                 .isFalse()
     }
 
-    private fun generateToken(active: Boolean = true) = jwtUtil.generateToken(User("Fred", "password", active = active))
+    private fun generateToken(active: Boolean = true) = jwtUtil.generateToken(User("Fred", "password", enabled = active))
 }

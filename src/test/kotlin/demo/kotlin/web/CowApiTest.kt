@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
 import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
+import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
+import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document
 import org.springframework.test.web.reactive.server.expectBody
 import org.springframework.test.web.reactive.server.expectBodyList
@@ -42,17 +44,19 @@ internal class CowApiTest(
     }
 
     @Test
-    fun `Verify findByName doc`() {
+    fun `Cow findByName doc`() {
         client.get().uri("/api/cows/{name}", "Marguerite")
                 .addAuthHeader()
                 .exchange()
                 .expectStatus().isOk
                 .expectBody()
-                .consumeWith(document("findByNameCow", responseFields(*cowFields())))
+                .consumeWith(document("findByNameCow",
+                        pathParameters(parameterWithName("name").description("Name of the Cow to search for")),
+                        responseFields(*cowFields())))
     }
 
     @Test
-    fun `Verify findAll doc`() {
+    fun `Cow findAll doc`() {
         client.get().uri("/api/cows/")
                 .addAuthHeader()
                 .exchange()

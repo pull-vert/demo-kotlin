@@ -50,8 +50,8 @@ internal abstract class ApiTest(
 
     private fun buildAuthHeader(role: Role): String {
         val user = when(role) {
-            ROLE_USER -> User("Fred", "password", authorities = mutableListOf(ROLE_USER))
-            ROLE_ADMIN -> User("Boss", "secured_password", authorities = mutableListOf(ROLE_ADMIN))
+            ROLE_USER -> User("Fred", "password", authorities = mutableListOf(ROLE_USER), enabled = true)
+            ROLE_ADMIN -> User("Boss", "secured_password", authorities = mutableListOf(ROLE_ADMIN), enabled = true)
         }
         val jwtToken = jwtUtil.generateToken(user)
         println("generating jwt token : $jwtToken")

@@ -7,7 +7,7 @@ class User(
         private var username: String,
         private var password: String,
         private var authorities: MutableList<Role> = mutableListOf(Role.ROLE_USER), // Default Role : USER
-        var active: Boolean = true,
+        private var enabled: Boolean = false,
         override val id: UUID = UUID.randomUUID()
 ) : IEntity, UserDetails {
 
@@ -18,13 +18,13 @@ class User(
 
     override fun getAuthorities() = this.authorities
 
-    override fun isEnabled() = this.active
+    override fun isEnabled() = this.enabled
 
-    override fun isCredentialsNonExpired() = false
+    override fun isCredentialsNonExpired() = true
 
-    override fun isAccountNonExpired() = false
+    override fun isAccountNonExpired() = true
 
-    override fun isAccountNonLocked() = false
+    override fun isAccountNonLocked() = true
 
     fun setPassword(password: String) {
         this.password = password

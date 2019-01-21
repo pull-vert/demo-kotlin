@@ -29,6 +29,8 @@ class UserServiceTest(
                     assertThat(it.password)
                             .isNotEqualTo(rawPassword)
                             .matches { passwordEncoder.matches(rawPassword, it) }
+                    assertThat(it.isEnabled)
+                            .isFalse()
                 }.verifyComplete()
     }
 

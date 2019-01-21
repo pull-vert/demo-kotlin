@@ -8,4 +8,6 @@ import org.springframework.stereotype.Component
 class UserHandler(override val service: UserService): IHandler<User> {
 
     override val findByIdUrl: String = "/api/users"
+
+    // todo when Mapstruct is here save must not provide a ID
 }

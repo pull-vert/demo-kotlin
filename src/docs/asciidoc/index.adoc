@@ -2,11 +2,21 @@
 
 This is the documentation for the API, with curl command, request and response format for each endpoint:
 
-== GET all Cows
+== Cow Operations
+
+=== GET all Cows
 operation::findAllCows[snippets='curl-request,http-request,http-response,response-fields']
 
-== GET cow by name
-operation::findByNameCow[snippets='curl-request,http-request,http-response,response-fields']
+=== GET Cow by name
+operation::findByNameCow[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
 
-== POST auth
+== User Operations
+
+=== GET User by ID
+operation::findByIdUser[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
+
+=== POST authentication
 operation::auth[snippets='curl-request,http-request,http-response,request-fields,response-fields']
+
+=== POST (save) User
+operation::saveUser[snippets='curl-request,http-request,http-response,request-fields,response-headers']

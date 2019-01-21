@@ -34,8 +34,8 @@ class DatabaseInitializer(
                     cowRepository.save(it)
                 }.blockLast()
 
-        val fred = User("Fred", "password", id = UUID.fromString(USER_FRED_UUID))
-        val boss = User("Boss", "secured_password", id = UUID.fromString(USER_BOSS_UUID))
+        val fred = User("Fred", "password", id = UUID.fromString(USER_FRED_UUID), enabled = true)
+        val boss = User("Boss", "secured_password", id = UUID.fromString(USER_BOSS_UUID), enabled = true)
         listOf(fred, boss)
                 .toFlux()
                 .flatMap {

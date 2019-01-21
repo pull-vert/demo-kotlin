@@ -9,6 +9,12 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
+import org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders
+import org.springframework.restdocs.payload.PayloadDocumentation.*
+import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
+import org.springframework.restdocs.request.RequestDocumentation.pathParameters
+import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.web.reactive.server.expectBody
 import java.util.*
@@ -20,7 +26,7 @@ internal class UserApiTest(
 
     @Rollback
     @Test
-    fun `Verify delete with authenticated ADMIN role works`() {
+    fun `Verify delete User with authenticated ADMIN role works`() {
         client.delete().uri("/api/users/{userId}", USER_FRED_UUID)
                 .addAuthHeader(ROLE_ADMIN)
                 .exchange()
@@ -28,7 +34,7 @@ internal class UserApiTest(
     }
 
     @Test
-    fun `Verify delete with authenticated USER role fails`() {
+    fun `Verify delete User with authenticated USER role fails`() {
         client.delete().uri("/api/users/{userId}", USER_BOSS_UUID)
                 .addAuthHeader()
                 .exchange()
@@ -36,7 +42,7 @@ internal class UserApiTest(
     }
 
     @Test
-    fun `Verify delete with invalid uuid uri param fails`() {
+    fun `Verify delete User with invalid uuid uri param fails`() {
         val invalidUuid = "invalid_uuid"
         client.delete().uri("/api/users/{userId}", invalidUuid)
                 .addAuthHeader(ROLE_ADMIN)
@@ -54,7 +60,7 @@ internal class UserApiTest(
     }
 
     @Test
-    fun `Verify delete with valid uuid but no user matching fails`() {
+    fun `Verify delete User with valid uuid but no user matching fails`() {
        client.delete().uri("/api/users/{userId}", UUID.randomUUID())
                 .addAuthHeader(ROLE_ADMIN)
                 .exchange()
@@ -62,7 +68,7 @@ internal class UserApiTest(
     }
 
     @Test
-    fun `Verify findById returns expected user`() {
+    fun `Verify findById returns expected User`() {
         client.get().uri("/api/users/{id}", USER_BOSS_UUID)
                 .addAuthHeader()
                 .exchange()
@@ -92,11 +98,10 @@ internal class UserApiTest(
     }
 
     @Test
-    fun `Verify save ok`() {
-        val userToInsert = User("William", "password_again");
+    fun `Verify save User ok`() {
+        val userToInsert = User("William", "password_again")
         client.post().uri("/api/users/")
                 .syncBody(userToInsert)
-                .addAuthHeader()
                 .exchange()
                 .expectStatus().isCreated
                 .expectHeader().value("location") {
@@ -111,9 +116,50 @@ internal class UserApiTest(
                                 val user = it.responseBody!!
                                 assertThat(user.username).isEqualTo("William")
                                 assertThat(user.id).isEqualTo(userToInsert.id)
+                                assertThat(user.isEnabled).isFalse()
                             }
                 }
     }
 
-    // todo : test for restDocs (+ adoc)
+    @Test
+    fun `User findById doc`() {
+        client.get().uri("/api/users/{id}", USER_BOSS_UUID)
+                .addAuthHeader()
+                .exchange()
+                .expectStatus().isOk
+                .expectBody()
+                .consumeWith(document("findByIdUser",
+                        pathParameters(parameterWithName("id").description("ID of the User to search for")),
+                        responseFields(*userFields())))
+    }
+
+    @Test
+    fun `Save doc`() {
+        client.post().uri("/api/users/")
+                .syncBody(User("User", "password_again_again"))
+                .exchange()
+                .expectStatus().isCreated
+                .expectBody()
+                .consumeWith(document("saveUser",
+                        requestFields(*userFields()),
+                        responseHeaders(
+                                headerWithName("location").description("GET URI for accessing created User by ID")
+                        )))
+    }
+
+    /**
+     * User fields used in requests and responses.
+     *
+     * @return
+     */
+    private fun userFields() = arrayOf(
+            fieldWithPath("username").description("username"),
+            fieldWithPath("password").description("raw (non encrypted) password"),
+            fieldWithPath("authorities.[]").description("An array of authorities (roles)"),
+            fieldWithPath("enabled").description("if user is active or disabled"),
+            fieldWithPath("credentialsNonExpired").description("if user's credential is active or expired"),
+            fieldWithPath("accountNonExpired").description("if user's account is active or expired"),
+            fieldWithPath("accountNonLocked").description("if user's account is not locked"),
+            fieldWithPath("id").description("ID of the User document")
+    )
 }

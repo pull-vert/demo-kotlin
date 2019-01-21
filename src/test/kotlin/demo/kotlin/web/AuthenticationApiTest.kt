@@ -57,11 +57,10 @@ internal class AuthenticationApiTest(
     }
 
     @Test
-    fun `Verify auth doc`() {
+    fun `Auth doc`() {
         client.post().uri("/auth/")
                 .syncBody(AuthRequest("Fred", "password"))
                 .exchange()
-                .expectStatus().isOk
                 .expectBody()
                 .consumeWith(document("auth",
                         requestFields(
