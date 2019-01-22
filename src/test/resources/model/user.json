@@ -1,0 +1,13 @@
+{
+  "username": "Fred",
+  "password": "password",
+  "authorities": [
+    "ROLE_USER"
+  ],
+  "active": true,
+  "id": "79e9eb45-2835-49c8-ad3b-c951b591bc7f",
+  "enabled": true,
+  "accountNonExpired": false,
+  "accountNonLocked": false,
+  "credentialsNonExpired": false
+}

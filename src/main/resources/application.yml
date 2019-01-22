@@ -1,0 +1,12 @@
+server:
+  port: 8443
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.jks
+    key-store-password: secret
+  http2:
+    enabled: true
+
+jwt:
+  secret: mysecret
+  expiration: 28800

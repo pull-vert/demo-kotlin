@@ -2,10 +2,9 @@
 This is an example of a Spring boot reactive (Webflux) app in Kotlin, made at first for a live coding and completed since then with new steps.
 Every step adds new features.
 
-## Kotlin with Spring annotations (@Service, @Repository...)
+[Master](https://github.com/pull-vert/demo-kotlin) contains the most recent finished feature.
 
-### [step 0 : initializr](https://github.com/pull-vert/demo-kotlin/tree/master)
-Direct commit from Spring Initializr
+## Kotlin with Spring annotations (@Service, @Repository...)
 
 ### [step 1 : project skeleton](https://github.com/pull-vert/demo-kotlin/tree/step1-skeleton)
 Empty files for the demo
@@ -36,6 +35,15 @@ keytool -genkey -keyalg RSA -alias selfsigned -keystore keystore.jks -storepass 
 * Modify build.gradle to add asciidoc and Spring Resdocs
 * Modify ApiTest to generate doc
 * add index.adoc to expose all API documentation
+
+### [step 5 : Spring security with JWT](https://github.com/pull-vert/demo-kotlin/tree/step5-spring-security)
+* New package demo.kotlin.security
+* Security and Roles for endpoints is configured in SecurityConfig class
+* New User entity, with UserRepository, UserService and UserHandler
+* New AuthenticationHandler for POST /auth
+* Followed these tutorials : [jwt-on-spring-webflux](https://medium.com/@ard333/authentication-and-authorization-using-jwt-on-spring-webflux-29b81f813e78)
+* https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#reactive-applications
+* https://spring.io/guides/topicals/spring-security-architecture
 
 ## Kotlin with Functional bean registration
 ### [step 2.1 : functional bean registration](https://github.com/pull-vert/demo-kotlin/tree/step2.1-functional-bean-registration)
