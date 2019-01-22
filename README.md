@@ -2,9 +2,9 @@
 This is an example of a Spring boot reactive (Webflux) app in Kotlin, made at first for a live coding and completed since then with new steps.
 Every step adds new features.
 
+[Master](https://github.com/pull-vert/demo-kotlin) contains the most recent finished feature.
+
 ## Kotlin with Spring annotations (@Service, @Repository...)
-### [step 0 : initializr](https://github.com/pull-vert/demo-kotlin/tree/master)
-Direct commit from Spring Initializr
 
 ### [step 1 : project skeleton](https://github.com/pull-vert/demo-kotlin/tree/step1-skeleton)
 Empty files for the demo
