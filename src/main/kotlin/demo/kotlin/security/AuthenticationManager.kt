@@ -1,6 +1,6 @@
 package demo.kotlin.security
 
-import demo.kotlin.model.entities.Role
+import demo.kotlin.entities.Role
 import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication

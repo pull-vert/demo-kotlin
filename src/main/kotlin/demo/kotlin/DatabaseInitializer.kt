@@ -1,7 +1,7 @@
 package demo.kotlin
 
-import demo.kotlin.model.entities.Cow
-import demo.kotlin.model.entities.User
+import demo.kotlin.entities.Cow
+import demo.kotlin.entities.User
 import demo.kotlin.repositories.CowRepository
 import demo.kotlin.services.UserService
 import org.springframework.boot.CommandLineRunner

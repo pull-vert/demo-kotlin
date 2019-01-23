@@ -1,6 +1,6 @@
 package demo.kotlin.services
 
-import demo.kotlin.model.entities.IEntity
+import demo.kotlin.entities.IEntity
 import demo.kotlin.repositories.IRepository
 import demo.kotlin.web.BadRequestStatusException
 import demo.kotlin.web.NotFoundStatusException

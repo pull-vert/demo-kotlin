@@ -1,4 +1,4 @@
-package demo.kotlin.model.entities
+package demo.kotlin.entities
 
 import org.springframework.data.annotation.Id
 import java.util.*

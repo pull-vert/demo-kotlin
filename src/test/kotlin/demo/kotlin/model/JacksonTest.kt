@@ -3,7 +3,7 @@ package demo.kotlin.model
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import demo.kotlin.USER_FRED_UUID
-import demo.kotlin.model.entities.User
+import demo.kotlin.entities.User
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

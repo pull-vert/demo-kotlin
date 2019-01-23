@@ -1,6 +1,6 @@
 package demo.kotlin.web.handlers
 
-import demo.kotlin.model.dtos.AuthRequestDto
+import demo.kotlin.web.dtos.AuthRequestDto
 import demo.kotlin.services.UserService
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest

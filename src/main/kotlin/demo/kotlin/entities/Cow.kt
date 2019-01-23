@@ -1,4 +1,4 @@
-package demo.kotlin.model.entities
+package demo.kotlin.entities
 
 import java.time.LocalDateTime
 import java.util.*

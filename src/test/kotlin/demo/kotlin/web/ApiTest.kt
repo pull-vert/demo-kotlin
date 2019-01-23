@@ -1,9 +1,9 @@
 package demo.kotlin.web
 
-import demo.kotlin.model.entities.Role
-import demo.kotlin.model.entities.Role.ROLE_ADMIN
-import demo.kotlin.model.entities.Role.ROLE_USER
-import demo.kotlin.model.entities.User
+import demo.kotlin.entities.Role
+import demo.kotlin.entities.Role.ROLE_ADMIN
+import demo.kotlin.entities.Role.ROLE_USER
+import demo.kotlin.entities.User
 import demo.kotlin.security.JWTUtil
 import io.netty.handler.ssl.SslContextBuilder
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory

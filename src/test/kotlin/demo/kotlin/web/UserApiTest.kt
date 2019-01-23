@@ -2,9 +2,11 @@ package demo.kotlin.web
 
 import demo.kotlin.USER_BOSS_UUID
 import demo.kotlin.USER_FRED_UUID
-import demo.kotlin.model.entities.Role.ROLE_ADMIN
-import demo.kotlin.model.entities.User
+import demo.kotlin.entities.Role.ROLE_ADMIN
+import demo.kotlin.entities.User
 import demo.kotlin.security.JWTUtil
+import demo.kotlin.web.dtos.UserGetDto
+import demo.kotlin.web.dtos.UserSaveDto
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -73,11 +75,11 @@ internal class UserApiTest(
                 .addAuthHeader()
                 .exchange()
                 .expectStatus().isOk
-                .expectBody<User>()
+                .expectBody<UserGetDto>()
                 .consumeWith {
                     val user = it.responseBody!!
                     assertThat(user.username).isEqualTo("Boss")
-                    assertThat(user.id).isEqualTo(UUID.fromString(USER_BOSS_UUID))
+                    assertThat(user.id).isEqualTo(USER_BOSS_UUID)
                 }
     }
 
@@ -99,9 +101,8 @@ internal class UserApiTest(
 
     @Test
     fun `Verify save User ok`() {
-        val userToInsert = User("William", "password_again")
         client.post().uri("/api/users/")
-                .syncBody(userToInsert)
+                .syncBody(UserSaveDto("William", "password_again"))
                 .exchange()
                 .expectStatus().isCreated
                 .expectHeader().value("location") {
@@ -111,12 +112,12 @@ internal class UserApiTest(
                             .addAuthHeader()
                             .exchange()
                             .expectStatus().isOk
-                            .expectBody<User>()
+                            .expectBody<UserGetDto>()
                             .consumeWith {
                                 val user = it.responseBody!!
                                 assertThat(user.username).isEqualTo("William")
-                                assertThat(user.id).isEqualTo(userToInsert.id)
-                                assertThat(user.isEnabled).isFalse()
+                                assertThat(user.id).isNotEmpty()
+                                assertThat(user.enabled).isFalse()
                             }
                 }
     }
@@ -130,36 +131,31 @@ internal class UserApiTest(
                 .expectBody()
                 .consumeWith(document("findByIdUser",
                         pathParameters(parameterWithName("id").description("ID of the User to search for")),
-                        responseFields(*userFields())))
+                        responseFields(
+                                fieldWithPath("username").description("username"),
+                                fieldWithPath("authorities.[]").description("An array of authorities (roles)"),
+                                fieldWithPath("enabled").description("if user is active or disabled"),
+//                                fieldWithPath("credentialsNonExpired").description("if user's credential is active or expired"),
+//                                fieldWithPath("accountNonExpired").description("if user's account is active or expired"),
+//                                fieldWithPath("accountNonLocked").description("if user's account is not locked"),
+                                fieldWithPath("id").description("ID of the User document")
+                        )))
     }
 
     @Test
     fun `Save doc`() {
         client.post().uri("/api/users/")
-                .syncBody(User("User", "password_again_again"))
+                .syncBody(UserSaveDto("User", "password_again_again"))
                 .exchange()
                 .expectStatus().isCreated
                 .expectBody()
                 .consumeWith(document("saveUser",
-                        requestFields(*userFields()),
+                        requestFields(
+                                fieldWithPath("username").description("username"),
+                                fieldWithPath("password").description("raw (non encrypted) password")
+                        ),
                         responseHeaders(
-                                headerWithName("location").description("GET URI for accessing created User by ID")
+                                headerWithName("Location").description("GET URI for accessing created User by ID")
                         )))
     }
-
-    /**
-     * User fields used in requests and responses.
-     *
-     * @return
-     */
-    private fun userFields() = arrayOf(
-            fieldWithPath("username").description("username"),
-            fieldWithPath("password").description("raw (non encrypted) password"),
-            fieldWithPath("authorities.[]").description("An array of authorities (roles)"),
-            fieldWithPath("enabled").description("if user is active or disabled"),
-            fieldWithPath("credentialsNonExpired").description("if user's credential is active or expired"),
-            fieldWithPath("accountNonExpired").description("if user's account is active or expired"),
-            fieldWithPath("accountNonLocked").description("if user's account is not locked"),
-            fieldWithPath("id").description("ID of the User document")
-    )
 }

@@ -1,7 +1,8 @@
 package demo.kotlin.web
 
-import demo.kotlin.model.entities.Cow
+import demo.kotlin.entities.Cow
 import demo.kotlin.security.JWTUtil
+import demo.kotlin.web.dtos.CowGetDto
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,7 +26,7 @@ internal class CowApiTest(
                 .addAuthHeader()
                 .exchange()
                 .expectStatus().isOk
-                .expectBody<Cow>()
+                .expectBody<CowGetDto>()
                 .consumeWith {
                     val cow = it.responseBody!!
                     assertThat(cow.name).isEqualTo("Marguerite")
@@ -39,7 +40,7 @@ internal class CowApiTest(
                 .addAuthHeader()
                 .exchange()
                 .expectStatus().isOk
-                .expectBodyList<Cow>()
+                .expectBodyList<CowGetDto>()
                 .hasSize(2)
     }
 

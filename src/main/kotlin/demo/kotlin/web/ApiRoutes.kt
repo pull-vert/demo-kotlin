@@ -1,6 +1,5 @@
 package demo.kotlin.web
 
-import demo.kotlin.model.entities.User
 import demo.kotlin.web.handlers.AuthenticationHandler
 import demo.kotlin.web.handlers.CowHandler
 import demo.kotlin.web.handlers.UserHandler
@@ -9,7 +8,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.web.reactive.function.server.router
-
 
 @Configuration
 class ApiRoutes(

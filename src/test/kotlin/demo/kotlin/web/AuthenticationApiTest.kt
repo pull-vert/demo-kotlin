@@ -1,8 +1,8 @@
 package demo.kotlin.web
 
-import demo.kotlin.model.dtos.AuthRequestDto
-import demo.kotlin.model.dtos.AuthResponseDto
-import demo.kotlin.model.entities.Role
+import demo.kotlin.web.dtos.AuthRequestDto
+import demo.kotlin.web.dtos.AuthResponseDto
+import demo.kotlin.entities.Role
 import demo.kotlin.security.JWTUtil
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

@@ -1,18 +1,20 @@
 package demo.kotlin.web.handlers
 
-import demo.kotlin.model.dtos.CowDto
-import demo.kotlin.model.entities.Cow
-import demo.kotlin.model.mappers.toCowDto
+import demo.kotlin.entities.Cow
 import demo.kotlin.services.CowService
+import demo.kotlin.web.dtos.CowGetDto
+import demo.kotlin.web.dtos.CowSaveDto
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse.ok
 import org.springframework.web.reactive.function.server.body
 
 @Component
-class CowHandler(override val service: CowService): IHandler<Cow, CowDto> {
+class CowHandler(override val service: CowService): IHandler<Cow, CowGetDto, CowSaveDto> {
 
-    override val entityToDto: (Cow) -> CowDto = { it.toCowDto() }
+    override fun entityToGetDto(entity: Cow) = CowGetDto(entity.name, entity.lastCalvingDate, entity.id.toString())
 
-    fun findByName(req: ServerRequest)= ok().body(service.findByName(req.pathVariable("name")).map { cow -> cow.toCowDto() })
+    override fun saveDtoToEntity(saveDto: CowSaveDto) = Cow(saveDto.name, saveDto.lastCalvingDate)
+
+    fun findByName(req: ServerRequest)= ok().body(service.findByName(req.pathVariable("name")).map(::entityToGetDto))
 }
