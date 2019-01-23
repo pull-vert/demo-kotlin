@@ -1,7 +1,7 @@
 package demo.kotlin.services
 
-import demo.kotlin.web.dtos.AuthRequest
-import demo.kotlin.web.dtos.AuthResponse
+import demo.kotlin.model.dtos.AuthRequestDto
+import demo.kotlin.model.dtos.AuthResponseDto
 import demo.kotlin.model.entities.User
 import demo.kotlin.repositories.UserRepository
 import demo.kotlin.security.JWTUtil
@@ -23,11 +23,11 @@ class UserService(
                     .doOnNext { it.password = passwordEncoder.encode(it.password) }
                     .flatMap { repository.save(it) }
 
-    fun auth(authRequest: AuthRequest) =
-            repository.findByUsername(authRequest.username)
+    fun auth(authRequestDto: AuthRequestDto) =
+            repository.findByUsername(authRequestDto.username)
                     .map { user ->
-                        if (passwordEncoder.matches(authRequest.password, user.getPassword())) {
-                            AuthResponse(jwtUtil.generateToken(user))
+                        if (passwordEncoder.matches(authRequestDto.password, user.getPassword())) {
+                            AuthResponseDto(jwtUtil.generateToken(user))
                         } else {
                             throw UnauthorizedStatusException()
                         }

@@ -1,6 +1,6 @@
 package demo.kotlin.web.handlers
 
-import demo.kotlin.web.dtos.AuthRequest
+import demo.kotlin.model.dtos.AuthRequestDto
 import demo.kotlin.services.UserService
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
@@ -13,6 +13,6 @@ class AuthenticationHandler(
         private val userService: UserService
 ) {
     fun auth(req: ServerRequest) =
-            req.bodyToMono<AuthRequest>()
+            req.bodyToMono<AuthRequestDto>()
                     .flatMap { authRequest -> ok().body(userService.auth(authRequest)) }
 }

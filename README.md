@@ -45,6 +45,10 @@ keytool -genkey -keyalg RSA -alias selfsigned -keystore keystore.jks -storepass 
 * https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#reactive-applications
 * https://spring.io/guides/topicals/spring-security-architecture
 
+### [step 6 : DTOs + bean validation](https://github.com/pull-vert/demo-kotlin/tree/step6-dtos-bean-validation)
+* now webservice endpoints consume and return DTOs
+* mapping between POJOs is made by Extension Functions
+
 ## Kotlin with Functional bean registration
 ### [step 2.1 : functional bean registration](https://github.com/pull-vert/demo-kotlin/tree/step2.1-functional-bean-registration)
 inspired by : [kofu-reactive-mongodb-sample](https://github.com/spring-projects/spring-fu/tree/master/samples/kofu-reactive-mongodb)

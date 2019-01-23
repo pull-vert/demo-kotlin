@@ -1,7 +1,7 @@
 package demo.kotlin.web
 
-import demo.kotlin.web.dtos.AuthRequest
-import demo.kotlin.web.dtos.AuthResponse
+import demo.kotlin.model.dtos.AuthRequestDto
+import demo.kotlin.model.dtos.AuthResponseDto
 import demo.kotlin.model.entities.Role
 import demo.kotlin.security.JWTUtil
 import org.assertj.core.api.Assertions.assertThat
@@ -22,10 +22,10 @@ internal class AuthenticationApiTest(
     @Test
     fun `Verify auth ok`() {
         client.post().uri("/auth/")
-                .syncBody(AuthRequest("Fred", "password"))
+                .syncBody(AuthRequestDto("Fred", "password"))
                 .exchange()
                 .expectStatus().isOk
-                .expectBody<AuthResponse>()
+                .expectBody<AuthResponseDto>()
                 .consumeWith {
                     val authResponse = it.responseBody!!
                     assertThat(authResponse.token)
@@ -43,7 +43,7 @@ internal class AuthenticationApiTest(
     @Test
     fun `Verify auth unknown user unauthorized`() {
         client.post().uri("/auth/")
-                .syncBody(AuthRequest("John", "password"))
+                .syncBody(AuthRequestDto("John", "password"))
                 .exchange()
                 .expectStatus().isUnauthorized
     }
@@ -51,7 +51,7 @@ internal class AuthenticationApiTest(
     @Test
     fun `Verify auth incorrect password unauthorized`() {
         client.post().uri("/auth/")
-                .syncBody(AuthRequest("Fred", "incorrect_password"))
+                .syncBody(AuthRequestDto("Fred", "incorrect_password"))
                 .exchange()
                 .expectStatus().isUnauthorized
     }
@@ -59,7 +59,7 @@ internal class AuthenticationApiTest(
     @Test
     fun `Auth doc`() {
         client.post().uri("/auth/")
-                .syncBody(AuthRequest("Fred", "password"))
+                .syncBody(AuthRequestDto("Fred", "password"))
                 .exchange()
                 .expectBody()
                 .consumeWith(document("auth",

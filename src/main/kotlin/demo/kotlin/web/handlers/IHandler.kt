@@ -1,5 +1,6 @@
 package demo.kotlin.web.handlers
 
+import demo.kotlin.model.dtos.IDto
 import demo.kotlin.model.entities.IEntity
 import demo.kotlin.services.IService
 import org.springframework.core.ParameterizedTypeReference
@@ -10,7 +11,7 @@ import org.springframework.web.reactive.function.server.ServerResponse.created
 import org.springframework.web.reactive.function.server.bodyToMono
 import java.net.URI
 
-interface IHandler<T : IEntity> {
+interface IHandler<T : IEntity, U : IDto> {
 
     val service: IService<T>
 
@@ -20,18 +21,20 @@ interface IHandler<T : IEntity> {
     val findByIdUrl
             get() = "override_findByIdUrl_val_with_actual_Url"
 
-    fun findById(req: ServerRequest)=
-            ok().body(service.findById(req.pathVariable("id")), object : ParameterizedTypeReference<T>() {})
+    val entityToDto: (T) -> U
 
-    fun findAll(req: ServerRequest)=
-            ok().body(service.findAll(), object : ParameterizedTypeReference<T>() {})
+    fun findById(req: ServerRequest) =
+            ok().body(service.findById(req.pathVariable("id")).map(entityToDto), object : ParameterizedTypeReference<U>() {})
+
+    fun findAll(req: ServerRequest) =
+            ok().body(service.findAll().map(entityToDto), object : ParameterizedTypeReference<U>() {})
 
     fun deleteById(req: ServerRequest) =
             noContent().build(service.deleteById(req.pathVariable("id")))
 }
 
 // Must use inline function because of
-inline fun <reified T : IEntity> IHandler<T>.save(req: ServerRequest) =
+inline fun <reified T : IEntity, U : IDto> IHandler<T, U>.save(req: ServerRequest) =
         req.bodyToMono<T>()
                 .flatMap { service.save(it) }
                 .map { it.id }

@@ -19,7 +19,7 @@ plugins {
 
 group = 'demo.kotlin'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_1_8
 
 compileKotlin {
 	kotlinOptions {
@@ -50,7 +50,9 @@ dependencies {
 	compile("io.netty:netty-tcnative-boringssl-static:$netty_tcnative_version") // this dependency is only required for Java 8, since java 9 ALPN is natively supported
     compile('org.springframework.boot:spring-boot-starter-security')
     compile("io.jsonwebtoken:jjwt:$jjwt_version")
-    asciidoctor('org.springframework.restdocs:spring-restdocs-asciidoctor')
+
+	asciidoctor('org.springframework.restdocs:spring-restdocs-asciidoctor')
+
 	testCompile("org.springframework.boot:spring-boot-starter-test") {
         exclude group: 'junit', module: 'junit'
     }
