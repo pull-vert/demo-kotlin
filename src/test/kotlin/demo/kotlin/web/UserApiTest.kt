@@ -11,6 +11,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.core.io.ClassPathResource
+import org.springframework.core.io.ResourceLoader
 import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
 import org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders
 import org.springframework.restdocs.payload.PayloadDocumentation.*
@@ -19,6 +21,8 @@ import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.web.reactive.server.expectBody
+import org.springframework.util.ResourceUtils
+import org.springframework.web.reactive.function.BodyInserters
 import java.util.*
 
 internal class UserApiTest(
@@ -119,6 +123,41 @@ internal class UserApiTest(
                                 assertThat(user.id).isNotEmpty()
                                 assertThat(user.enabled).isFalse()
                             }
+                }
+    }
+
+    @Test
+    fun `Verify save User with password too short bean validation fails`() {
+        client.post().uri("/api/users/")
+                .syncBody(UserSaveDto("Wrong", "pass"))
+                .exchange()
+                .expectStatus().isBadRequest
+                .expectBody<ServerResponseError>()
+                .consumeWith {
+                    val error = it.responseBody!!
+                    assertThat(error["message"] as String).contains("password(pass)", "8", "200")
+                    assertThat(error["path"]).isEqualTo("/api/users/")
+                    assertThat(error["timestamp"]).isNotNull
+                    assertThat(error["status"]).isEqualTo(400)
+                    assertThat(error["error"]).isEqualTo("Bad Request")
+                }
+    }
+
+    @Test
+    fun `Verify save User with no password bean validation fails`() {
+        val resource = ClassPathResource("web/dtos/user_no_password.json")
+        client.post().uri("/api/users/")
+                .body(BodyInserters.fromResource(resource))
+                .exchange()
+                .expectStatus().isBadRequest
+                .expectBody<ServerResponseError>()
+                .consumeWith {
+                    val error = it.responseBody!!
+                    assertThat(error["message"] as String).contains("password(null)")
+                    assertThat(error["path"]).isEqualTo("/api/users/")
+                    assertThat(error["timestamp"]).isNotNull
+                    assertThat(error["status"]).isEqualTo(400)
+                    assertThat(error["error"]).isEqualTo("Bad Request")
                 }
     }
 

@@ -8,9 +8,13 @@ import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse.ok
 import org.springframework.web.reactive.function.server.body
+import javax.validation.Validator
 
 @Component
-class CowHandler(override val service: CowService): IHandler<Cow, CowGetDto, CowSaveDto> {
+class CowHandler(
+        override val service: CowService,
+        override val validator: Validator
+): IHandler<Cow, CowGetDto, CowSaveDto> {
 
     override fun entityToGetDto(entity: Cow) = CowGetDto(entity.name, entity.lastCalvingDate, entity.id.toString())
 
