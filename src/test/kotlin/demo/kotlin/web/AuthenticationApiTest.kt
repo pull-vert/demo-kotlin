@@ -57,6 +57,23 @@ internal class AuthenticationApiTest(
     }
 
     @Test
+    fun `Verify auth no password bean validation fails`() {
+        client.post().uri("/auth/")
+                .syncBody(AuthRequestDto("John", null))
+                .exchange()
+                .expectStatus().isBadRequest
+                .expectBody<ServerResponseError>()
+                .consumeWith {
+                    val error = it.responseBody!!
+                    assertThat(error["message"] as String).contains("password(null)")
+                    assertThat(error["path"]).isEqualTo("/auth/")
+                    assertThat(error["timestamp"]).isNotNull
+                    assertThat(error["status"]).isEqualTo(400)
+                    assertThat(error["error"]).isEqualTo("Bad Request")
+                }
+    }
+
+    @Test
     fun `Auth doc`() {
         client.post().uri("/auth/")
                 .syncBody(AuthRequestDto("Fred", "password"))
