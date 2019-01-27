@@ -8,8 +8,10 @@ class User(
         private var password: String,
         private var authorities: MutableList<Role> = mutableListOf(Role.ROLE_USER), // Default Role : USER
         private var enabled: Boolean = false,
-        override val id: UUID = UUID.randomUUID()
-) : IEntity, UserDetails {
+        private val id: UUID = UUID.randomUUID()
+) : Entity(), UserDetails {
+
+    override fun getId() = id
 
     // UserDetails
     override fun getUsername() = this.username

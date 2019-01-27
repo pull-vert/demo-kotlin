@@ -30,17 +30,17 @@ class DatabaseInitializer(
         listOf(marguerite, laNoiraude)
                 .toFlux()
                 .flatMap {
-                    println("saving cow ${it.name}")
                     cowRepository.save(it)
-                }.blockLast()
+                }.doOnNext { println("saving cow ${it.name}") }
+                .blockLast()
 
         val fred = User("Fred", "password", id = UUID.fromString(USER_FRED_UUID), enabled = true)
         val boss = User("Boss", "secured_password", id = UUID.fromString(USER_BOSS_UUID), enabled = true)
         listOf(fred, boss)
                 .toFlux()
                 .flatMap {
-                    println("saving user ${it.username} : uuid = ${it.id}")
                     userService.save(it)
-                }.blockLast()
+                }.doOnNext { println("saving user ${it.username}, uuid = ${it.id}, createdDate = ${it.createdDate}, updatedDate = ${it.lastModifiedDate}") }
+                .blockLast()
     }
 }

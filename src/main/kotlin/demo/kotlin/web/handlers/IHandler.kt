@@ -1,6 +1,6 @@
 package demo.kotlin.web.handlers
 
-import demo.kotlin.entities.IEntity
+import demo.kotlin.entities.Entity
 import demo.kotlin.services.IService
 import demo.kotlin.web.dtos.IDto
 import org.springframework.core.ParameterizedTypeReference
@@ -9,7 +9,7 @@ import org.springframework.web.reactive.function.server.ServerResponse.*
 import org.springframework.web.reactive.function.server.bodyToMono
 import java.net.URI
 
-interface IHandler<T : IEntity, GET_DTO : IDto, SAVE_DTO : IDto> : Validate {
+interface IHandler<T : Entity, GET_DTO : IDto, SAVE_DTO : IDto> : Validate {
 
     val service: IService<T>
 
@@ -33,7 +33,7 @@ interface IHandler<T : IEntity, GET_DTO : IDto, SAVE_DTO : IDto> : Validate {
 }
 
 // Must use inline function and reified because of bodyToMono<> not working with normal interface fun
-inline fun <T : IEntity, GET_DTO : IDto, reified SAVE_DTO : IDto> IHandler<T, GET_DTO, SAVE_DTO>.save(req: ServerRequest) =
+inline fun <T : Entity, GET_DTO : IDto, reified SAVE_DTO : IDto> IHandler<T, GET_DTO, SAVE_DTO>.save(req: ServerRequest) =
         req.bodyToMono<SAVE_DTO>()
                 .doOnNext(::callValidator)
                 .map(::saveDtoToEntity)

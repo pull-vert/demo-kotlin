@@ -6,5 +6,7 @@ import java.util.*
 data class Cow(
         val name: String,
         val lastCalvingDate: LocalDateTime? = null,
-        override val id: UUID = UUID.randomUUID()
-) : IEntity
+        private val id: UUID = UUID.randomUUID()
+) : Entity() {
+    override fun getId() = id
+}
