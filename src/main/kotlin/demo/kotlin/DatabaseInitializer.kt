@@ -1,6 +1,7 @@
 package demo.kotlin
 
 import demo.kotlin.entities.Cow
+import demo.kotlin.entities.Entity
 import demo.kotlin.entities.User
 import demo.kotlin.repositories.CowRepository
 import demo.kotlin.services.UserService
@@ -40,7 +41,7 @@ class DatabaseInitializer(
                 .toFlux()
                 .flatMap {
                     userService.save(it)
-                }.doOnNext { println("saving user ${it.username}, uuid = ${it.id}, createdDate = ${it.createdDate}, updatedDate = ${it.lastModifiedDate}") }
+                }.doOnNext { println("saving user $it, entity informations; createdBy=${it.createdBy}, createdDate=${it.createdDate}") }
                 .blockLast()
     }
 }

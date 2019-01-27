@@ -3,7 +3,7 @@ package demo.kotlin.entities
 import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
 
-class User(
+data class User(
         private var username: String,
         private var password: String,
         private var authorities: MutableList<Role> = mutableListOf(Role.ROLE_USER), // Default Role : USER
