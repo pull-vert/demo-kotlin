@@ -13,7 +13,7 @@ interface Validate {
             errors.forEach {
                 msg += "${it.propertyPath}(${it.invalidValue}):${it.message};"
             }
-            // remove last ;
+            // remove last ';'
             msg = msg.removeSuffix(";")
             throw BadRequestStatusException(msg)
         }

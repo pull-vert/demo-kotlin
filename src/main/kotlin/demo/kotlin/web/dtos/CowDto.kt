@@ -1,9 +1,13 @@
 package demo.kotlin.web.dtos
 
 import java.time.LocalDateTime
+import javax.validation.constraints.NotEmpty
+import javax.validation.constraints.Size
 
 data class CowSaveDto(
-        val name: String,
+        @field:NotEmpty
+        @field:Size(min = 2, max = 50)
+        val name: String?,
         val lastCalvingDate: LocalDateTime?
 ) : IDto
 

@@ -3,7 +3,6 @@ package demo.kotlin.web
 import demo.kotlin.USER_BOSS_UUID
 import demo.kotlin.USER_FRED_UUID
 import demo.kotlin.entities.Role.ROLE_ADMIN
-import demo.kotlin.entities.User
 import demo.kotlin.security.JWTUtil
 import demo.kotlin.web.dtos.UserGetDto
 import demo.kotlin.web.dtos.UserSaveDto
@@ -12,7 +11,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.core.io.ClassPathResource
-import org.springframework.core.io.ResourceLoader
 import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
 import org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders
 import org.springframework.restdocs.payload.PayloadDocumentation.*
@@ -21,7 +19,6 @@ import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.web.reactive.server.expectBody
-import org.springframework.util.ResourceUtils
 import org.springframework.web.reactive.function.BodyInserters
 import java.util.*
 

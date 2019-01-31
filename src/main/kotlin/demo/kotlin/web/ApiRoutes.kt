@@ -21,8 +21,10 @@ class ApiRoutes(
         accept(APPLICATION_JSON).nest {
             "/api".nest {
                 "/cows".nest {
-                    GET("/{name}", cowHandler::findByName)
+                    GET("/{id}", cowHandler::findById)
+                    GET("/name/{name}", cowHandler::findByName)
                     GET("/", cowHandler::findAll)
+                    POST("/") { cowHandler.save(it) }
                 }
                 "/users".nest {
                     GET("/{id}", userHandler::findById)

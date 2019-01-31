@@ -18,7 +18,9 @@ class CowHandler(
 
     override fun entityToGetDto(entity: Cow) = CowGetDto(entity.name, entity.lastCalvingDate, entity.id.toString())
 
-    override fun saveDtoToEntity(saveDto: CowSaveDto) = Cow(saveDto.name, saveDto.lastCalvingDate)
+    override fun saveDtoToEntity(saveDto: CowSaveDto) = Cow(saveDto.name!!, saveDto.lastCalvingDate)
+
+    override val findByIdUrl: String = "/api/cows"
 
     fun findByName(req: ServerRequest)= ok().body(service.findByName(req.pathVariable("name")).map(::entityToGetDto))
 }
