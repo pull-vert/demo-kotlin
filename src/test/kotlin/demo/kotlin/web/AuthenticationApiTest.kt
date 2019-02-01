@@ -1,5 +1,6 @@
 package demo.kotlin.web
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import demo.kotlin.web.dtos.AuthRequestDto
 import demo.kotlin.web.dtos.AuthResponseDto
 import demo.kotlin.entities.Role
@@ -15,9 +16,10 @@ import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation
 import org.springframework.test.web.reactive.server.expectBody
 
 internal class AuthenticationApiTest(
-        @LocalServerPort private val port: Int,
-        @Autowired private val jwtUtil: JWTUtil)
-    : ApiTest(port, jwtUtil) {
+        @LocalServerPort port: Int,
+        @Autowired private val jwtUtil: JWTUtil,
+        @Autowired objectMapper: ObjectMapper
+) : ApiTest(port, jwtUtil, objectMapper) {
 
     @Test
     fun `Verify auth ok`() {

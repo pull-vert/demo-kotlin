@@ -19,10 +19,10 @@ class WebConfiguration (private val objectMapper: ObjectMapper) : WebFluxConfigu
      * Configure Jackson to Serialize and Deserialize dates with ISO-8601 format
      */
     override fun configureHttpMessageCodecs(configurer: ServerCodecConfigurer) {
-        objectMapper
-                .registerModule(JavaTimeModule())
+        objectMapper.registerModule(JavaTimeModule())
 
-        configurer.defaultCodecs().jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper))
-        configurer.defaultCodecs().jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper))
+        val defaults = configurer.defaultCodecs()
+        defaults.jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper))
+        defaults.jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper))
     }
 }

@@ -1,5 +1,6 @@
 package demo.kotlin.web
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import demo.kotlin.USER_BOSS_UUID
 import demo.kotlin.USER_FRED_UUID
 import demo.kotlin.entities.Role.ROLE_ADMIN
@@ -23,9 +24,10 @@ import org.springframework.web.reactive.function.BodyInserters
 import java.util.*
 
 internal class UserApiTest(
-        @LocalServerPort private val port: Int,
-        @Autowired private val jwtUtil: JWTUtil
-) : ApiTest(port, jwtUtil) {
+        @LocalServerPort port: Int,
+        @Autowired jwtUtil: JWTUtil,
+        @Autowired objectMapper: ObjectMapper
+) : ApiTest(port, jwtUtil, objectMapper) {
 
     @Rollback
     @Test
@@ -179,7 +181,7 @@ internal class UserApiTest(
     }
 
     @Test
-    fun `Save doc`() {
+    fun `User Save doc`() {
         client.post().uri("/api/users/")
                 .syncBody(UserSaveDto("User", "password_again_again"))
                 .exchange()
@@ -191,7 +193,7 @@ internal class UserApiTest(
                                 fieldWithPath("password").description("raw (non encrypted) password")
                         ),
                         responseHeaders(
-                                headerWithName("Location").description("GET URI for accessing created User by ID")
+                                headerWithName("Location").description("GET URI for accessing created User by its ID")
                         )))
     }
 }

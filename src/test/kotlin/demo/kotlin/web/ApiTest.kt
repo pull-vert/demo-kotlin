@@ -1,5 +1,6 @@
 package demo.kotlin.web
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import demo.kotlin.entities.Role
 import demo.kotlin.entities.Role.ROLE_ADMIN
 import demo.kotlin.entities.Role.ROLE_USER
@@ -20,6 +21,11 @@ import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.WebTestClient
 import reactor.netty.http.client.HttpClient
+import org.springframework.http.codec.json.Jackson2JsonDecoder
+import org.springframework.http.codec.json.Jackson2JsonEncoder
+import org.springframework.web.reactive.function.client.ExchangeStrategies
+
+
 
 internal typealias ServerResponseError = Map<String, Any>
 
@@ -28,7 +34,8 @@ internal typealias ServerResponseError = Map<String, Any>
 @AutoConfigureRestDocs(uriScheme = "https", uriPort = 8443)
 internal abstract class ApiTest(
         private val port: Int,
-        private val jwtUtil: JWTUtil
+        private val jwtUtil: JWTUtil,
+        private val objectMapper: ObjectMapper
 ) {
 
     protected lateinit var client: WebTestClient
@@ -41,6 +48,12 @@ internal abstract class ApiTest(
         val httpConnector = ReactorClientHttpConnector(httpClient)
 
         client = WebTestClient.bindToServer(httpConnector).baseUrl("https://localhost:$port")
+                .exchangeStrategies(
+                        ExchangeStrategies.builder().codecs { codecs ->
+                            val defaults = codecs.defaultCodecs()
+                            defaults.jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper))
+                            defaults.jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper))
+                        }.build())
                 .filter(documentationConfiguration(restDocumentation)
                         .operationPreprocessors()
                         .withRequestDefaults(prettyPrint())

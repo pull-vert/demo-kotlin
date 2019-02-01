@@ -1,5 +1,6 @@
 package demo.kotlin.web
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import demo.kotlin.COW_MARGUERITE_UUID
 import demo.kotlin.security.JWTUtil
 import demo.kotlin.web.dtos.CowGetDto
@@ -8,6 +9,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.restdocs.headers.HeaderDocumentation
+import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
 import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
 import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
@@ -15,11 +18,13 @@ import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document
 import org.springframework.test.web.reactive.server.expectBody
 import org.springframework.test.web.reactive.server.expectBodyList
+import java.time.LocalDateTime
 
 internal class CowApiTest(
-        @LocalServerPort private val port: Int,
-        @Autowired private val jwtUtil: JWTUtil)
-    : ApiTest(port, jwtUtil) {
+        @LocalServerPort port: Int,
+        @Autowired jwtUtil: JWTUtil,
+        @Autowired objectMapper: ObjectMapper
+) : ApiTest(port, jwtUtil, objectMapper) {
 
     @Test
     fun `Verify findByName returns expected cow`() {
@@ -159,6 +164,36 @@ internal class CowApiTest(
                         responseFields(
                                 fieldWithPath("[]").description("An array of cows"))
                                 .andWithPrefix("[].", *cowFields())))
+    }
+
+    @Test
+    fun `Cow findById doc`() {
+        client.get().uri("/api/cows/{id}", COW_MARGUERITE_UUID)
+                .addAuthHeader()
+                .exchange()
+                .expectStatus().isOk
+                .expectBody()
+                .consumeWith(document("findByIdCow",
+                        pathParameters(parameterWithName("id").description("ID of the Cow to search for")),
+                        responseFields(*cowFields())))
+    }
+
+    @Test
+    fun `Cow Save doc`() {
+        client.post().uri("/api/cows/")
+                .syncBody(CowSaveDto("Cow", LocalDateTime.of(2016, 5, 28, 13, 30)))
+                .addAuthHeader()
+                .exchange()
+                .expectStatus().isCreated
+                .expectBody()
+                .consumeWith(document("saveCow",
+                        PayloadDocumentation.requestFields(
+                                fieldWithPath("name").description("Name of the Cow"),
+                                fieldWithPath("lastCalvingDate").description("Last calving date of the Cow").optional()
+                        ),
+                        HeaderDocumentation.responseHeaders(
+                                HeaderDocumentation.headerWithName("Location").description("GET URI for accessing created Cow by its ID")
+                        )))
     }
 
     /**
