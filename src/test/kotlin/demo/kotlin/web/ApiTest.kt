@@ -1,9 +1,10 @@
 package demo.kotlin.web
 
-import demo.kotlin.model.entities.Role
-import demo.kotlin.model.entities.Role.ROLE_ADMIN
-import demo.kotlin.model.entities.Role.ROLE_USER
-import demo.kotlin.model.entities.User
+import com.fasterxml.jackson.databind.ObjectMapper
+import demo.kotlin.entities.Role
+import demo.kotlin.entities.Role.ROLE_ADMIN
+import demo.kotlin.entities.Role.ROLE_USER
+import demo.kotlin.entities.User
 import demo.kotlin.security.JWTUtil
 import io.netty.handler.ssl.SslContextBuilder
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory
@@ -20,6 +21,9 @@ import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.WebTestClient
 import reactor.netty.http.client.HttpClient
+import org.springframework.http.codec.json.Jackson2JsonDecoder
+import org.springframework.http.codec.json.Jackson2JsonEncoder
+import org.springframework.web.reactive.function.client.ExchangeStrategies
 
 internal typealias ServerResponseError = Map<String, Any>
 
@@ -28,7 +32,8 @@ internal typealias ServerResponseError = Map<String, Any>
 @AutoConfigureRestDocs(uriScheme = "https", uriPort = 8443)
 internal abstract class ApiTest(
         private val port: Int,
-        private val jwtUtil: JWTUtil
+        private val jwtUtil: JWTUtil,
+        private val objectMapper: ObjectMapper
 ) {
 
     protected lateinit var client: WebTestClient
@@ -40,7 +45,14 @@ internal abstract class ApiTest(
         val httpClient = HttpClient.create().secure{ t -> t.sslContext(sslContext) }
         val httpConnector = ReactorClientHttpConnector(httpClient)
 
-        client = WebTestClient.bindToServer(httpConnector).baseUrl("https://localhost:$port")
+        client = WebTestClient.bindToServer(httpConnector)
+                .baseUrl("https://localhost:$port")
+                .exchangeStrategies(
+                        ExchangeStrategies.builder().codecs { codecs ->
+                            val defaults = codecs.defaultCodecs()
+                            defaults.jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper))
+                            defaults.jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper))
+                        }.build())
                 .filter(documentationConfiguration(restDocumentation)
                         .operationPreprocessors()
                         .withRequestDefaults(prettyPrint())

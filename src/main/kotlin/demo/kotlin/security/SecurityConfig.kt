@@ -6,7 +6,6 @@ import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.crypto.password.PasswordEncoder
 
 
 @Configuration
@@ -21,9 +20,7 @@ class SecurityConfig(
      * And used to decode password in Spring security Authentication
      */
     @Bean
-    fun passwordEncoder(): PasswordEncoder {
-        return BCryptPasswordEncoder()
-    }
+    fun passwordEncoder() = BCryptPasswordEncoder()
 
     @Bean
     fun securitygWebFilterChain(http: ServerHttpSecurity) =

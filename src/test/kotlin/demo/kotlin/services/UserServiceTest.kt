@@ -1,7 +1,7 @@
 package demo.kotlin.services
 
 import demo.kotlin.USER_FRED_UUID
-import demo.kotlin.model.entities.User
+import demo.kotlin.entities.User
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -15,22 +15,21 @@ import reactor.test.test
 @SpringBootTest
 class UserServiceTest(
         @Autowired private val userService: UserService,
-        @Autowired private val passwordEncoder: PasswordEncoder) {
+        @Autowired private val passwordEncoder: PasswordEncoder
+) {
 
     @Test
     fun `Verify save works and encodes password correcly`() {
         val name = "Bob"
         val rawPassword = "pass"
-        val user = User(name, rawPassword)
-        userService.save(user)
+        userService.save(User(name, rawPassword))
                 .test()
-                .assertNext {
-                    assertThat(it.username).isEqualTo(name)
-                    assertThat(it.password)
+                .assertNext { user ->
+                    assertThat(user.username).isEqualTo(name)
+                    assertThat(user.password)
                             .isNotEqualTo(rawPassword)
-                            .matches { passwordEncoder.matches(rawPassword, it) }
-                    assertThat(it.isEnabled)
-                            .isFalse()
+                            .matches { password -> passwordEncoder.matches(rawPassword, password) }
+                    assertThat(user.isEnabled).isFalse()
                 }.verifyComplete()
     }
 

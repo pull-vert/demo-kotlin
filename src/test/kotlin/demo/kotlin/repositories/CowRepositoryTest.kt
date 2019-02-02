@@ -16,10 +16,10 @@ class CowRepositoryTest(@Autowired private val cowRepository: CowRepository) {
     fun `Verify findByName returns existing Marguerite Cow`() {
         cowRepository.findByName("Marguerite")
                 .test()
-                .consumeNextWith {
-                    assertThat(it.name).isEqualTo("Marguerite")
-                    assertThat(it.lastCalvingDate).isNotNull()
-                    assertThat(it.id).isNotNull()
+                .consumeNextWith { cow ->
+                    assertThat(cow.name).isEqualTo("Marguerite")
+                    assertThat(cow.lastCalvingDate).isNotNull()
+                    assertThat(cow.id).isNotNull()
                 }.verifyComplete()
     }
 

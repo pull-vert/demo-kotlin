@@ -11,9 +11,7 @@ import reactor.core.publisher.Mono
 
 
 @Component
-class SecurityContextRepository(
-        private val authenticationManager: AuthenticationManager
-) : ServerSecurityContextRepository {
+class SecurityContextRepository(private val authManager: AuthenticationManager) : ServerSecurityContextRepository {
 
     override fun save(swe: ServerWebExchange, sc: SecurityContext) = throw UnsupportedOperationException("Not supported yet.")
 
@@ -24,7 +22,7 @@ class SecurityContextRepository(
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             val authToken = authHeader.substring(7)
             val auth = UsernamePasswordAuthenticationToken(authToken, authToken)
-            return this.authenticationManager.authenticate(auth).map { authentication -> SecurityContextImpl(authentication) }
+            return authManager.authenticate(auth).map { authentication -> SecurityContextImpl(authentication) }
         } else {
             return Mono.empty()
         }

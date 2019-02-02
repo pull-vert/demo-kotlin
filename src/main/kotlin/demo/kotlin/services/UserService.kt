@@ -1,8 +1,8 @@
 package demo.kotlin.services
 
-import demo.kotlin.web.dtos.AuthRequest
-import demo.kotlin.web.dtos.AuthResponse
-import demo.kotlin.model.entities.User
+import demo.kotlin.web.dtos.AuthRequestDto
+import demo.kotlin.web.dtos.AuthResponseDto
+import demo.kotlin.entities.User
 import demo.kotlin.repositories.UserRepository
 import demo.kotlin.security.JWTUtil
 import demo.kotlin.web.UnauthorizedStatusException
@@ -20,14 +20,14 @@ class UserService(
 
     override fun save(entity: User) =
             entity.toMono()
-                    .doOnNext { it.password = passwordEncoder.encode(it.password) }
-                    .flatMap { repository.save(it) }
+                    .doOnNext { user -> user.password = passwordEncoder.encode(user.password) }
+                    .flatMap { user -> repository.save(user) }
 
-    fun auth(authRequest: AuthRequest) =
-            repository.findByUsername(authRequest.username)
+    fun auth(authRequestDto: AuthRequestDto) =
+            repository.findByUsername(authRequestDto.username)
                     .map { user ->
-                        if (passwordEncoder.matches(authRequest.password, user.getPassword())) {
-                            AuthResponse(jwtUtil.generateToken(user))
+                        if (passwordEncoder.matches(authRequestDto.password, user.password)) {
+                            AuthResponseDto(jwtUtil.generateToken(user))
                         } else {
                             throw UnauthorizedStatusException()
                         }

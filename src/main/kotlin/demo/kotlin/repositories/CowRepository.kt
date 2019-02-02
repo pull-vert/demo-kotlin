@@ -1,6 +1,6 @@
 package demo.kotlin.repositories
 
-import demo.kotlin.model.entities.Cow
+import demo.kotlin.entities.Cow
 import org.springframework.stereotype.Repository
 import reactor.core.publisher.Mono
 

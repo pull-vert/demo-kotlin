@@ -1,6 +1,6 @@
 package demo.kotlin.repositories
 
-import demo.kotlin.model.entities.User
+import demo.kotlin.entities.User
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -20,10 +20,10 @@ class UserRepositoryTest(
     fun `Verify findByUsername returns existing Fred User`() {
         userRepository.findByUsername("Fred")
                 .test()
-                .consumeNextWith {
-                    assertThat(it.username).isEqualTo("Fred")
-                    assertThat(passwordEncoder.matches("password", it.password)).isTrue()
-                    assertThat((it as User).id).isNotNull()
+                .consumeNextWith { user ->
+                    assertThat(user.username).isEqualTo("Fred")
+                    assertThat(passwordEncoder.matches("password", user.password)).isTrue()
+                    assertThat((user as User).id).isNotNull()
                 }.verifyComplete()
     }
 

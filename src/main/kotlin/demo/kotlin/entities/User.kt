@@ -1,17 +1,20 @@
-package demo.kotlin.model.entities
+package demo.kotlin.entities
 
 import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
 
-class User(
+data class User(
         private var username: String,
         private var password: String,
         private var authorities: MutableList<Role> = mutableListOf(Role.ROLE_USER), // Default Role : USER
         private var enabled: Boolean = false,
-        override val id: UUID = UUID.randomUUID()
-) : IEntity, UserDetails {
+        private val id: UUID = UUID.randomUUID()
+) : Entity(), UserDetails {
 
-    // UserDetails
+    // Persistable function
+    override fun getId() = id
+
+    // UserDetails functions
     override fun getUsername() = this.username
 
     override fun getPassword() = this.password
@@ -26,7 +29,12 @@ class User(
 
     override fun isAccountNonLocked() = true
 
+
     fun setPassword(password: String) {
         this.password = password
+    }
+
+    fun setEnabled(enabled: Boolean) {
+        this.enabled = enabled
     }
 }

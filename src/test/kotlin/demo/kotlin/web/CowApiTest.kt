@@ -1,11 +1,16 @@
 package demo.kotlin.web
 
-import demo.kotlin.model.entities.Cow
+import com.fasterxml.jackson.databind.ObjectMapper
+import demo.kotlin.COW_MARGUERITE_UUID
 import demo.kotlin.security.JWTUtil
+import demo.kotlin.web.dtos.CowGetDto
+import demo.kotlin.web.dtos.CowSaveDto
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.restdocs.headers.HeaderDocumentation
+import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
 import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
 import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
@@ -13,21 +18,23 @@ import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document
 import org.springframework.test.web.reactive.server.expectBody
 import org.springframework.test.web.reactive.server.expectBodyList
+import java.time.LocalDateTime
 
 internal class CowApiTest(
-        @LocalServerPort private val port: Int,
-        @Autowired private val jwtUtil: JWTUtil)
-    : ApiTest(port, jwtUtil) {
+        @LocalServerPort port: Int,
+        @Autowired jwtUtil: JWTUtil,
+        @Autowired objectMapper: ObjectMapper
+) : ApiTest(port, jwtUtil, objectMapper) {
 
     @Test
     fun `Verify findByName returns expected cow`() {
-        client.get().uri("/api/cows/{name}", "Marguerite")
+        client.get().uri("/api/cows/name/{name}", "Marguerite")
                 .addAuthHeader()
                 .exchange()
                 .expectStatus().isOk
-                .expectBody<Cow>()
-                .consumeWith {
-                    val cow = it.responseBody!!
+                .expectBody<CowGetDto>()
+                .consumeWith { exchangeResult ->
+                    val cow = exchangeResult.responseBody!!
                     assertThat(cow.name).isEqualTo("Marguerite")
                     assertThat(cow.lastCalvingDate).isNotNull()
                 }
@@ -39,13 +46,104 @@ internal class CowApiTest(
                 .addAuthHeader()
                 .exchange()
                 .expectStatus().isOk
-                .expectBodyList<Cow>()
+                .expectBodyList<CowGetDto>()
                 .hasSize(2)
     }
 
     @Test
+    fun `Verify findById returns expected Cow`() {
+        client.get().uri("/api/cows/{id}", COW_MARGUERITE_UUID)
+                .addAuthHeader()
+                .exchange()
+                .expectStatus().isOk
+                .expectBody<CowGetDto>()
+                .consumeWith { exchangeResult ->
+                    val cow = exchangeResult.responseBody!!
+                    assertThat(cow.name).isEqualTo("Marguerite")
+                    assertThat(cow.lastCalvingDate).isNotNull()
+                    assertThat(cow.id).isEqualTo(COW_MARGUERITE_UUID)
+                }
+    }
+
+    @Test
+    fun `Verify findById with no JWT Token fails`() {
+        client.get().uri("/api/cows/{id}", COW_MARGUERITE_UUID)
+                .exchange()
+                .expectStatus().isUnauthorized
+    }
+
+    @Test
+    fun `Verify findById with invalid uuid uri param fails`() {
+        val invalidUuid = "invalid_uuid"
+        client.get().uri("/api/cows/{id}", invalidUuid)
+                .addAuthHeader()
+                .exchange()
+                .expectStatus().isBadRequest
+    }
+
+    @Test
+    fun `Verify save Cow ok`() {
+        client.post().uri("/api/cows/")
+                .syncBody(CowSaveDto("Paquerette", null))
+                .addAuthHeader()
+                .exchange()
+                .expectStatus().isCreated
+                .expectHeader().value("location") { uri ->
+                    assertThat(uri).startsWith("/api/cows/")
+                    // Then call the returned uri and verify the it returns saved User resource
+                    client.get().uri(uri)
+                            .addAuthHeader()
+                            .exchange()
+                            .expectStatus().isOk
+                            .expectBody<CowGetDto>()
+                            .consumeWith { exchangeResult ->
+                                val cow = exchangeResult.responseBody!!
+                                assertThat(cow.name).isEqualTo("Paquerette")
+                                assertThat(cow.lastCalvingDate).isNull()
+                                assertThat(cow.id).isNotEmpty()
+                            }
+                }
+    }
+
+    @Test
+    fun `Verify save Cow with name too short bean validation fails`() {
+        client.post().uri("/api/cows/")
+                .syncBody(CowSaveDto("t", null))
+                .addAuthHeader()
+                .exchange()
+                .expectStatus().isBadRequest
+                .expectBody<ServerResponseError>()
+                .consumeWith { exchangeResult ->
+                    val error = exchangeResult.responseBody!!
+                    assertThat(error["message"] as String).contains("name(t)", "2", "50")
+                    assertThat(error["path"]).isEqualTo("/api/cows/")
+                    assertThat(error["timestamp"]).isNotNull
+                    assertThat(error["status"]).isEqualTo(400)
+                    assertThat(error["error"]).isEqualTo("Bad Request")
+                }
+    }
+
+    @Test
+    fun `Verify save Cow with no name bean validation fails`() {
+        client.post().uri("/api/cows/")
+                .syncBody(CowSaveDto(null, null))
+                .addAuthHeader()
+                .exchange()
+                .expectStatus().isBadRequest
+                .expectBody<ServerResponseError>()
+                .consumeWith { exchangeResult ->
+                    val error = exchangeResult.responseBody!!
+                    assertThat(error["message"] as String).contains("name(null)")
+                    assertThat(error["path"]).isEqualTo("/api/cows/")
+                    assertThat(error["timestamp"]).isNotNull
+                    assertThat(error["status"]).isEqualTo(400)
+                    assertThat(error["error"]).isEqualTo("Bad Request")
+                }
+    }
+
+    @Test
     fun `Cow findByName doc`() {
-        client.get().uri("/api/cows/{name}", "Marguerite")
+        client.get().uri("/api/cows/name/{name}", "Marguerite")
                 .addAuthHeader()
                 .exchange()
                 .expectStatus().isOk
@@ -66,6 +164,36 @@ internal class CowApiTest(
                         responseFields(
                                 fieldWithPath("[]").description("An array of cows"))
                                 .andWithPrefix("[].", *cowFields())))
+    }
+
+    @Test
+    fun `Cow findById doc`() {
+        client.get().uri("/api/cows/{id}", COW_MARGUERITE_UUID)
+                .addAuthHeader()
+                .exchange()
+                .expectStatus().isOk
+                .expectBody()
+                .consumeWith(document("findByIdCow",
+                        pathParameters(parameterWithName("id").description("ID of the Cow to search for")),
+                        responseFields(*cowFields())))
+    }
+
+    @Test
+    fun `Cow Save doc`() {
+        client.post().uri("/api/cows/")
+                .syncBody(CowSaveDto("Cow", LocalDateTime.of(2016, 5, 28, 13, 30)))
+                .addAuthHeader()
+                .exchange()
+                .expectStatus().isCreated
+                .expectBody()
+                .consumeWith(document("saveCow",
+                        PayloadDocumentation.requestFields(
+                                fieldWithPath("name").description("Name of the Cow"),
+                                fieldWithPath("lastCalvingDate").description("Last calving date of the Cow").optional()
+                        ),
+                        HeaderDocumentation.responseHeaders(
+                                HeaderDocumentation.headerWithName("Location").description("GET URI for accessing created Cow by its ID")
+                        )))
     }
 
     /**

@@ -1,6 +1,6 @@
 package demo.kotlin.services
 
-import demo.kotlin.model.entities.Cow
+import demo.kotlin.entities.Cow
 import demo.kotlin.repositories.CowRepository
 import org.springframework.stereotype.Service
 

@@ -10,6 +10,12 @@ operation::findAllCows[snippets='curl-request,http-request,http-response,respons
 === GET Cow by name
 operation::findByNameCow[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
 
+=== GET Cow by ID
+operation::findByIdCow[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
+
+=== POST (save) Cow
+operation::saveCow[snippets='curl-request,http-request,http-response,request-fields,response-headers']
+
 == User Operations
 
 === GET User by ID

@@ -1,13 +1,13 @@
 package demo.kotlin.services
 
-import demo.kotlin.model.entities.IEntity
+import demo.kotlin.entities.Entity
 import demo.kotlin.repositories.IRepository
 import demo.kotlin.web.BadRequestStatusException
 import demo.kotlin.web.NotFoundStatusException
 import reactor.core.publisher.switchIfEmpty
 import java.util.*
 
-interface IService<T : IEntity> {
+interface IService<T : Entity> {
 
     val repository: IRepository<T>
 
@@ -21,7 +21,7 @@ interface IService<T : IEntity> {
 
     fun deleteById(id: String) = repository.deleteById(id.toUuid())
 
-    private fun String?.toUuid() =
+    private fun String.toUuid() =
             try {
                 UUID.fromString(this)
             } catch(e: Throwable) {
