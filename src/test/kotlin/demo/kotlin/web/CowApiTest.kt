@@ -33,8 +33,8 @@ internal class CowApiTest(
                 .exchange()
                 .expectStatus().isOk
                 .expectBody<CowGetDto>()
-                .consumeWith {
-                    val cow = it.responseBody!!
+                .consumeWith { exchangeResult ->
+                    val cow = exchangeResult.responseBody!!
                     assertThat(cow.name).isEqualTo("Marguerite")
                     assertThat(cow.lastCalvingDate).isNotNull()
                 }
@@ -57,8 +57,8 @@ internal class CowApiTest(
                 .exchange()
                 .expectStatus().isOk
                 .expectBody<CowGetDto>()
-                .consumeWith {
-                    val cow = it.responseBody!!
+                .consumeWith { exchangeResult ->
+                    val cow = exchangeResult.responseBody!!
                     assertThat(cow.name).isEqualTo("Marguerite")
                     assertThat(cow.lastCalvingDate).isNotNull()
                     assertThat(cow.id).isEqualTo(COW_MARGUERITE_UUID)
@@ -88,16 +88,16 @@ internal class CowApiTest(
                 .addAuthHeader()
                 .exchange()
                 .expectStatus().isCreated
-                .expectHeader().value("location") {
-                    assertThat(it).startsWith("/api/cows/")
+                .expectHeader().value("location") { uri ->
+                    assertThat(uri).startsWith("/api/cows/")
                     // Then call the returned uri and verify the it returns saved User resource
-                    client.get().uri(it)
+                    client.get().uri(uri)
                             .addAuthHeader()
                             .exchange()
                             .expectStatus().isOk
                             .expectBody<CowGetDto>()
-                            .consumeWith {
-                                val cow = it.responseBody!!
+                            .consumeWith { exchangeResult ->
+                                val cow = exchangeResult.responseBody!!
                                 assertThat(cow.name).isEqualTo("Paquerette")
                                 assertThat(cow.lastCalvingDate).isNull()
                                 assertThat(cow.id).isNotEmpty()
@@ -113,8 +113,8 @@ internal class CowApiTest(
                 .exchange()
                 .expectStatus().isBadRequest
                 .expectBody<ServerResponseError>()
-                .consumeWith {
-                    val error = it.responseBody!!
+                .consumeWith { exchangeResult ->
+                    val error = exchangeResult.responseBody!!
                     assertThat(error["message"] as String).contains("name(t)", "2", "50")
                     assertThat(error["path"]).isEqualTo("/api/cows/")
                     assertThat(error["timestamp"]).isNotNull
@@ -131,8 +131,8 @@ internal class CowApiTest(
                 .exchange()
                 .expectStatus().isBadRequest
                 .expectBody<ServerResponseError>()
-                .consumeWith {
-                    val error = it.responseBody!!
+                .consumeWith { exchangeResult ->
+                    val error = exchangeResult.responseBody!!
                     assertThat(error["message"] as String).contains("name(null)")
                     assertThat(error["path"]).isEqualTo("/api/cows/")
                     assertThat(error["timestamp"]).isNotNull

@@ -9,3 +9,5 @@ data class AuthRequestDto(
         @field:NotEmpty
         val password: String?
 ) : IDto
+
+data class AuthResponseDto(val token: String) : IDto

@@ -20,13 +20,13 @@ class UserService(
 
     override fun save(entity: User) =
             entity.toMono()
-                    .doOnNext { it.password = passwordEncoder.encode(it.password) }
-                    .flatMap { repository.save(it) }
+                    .doOnNext { user -> user.password = passwordEncoder.encode(user.password) }
+                    .flatMap { user -> repository.save(user) }
 
     fun auth(authRequestDto: AuthRequestDto) =
             repository.findByUsername(authRequestDto.username)
                     .map { user ->
-                        if (passwordEncoder.matches(authRequestDto.password, user.getPassword())) {
+                        if (passwordEncoder.matches(authRequestDto.password, user.password)) {
                             AuthResponseDto(jwtUtil.generateToken(user))
                         } else {
                             throw UnauthorizedStatusException()

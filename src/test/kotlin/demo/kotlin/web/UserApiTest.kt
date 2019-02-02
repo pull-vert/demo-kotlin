@@ -54,8 +54,8 @@ internal class UserApiTest(
                 .exchange()
                 .expectStatus().isBadRequest
                 .expectBody<ServerResponseError>()
-                .consumeWith {
-                    val error = it.responseBody!!
+                .consumeWith { exchangeResult ->
+                    val error = exchangeResult.responseBody!!
                     assertThat(error["message"]).isEqualTo("Invalid UUID string: $invalidUuid")
                     assertThat(error["path"]).isEqualTo("/api/users/$invalidUuid")
                     assertThat(error["timestamp"]).isNotNull
@@ -79,8 +79,8 @@ internal class UserApiTest(
                 .exchange()
                 .expectStatus().isOk
                 .expectBody<UserGetDto>()
-                .consumeWith {
-                    val user = it.responseBody!!
+                .consumeWith { exchangeResult ->
+                    val user = exchangeResult.responseBody!!
                     assertThat(user.username).isEqualTo("Boss")
                     assertThat(user.id).isEqualTo(USER_BOSS_UUID)
                 }
@@ -108,16 +108,16 @@ internal class UserApiTest(
                 .syncBody(UserSaveDto("William", "password_again"))
                 .exchange()
                 .expectStatus().isCreated
-                .expectHeader().value("location") {
-                    assertThat(it).startsWith("/api/users/")
+                .expectHeader().value("location") { uri ->
+                    assertThat(uri).startsWith("/api/users/")
                     // Then call the returned uri and verify the it returns saved User resource
-                    client.get().uri(it)
+                    client.get().uri(uri)
                             .addAuthHeader()
                             .exchange()
                             .expectStatus().isOk
                             .expectBody<UserGetDto>()
-                            .consumeWith {
-                                val user = it.responseBody!!
+                            .consumeWith { exchangeResult ->
+                                val user = exchangeResult.responseBody!!
                                 assertThat(user.username).isEqualTo("William")
                                 assertThat(user.id).isNotEmpty()
                                 assertThat(user.enabled).isFalse()
@@ -132,8 +132,8 @@ internal class UserApiTest(
                 .exchange()
                 .expectStatus().isBadRequest
                 .expectBody<ServerResponseError>()
-                .consumeWith {
-                    val error = it.responseBody!!
+                .consumeWith { exchangeResult ->
+                    val error = exchangeResult.responseBody!!
                     assertThat(error["message"] as String).contains("password(pass)", "8", "200")
                     assertThat(error["path"]).isEqualTo("/api/users/")
                     assertThat(error["timestamp"]).isNotNull
@@ -150,8 +150,8 @@ internal class UserApiTest(
                 .exchange()
                 .expectStatus().isBadRequest
                 .expectBody<ServerResponseError>()
-                .consumeWith {
-                    val error = it.responseBody!!
+                .consumeWith { exchangeResult ->
+                    val error = exchangeResult.responseBody!!
                     assertThat(error["message"] as String).contains("password(null)")
                     assertThat(error["path"]).isEqualTo("/api/users/")
                     assertThat(error["timestamp"]).isNotNull

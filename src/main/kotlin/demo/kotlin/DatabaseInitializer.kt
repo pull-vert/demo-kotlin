@@ -19,6 +19,7 @@ class DatabaseInitializer(
         private val cowRepository: CowRepository,
         private val userService: UserService
 ) : CommandLineRunner {
+
     override fun run(vararg args: String) {
 
         // uncomment if targetting a real MongoDB Database (not embedded)
@@ -30,18 +31,17 @@ class DatabaseInitializer(
         val laNoiraude = Cow("La Noiraude")
         listOf(marguerite, laNoiraude)
                 .toFlux()
-                .flatMap {
-                    cowRepository.save(it)
-                }.doOnNext { println("saving cow $it") }
+                .flatMap { cow -> cowRepository.save(cow) }
+                .doOnNext {cow -> println("saving cow $cow") }
                 .blockLast()
 
         val fred = User("Fred", "password", id = UUID.fromString(USER_FRED_UUID), enabled = true)
         val boss = User("Boss", "secured_password", id = UUID.fromString(USER_BOSS_UUID), enabled = true)
         listOf(fred, boss)
                 .toFlux()
-                .flatMap {
-                    userService.save(it)
-                }.doOnNext { println("saving user $it, entity informations; createdBy=${it.createdBy}, createdDate=${it.createdDate}") }
-                .blockLast()
+                .flatMap { user -> userService.save(user) }
+                .doOnNext { user ->
+                    println("saving user $user, entity informations; createdBy=${user.createdBy}, createdDate=${user.createdDate}")
+                }.blockLast()
     }
 }

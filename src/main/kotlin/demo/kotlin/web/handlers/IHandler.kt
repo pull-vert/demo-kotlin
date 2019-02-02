@@ -17,16 +17,20 @@ interface IHandler<T : Entity, GET_DTO : IDto, SAVE_DTO : IDto> : Validate {
      * Only override this if save is used
      */
     val findByIdUrl
-            get() = "override_findByIdUrl_val_with_actual_Url"
+        get() = "override_findByIdUrl_val_with_actual_Url"
 
-    fun entityToGetDto(entity: T) : GET_DTO
-    fun saveDtoToEntity(saveDto: SAVE_DTO) : T
+    fun entityToGetDto(entity: T): GET_DTO
+    fun saveDtoToEntity(saveDto: SAVE_DTO): T
 
     fun findById(req: ServerRequest) =
-            ok().body(service.findById(req.pathVariable("id")).map(::entityToGetDto), object : ParameterizedTypeReference<GET_DTO>() {})
+            ok().body(service.findById(req.pathVariable("id"))
+                    .map(::entityToGetDto)
+                    , object : ParameterizedTypeReference<GET_DTO>() {})
 
     fun findAll(req: ServerRequest) =
-            ok().body(service.findAll().map(::entityToGetDto), object : ParameterizedTypeReference<GET_DTO>() {})
+            ok().body(service.findAll()
+                    .map(::entityToGetDto)
+                    , object : ParameterizedTypeReference<GET_DTO>() {})
 
     fun deleteById(req: ServerRequest) =
             noContent().build(service.deleteById(req.pathVariable("id")))
@@ -37,6 +41,5 @@ inline fun <T : Entity, GET_DTO : IDto, reified SAVE_DTO : IDto> IHandler<T, GET
         req.bodyToMono<SAVE_DTO>()
                 .doOnNext(::callValidator)
                 .map(::saveDtoToEntity)
-                .flatMap { service.save(it) }
-                .map { it.id }
-                .flatMap { created(URI.create("$findByIdUrl/$it")).build() }
+                .flatMap { entity -> service.save(entity) }
+                .flatMap { entity -> created(URI.create("$findByIdUrl/${entity.id}")).build() }

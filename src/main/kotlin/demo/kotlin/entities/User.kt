@@ -11,9 +11,10 @@ data class User(
         private val id: UUID = UUID.randomUUID()
 ) : Entity(), UserDetails {
 
+    // Persistable function
     override fun getId() = id
 
-    // UserDetails
+    // UserDetails functions
     override fun getUsername() = this.username
 
     override fun getPassword() = this.password
@@ -28,7 +29,12 @@ data class User(
 
     override fun isAccountNonLocked() = true
 
+
     fun setPassword(password: String) {
         this.password = password
+    }
+
+    fun setEnabled(enabled: Boolean) {
+        this.enabled = enabled
     }
 }

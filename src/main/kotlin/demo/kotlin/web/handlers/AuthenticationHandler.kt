@@ -14,6 +14,7 @@ class AuthenticationHandler(
         private val userService: UserService,
         override val validator: Validator
 ) : Validate {
+
     fun auth(req: ServerRequest) =
             req.bodyToMono<AuthRequestDto>()
                     .doOnNext(::callValidator)

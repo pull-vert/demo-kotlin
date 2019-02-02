@@ -21,7 +21,7 @@ interface IService<T : Entity> {
 
     fun deleteById(id: String) = repository.deleteById(id.toUuid())
 
-    private fun String?.toUuid() =
+    private fun String.toUuid() =
             try {
                 UUID.fromString(this)
             } catch(e: Throwable) {

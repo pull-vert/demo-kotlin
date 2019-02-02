@@ -25,8 +25,6 @@ import org.springframework.http.codec.json.Jackson2JsonDecoder
 import org.springframework.http.codec.json.Jackson2JsonEncoder
 import org.springframework.web.reactive.function.client.ExchangeStrategies
 
-
-
 internal typealias ServerResponseError = Map<String, Any>
 
 @ExtendWith(RestDocumentationExtension::class, SpringExtension::class)
@@ -47,7 +45,8 @@ internal abstract class ApiTest(
         val httpClient = HttpClient.create().secure{ t -> t.sslContext(sslContext) }
         val httpConnector = ReactorClientHttpConnector(httpClient)
 
-        client = WebTestClient.bindToServer(httpConnector).baseUrl("https://localhost:$port")
+        client = WebTestClient.bindToServer(httpConnector)
+                .baseUrl("https://localhost:$port")
                 .exchangeStrategies(
                         ExchangeStrategies.builder().codecs { codecs ->
                             val defaults = codecs.defaultCodecs()

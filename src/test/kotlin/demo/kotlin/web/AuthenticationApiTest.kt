@@ -28,15 +28,15 @@ internal class AuthenticationApiTest(
                 .exchange()
                 .expectStatus().isOk
                 .expectBody<AuthResponseDto>()
-                .consumeWith {
-                    val authResponse = it.responseBody!!
+                .consumeWith { exchangeResult ->
+                    val authResponse = exchangeResult.responseBody!!
                     assertThat(authResponse.token)
                             .isNotEmpty()
-                            .matches { jwtUtil.validateToken(it) }
-                            .satisfies {
-                                val claims = jwtUtil.getAllClaimsFromToken(it)
+                            .matches { token -> jwtUtil.validateToken(token) }
+                            .satisfies {token ->
+                                val claims = jwtUtil.getAllClaimsFromToken(token)
                                 val roles = claims.get("authorities", List::class.java)
-                                        .map { Role.valueOf(it as String) }
+                                        .map { authority -> Role.valueOf(authority as String) }
                                 assertThat(roles).containsOnly(Role.ROLE_USER)
                             }
                 }
@@ -65,8 +65,8 @@ internal class AuthenticationApiTest(
                 .exchange()
                 .expectStatus().isBadRequest
                 .expectBody<ServerResponseError>()
-                .consumeWith {
-                    val error = it.responseBody!!
+                .consumeWith { exchangeResult ->
+                    val error = exchangeResult.responseBody!!
                     assertThat(error["message"] as String).contains("password(null)")
                     assertThat(error["path"]).isEqualTo("/auth/")
                     assertThat(error["timestamp"]).isNotNull

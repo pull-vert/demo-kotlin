@@ -10,11 +10,10 @@ interface Validate {
         val errors = validator.validate(any)
         if (!errors.isEmpty()) {
             var msg = ""
-            errors.forEach {
-                msg += "${it.propertyPath}(${it.invalidValue}):${it.message};"
+            errors.forEach { error ->
+                msg += "${error.propertyPath}(${error.invalidValue}):${error.message};"
             }
-            // remove last ';'
-            msg = msg.removeSuffix(";")
+            msg = msg.removeSuffix(";") // remove last ';'
             throw BadRequestStatusException(msg)
         }
     }

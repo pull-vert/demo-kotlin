@@ -22,5 +22,7 @@ class CowHandler(
 
     override val findByIdUrl: String = "/api/cows"
 
-    fun findByName(req: ServerRequest)= ok().body(service.findByName(req.pathVariable("name")).map(::entityToGetDto))
+    fun findByName(req: ServerRequest)=
+            ok().body(service.findByName(req.pathVariable("name"))
+                    .map(::entityToGetDto))
 }

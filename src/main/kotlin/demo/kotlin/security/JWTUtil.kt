@@ -12,21 +12,19 @@ import java.util.*
 @Component
 class JWTUtil(
         @Value("\${jwt.secret}") private val secret: String,
-        @Value("\${jwt.expiration}") private val expirationTime: String
+        @Value("\${jwt.expiration}") private val expirationTime: Long //in second
 ) {
 
-    private val jwtParser = Jwts.parser().setSigningKey(secret.toByteArray());
+    private val jwtParser = Jwts.parser().setSigningKey(secret.toByteArray())
 
     fun getAllClaimsFromToken(token: String) = jwtParser.parseClaimsJws(token).body
 
-    fun getUsernameFromToken(token: String): String = getAllClaimsFromToken(token).subject
-
-//    fun getExpirationDateFromToken(token: String) = getAllClaimsFromToken(token).expiration
+    fun getUsernameFromToken(token: String) = getAllClaimsFromToken(token).subject
 
     fun generateToken(user: UserDetails): String {
         val claims = mutableMapOf<String, Any>()
         claims["authorities"] = user.authorities
-        claims["enable"] = user.isEnabled
+        claims["enabled"] = user.isEnabled
         return doGenerateToken(user.getUsername(), claims)
     }
 
@@ -36,17 +34,15 @@ class JWTUtil(
             if (!jwtParser.isSigned(token)) return false
             // parse token to get claims, will throw ExpiredJwtException if expired at current time
             val claims = getAllClaimsFromToken(token)
-            return claims.getOrDefault("enable", false) as Boolean
+            return claims.getOrDefault("enabled", false) as Boolean
         } catch(ex: ExpiredJwtException) {
             return false
         }
     }
 
     private fun doGenerateToken(username: String, claims: Map<String, Any>): String {
-        val expirationTimeLong = expirationTime.toLong() //in second
-
         val createdDate = Date()
-        val expirationDate = Date(createdDate.getTime() + expirationTimeLong * 1000)
+        val expirationDate = Date(createdDate.getTime() + expirationTime * 1000)
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(username)

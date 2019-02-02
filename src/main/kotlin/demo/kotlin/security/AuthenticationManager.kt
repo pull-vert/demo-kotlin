@@ -10,24 +10,16 @@ import reactor.core.publisher.toMono
 
 
 @Component
-class AuthenticationManager(
-        private val jwtUtil: JWTUtil
-) : ReactiveAuthenticationManager {
+class AuthenticationManager(private val jwtUtil: JWTUtil) : ReactiveAuthenticationManager {
 
     override fun authenticate(authentication: Authentication): Mono<Authentication> {
         val authToken = authentication.credentials.toString()
-
-        var username: String?
-        try {
-            username = jwtUtil.getUsernameFromToken(authToken)
-        } catch (e: Exception) {
-            username = null
-        }
+        val username = try { jwtUtil.getUsernameFromToken(authToken) } catch (e: Throwable) { null }
 
         if (null != username && jwtUtil.validateToken(authToken)) {
             val claims = jwtUtil.getAllClaimsFromToken(authToken)
             val roles = claims.get("authorities", List::class.java)
-                    .map { Role.valueOf(it as String) }
+                    .map { authority -> Role.valueOf(authority as String) }
             return UsernamePasswordAuthenticationToken(username, null, roles).toMono()
         } else {
             return Mono.empty()

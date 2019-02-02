@@ -24,12 +24,12 @@ class ApiRoutes(
                     GET("/{id}", cowHandler::findById)
                     GET("/name/{name}", cowHandler::findByName)
                     GET("/", cowHandler::findAll)
-                    POST("/") { cowHandler.save(it) }
+                    POST("/") { req -> cowHandler.save(req) }
                 }
                 "/users".nest {
                     GET("/{id}", userHandler::findById)
                     DELETE("/{id}", userHandler::deleteById)
-                    POST("/") { userHandler.save(it) }
+                    POST("/") { req -> userHandler.save(req) }
                 }
             }
             "/auth".nest {

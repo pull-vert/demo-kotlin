@@ -19,7 +19,6 @@ class JacksonTest(@Autowired private val objectMapper: ObjectMapper) {
     @Test
     fun `Verify User serialize works`() {
         val user = UserGetDto("Fred", listOf(ROLE_USER), true, USER_FRED_UUID)
-        println()
         val json = objectMapper.writeValueAsString(user)
         assertThat(json).isEqualTo("{\"username\":\"Fred\",\"authorities\":[\"ROLE_USER\"],\"enabled\":true,\"id\":\"79e9eb45-2835-49c8-ad3b-c951b591bc7f\"}")
     }
