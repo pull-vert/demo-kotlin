@@ -21,6 +21,7 @@ println("Using Kotlin compiler version: $org.jetbrains.kotlin.config.KotlinCompi
 
 group = 'demo.kotlin'
 version = '0.0.1-SNAPSHOT'
+
 sourceCompatibility = JavaVersion.VERSION_1_8
 
 compileKotlin {

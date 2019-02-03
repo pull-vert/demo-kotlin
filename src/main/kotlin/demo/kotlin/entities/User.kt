@@ -1,5 +1,6 @@
 package demo.kotlin.entities
 
+import org.springframework.data.annotation.Id
 import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
 
@@ -12,6 +13,7 @@ data class User(
 ) : Entity(), UserDetails {
 
     // Persistable function
+    @Id
     override fun getId() = id
 
     // UserDetails functions
