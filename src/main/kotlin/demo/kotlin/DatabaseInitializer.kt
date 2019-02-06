@@ -21,12 +21,14 @@ class DatabaseInitializer(
 ) : CommandLineRunner {
 
     override fun run(vararg args: String) {
+        println("DatabaseInitializer start")
 
         // uncomment if targetting a real MongoDB Database (not embedded)
-//        cowRepository.deleteAll()
+//        userService.deleteAll()
 //                .block()
 //        userRepository.deleteAll()
 //                .block()
+
         val marguerite = Cow("Marguerite", LocalDateTime.of(2017, 9, 28, 13, 30), id = UUID.fromString(COW_MARGUERITE_UUID))
         val laNoiraude = Cow("La Noiraude")
         listOf(marguerite, laNoiraude)
