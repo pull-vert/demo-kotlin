@@ -16,7 +16,7 @@ class CowHandler(
         override val validator: Validator
 ): IHandler<Cow, CowGetDto, CowSaveDto> {
 
-    override fun entityToGetDto(entity: Cow) = CowGetDto(entity.name, entity.lastCalvingDate, entity.id.toString())
+    override fun entityToGetDto(entity: Cow) = CowGetDto(entity.name, entity.lastCalvingDate, entity.id)
 
     override fun saveDtoToEntity(saveDto: CowSaveDto) = Cow(saveDto.name!!, saveDto.lastCalvingDate)
 
