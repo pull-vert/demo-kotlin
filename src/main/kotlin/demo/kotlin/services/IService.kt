@@ -12,21 +12,22 @@ interface IService<T : Entity> {
     val repository: IRepository<T>
 
     fun findById(id: String) =
-            repository.findById(id.toUuid())
+            repository.findById(id.checkValidUuid())
                     .switchIfEmpty { throw NotFoundStatusException() }
 
     fun findAll() = repository.findAll()
 
     fun save(entity: T) = repository.save(entity)
 
-    fun deleteById(id: String) = repository.deleteById(id.toUuid())
+    fun deleteById(id: String) = repository.deleteById(id.checkValidUuid())
 
     fun deleteAll() = repository.deleteAll()
 
-    private fun String.toUuid() =
+    private fun String.checkValidUuid() =
             try {
                 UUID.fromString(this)
-            } catch(e: Throwable) {
+                this
+            } catch (e: Throwable) {
                 throw BadRequestStatusException(e.localizedMessage)
             }
 }
