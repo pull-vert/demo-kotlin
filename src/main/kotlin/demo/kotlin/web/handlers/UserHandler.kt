@@ -18,5 +18,5 @@ class UserHandler(
 
     override fun saveDtoToEntity(saveDto: UserSaveDto) = User(saveDto.username!!, saveDto.password!!)
 
-    override val findByIdUrl: String = "/api/users"
+    override val findByIdUrl = "/api/users"
 }

@@ -20,7 +20,7 @@ class CowHandler(
 
     override fun saveDtoToEntity(saveDto: CowSaveDto) = Cow(saveDto.name!!, saveDto.lastCalvingDate)
 
-    override val findByIdUrl: String = "/api/cows"
+    override val findByIdUrl = "/api/cows"
 
     fun findByName(req: ServerRequest)=
             ok().body(service.findByName(req.pathVariable("name"))
