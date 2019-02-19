@@ -5,4 +5,4 @@ import org.springframework.web.server.ResponseStatusException
 
 internal class BadRequestStatusException(reason: String) : ResponseStatusException(HttpStatus.BAD_REQUEST, reason)
 internal class UnauthorizedStatusException : ResponseStatusException(HttpStatus.UNAUTHORIZED)
-internal class NotFoundStatusException : ResponseStatusException(HttpStatus.NOT_FOUND)
+internal class NotFoundStatusException(reason: String? = null) : ResponseStatusException(HttpStatus.NOT_FOUND, reason)

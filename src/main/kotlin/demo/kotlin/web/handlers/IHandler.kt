@@ -17,10 +17,14 @@ interface IHandler<T : Entity, GET_DTO : IDto, SAVE_DTO : IDto> : Validate {
      * Only override this if save is used
      */
     val findByIdUrl
-        get() = "override_findByIdUrl_val_with_actual_Url"
+        get(): String = TODO("override_findByIdUrl_val_with_actual_Url")
 
-    fun entityToGetDto(entity: T): GET_DTO
-    fun saveDtoToEntity(saveDto: SAVE_DTO): T
+    fun entityToGetDto(entity: T): GET_DTO {
+        TODO("override_entityToGetDto_func_if_needed")
+    }
+    fun saveDtoToEntity(saveDto: SAVE_DTO): T {
+        TODO("override_saveDtoToEntity_func_if_needed")
+    }
 
     fun findById(req: ServerRequest) =
             ok().body(service.findById(req.pathVariable("id"))

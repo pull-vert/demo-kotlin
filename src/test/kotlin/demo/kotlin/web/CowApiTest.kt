@@ -1,18 +1,13 @@
 package demo.kotlin.web
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import demo.kotlin.COW_MARGUERITE_UUID
-import demo.kotlin.security.JWTUtil
 import demo.kotlin.web.dtos.CowGetDto
 import demo.kotlin.web.dtos.CowSaveDto
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.web.server.LocalServerPort
-import org.springframework.restdocs.headers.HeaderDocumentation
-import org.springframework.restdocs.payload.PayloadDocumentation
-import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
-import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
+import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
+import org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders
+import org.springframework.restdocs.payload.PayloadDocumentation.*
 import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
 import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document
@@ -20,11 +15,7 @@ import org.springframework.test.web.reactive.server.expectBody
 import org.springframework.test.web.reactive.server.expectBodyList
 import java.time.LocalDateTime
 
-internal class CowApiTest(
-        @LocalServerPort port: Int,
-        @Autowired jwtUtil: JWTUtil,
-        @Autowired objectMapper: ObjectMapper
-) : ApiTest(port, jwtUtil, objectMapper) {
+internal class CowApiTest : ApiTest() {
 
     @Test
     fun `Verify findByName returns expected cow`() {
@@ -37,6 +28,24 @@ internal class CowApiTest(
                     val cow = exchangeResult.responseBody!!
                     assertThat(cow.name).isEqualTo("Marguerite")
                     assertThat(cow.lastCalvingDate).isNotNull()
+                }
+    }
+
+    @Test
+    fun `Verify findByName returns 404 Not Found if Cow corresponding to provided name is not found`() {
+        val name = "no-name"
+        client.get().uri("/api/cows/name/{name}", name)
+                .addAuthHeader()
+                .exchange()
+                .expectStatus().isNotFound
+                .expectBody<ServerResponseError>()
+                .consumeWith { exchangeResult ->
+                    val error = exchangeResult.responseBody!!
+                    assertThat(error["message"] as String).isEqualTo("No Cow found for $name name")
+                    assertThat(error["path"]).isEqualTo("/api/cows/name/no-name")
+                    assertThat(error["timestamp"]).isNotNull
+                    assertThat(error["status"]).isEqualTo(404)
+                    assertThat(error["error"]).isEqualTo("Not Found")
                 }
     }
 
@@ -187,17 +196,17 @@ internal class CowApiTest(
                 .expectStatus().isCreated
                 .expectBody()
                 .consumeWith(document("saveCow",
-                        PayloadDocumentation.requestFields(
+                        requestFields(
                                 fieldWithPath("name").description("Name of the Cow"),
                                 fieldWithPath("lastCalvingDate").description("Last calving date of the Cow").optional()
                         ),
-                        HeaderDocumentation.responseHeaders(
-                                HeaderDocumentation.headerWithName("Location").description("GET URI for accessing created Cow by its ID")
+                        responseHeaders(
+                                headerWithName("Location").description("GET URI for accessing created Cow by its ID")
                         )))
     }
 
     /**
-     * Cow fields used in requests and responses.
+     * Cow fields used in responses.
      *
      * @return
      */

@@ -1,25 +1,17 @@
 package demo.kotlin.web
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import demo.kotlin.web.dtos.AuthRequestDto
-import demo.kotlin.web.dtos.AuthResponseDto
 import demo.kotlin.entities.Role
 import demo.kotlin.security.JWTUtil
+import demo.kotlin.web.dtos.AuthRequestDto
+import demo.kotlin.web.dtos.AuthResponseDto
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.web.server.LocalServerPort
-import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
-import org.springframework.restdocs.payload.PayloadDocumentation.requestFields
-import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
+import org.springframework.restdocs.payload.PayloadDocumentation.*
 import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document
 import org.springframework.test.web.reactive.server.expectBody
 
-internal class AuthenticationApiTest(
-        @LocalServerPort port: Int,
-        @Autowired private val jwtUtil: JWTUtil,
-        @Autowired objectMapper: ObjectMapper
-) : ApiTest(port, jwtUtil, objectMapper) {
+internal class AuthenticationApiTest(@Autowired private val jwtUtil: JWTUtil) : ApiTest() {
 
     @Test
     fun `Verify auth ok`() {

@@ -8,38 +8,51 @@ import demo.kotlin.entities.User
 import demo.kotlin.security.JWTUtil
 import io.netty.handler.ssl.SslContextBuilder
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.http.HttpHeaders
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
+import org.springframework.http.codec.json.Jackson2JsonDecoder
+import org.springframework.http.codec.json.Jackson2JsonEncoder
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint
 import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.WebTestClient
-import reactor.netty.http.client.HttpClient
-import org.springframework.http.codec.json.Jackson2JsonDecoder
-import org.springframework.http.codec.json.Jackson2JsonEncoder
 import org.springframework.web.reactive.function.client.ExchangeStrategies
+import reactor.netty.http.client.HttpClient
 
 internal typealias ServerResponseError = Map<String, Any>
 
-@ExtendWith(RestDocumentationExtension::class, SpringExtension::class)
+@ExtendWith(
+        RestDocumentationExtension::class,
+        SpringExtension::class
+)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureRestDocs(uriScheme = "https", uriPort = 8443)
-internal abstract class ApiTest(
-        private val port: Int,
-        private val jwtUtil: JWTUtil,
-        private val objectMapper: ObjectMapper
-) {
+@AutoConfigureRestDocs(
+        uriScheme = "https",
+        uriPort = 8443
+)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+internal abstract class ApiTest {
 
     protected lateinit var client: WebTestClient
+    private lateinit var jwtUtil: JWTUtil
 
-    @BeforeEach
-    fun before(restDocumentation: RestDocumentationContextProvider) {
+    @BeforeAll
+    fun before(
+            @Autowired jwtUtil: JWTUtil,
+            @Autowired restDocumentation: RestDocumentationContextProvider,
+            @Autowired objectMapper: ObjectMapper,
+            @LocalServerPort port: Int
+    ) {
+        this.jwtUtil = jwtUtil
         val sslContext = SslContextBuilder.forClient()
                 .trustManager(InsecureTrustManagerFactory.INSTANCE).build()
         val httpClient = HttpClient.create().secure{ t -> t.sslContext(sslContext) }
