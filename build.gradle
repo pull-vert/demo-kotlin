@@ -4,6 +4,7 @@ buildscript {
     ext {
         netty_tcnative_version = '2.0.20.Final'
         jjwt_version = '0.9.1'
+        kotlin_logging_version = '1.6.25'
     }
     repositories {
         mavenCentral()
@@ -54,6 +55,7 @@ dependencies {
     compile("io.netty:netty-tcnative-boringssl-static:$netty_tcnative_version") // this dependency is only required for Java 8, since java 9 ALPN is natively supported
     compile('org.springframework.boot:spring-boot-starter-security')
     compile("io.jsonwebtoken:jjwt:$jjwt_version")
+    compile("io.github.microutils:kotlin-logging:$kotlin_logging_version")
 
     asciidoctor('org.springframework.restdocs:spring-restdocs-asciidoctor')
 
