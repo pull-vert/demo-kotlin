@@ -32,7 +32,7 @@ keytool -genkey -keyalg RSA -alias selfsigned -keystore keystore.jks -storepass 
 * For production : make a POST and a GET endpoint for let's encrypt HTTP challenge, or use a real well signed Certificate
 
 ### [step 4 : Spring Restdocs](https://github.com/pull-vert/demo-kotlin/tree/step4-spring-restdocs)
-* Modify build.gradle to add asciidoc and Spring Resdocs
+* Modify build.gradle to add asciidoc and Spring Restdocs
 * Modify ApiTest to generate doc
 * add index.adoc to expose all API documentation
 
@@ -48,7 +48,9 @@ keytool -genkey -keyalg RSA -alias selfsigned -keystore keystore.jks -storepass 
 ### [step 6 : DTOs + bean validation](https://github.com/pull-vert/demo-kotlin/tree/step6-dtos-bean-validation)
 * now webservice endpoints consume and return DTOs
 * mapping between POJOs is made by Extension Functions
+* Bean validation with annotations
 * Note : all fields for Request DTO must be nullable to prevent Jackson deserialize error if param is null. Bean validation will take care of returning a nice error to API client
+* Add constraints documentation in Spring Restdocs based on Bean validation annotations
 
 ## Kotlin with Functional bean registration
 ### [step 2.1 : functional bean registration](https://github.com/pull-vert/demo-kotlin/tree/step2.1-functional-bean-registration)

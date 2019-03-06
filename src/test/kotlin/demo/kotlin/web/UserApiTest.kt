@@ -174,6 +174,8 @@ internal class UserApiTest : ApiTest() {
 
     @Test
     fun `User Save doc`() {
+        val fields = ConstrainedFields(UserSaveDto::class.java)
+
         client.post().uri("/api/users/")
                 .syncBody(UserSaveDto("User", "password_again_again"))
                 .exchange()
@@ -181,8 +183,8 @@ internal class UserApiTest : ApiTest() {
                 .expectBody()
                 .consumeWith(document("saveUser",
                         requestFields(
-                                fieldWithPath("username").description("username"),
-                                fieldWithPath("password").description("raw (non encrypted) password")
+                                fields.withPath("username").description("username"),
+                                fields.withPath("password").description("raw (non encrypted) password")
                         ),
                         responseHeaders(
                                 headerWithName("Location").description("GET URI for accessing created User by its ID")

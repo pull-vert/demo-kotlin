@@ -69,14 +69,16 @@ internal class AuthenticationApiTest(@Autowired private val jwtUtil: JWTUtil) : 
 
     @Test
     fun `Auth doc`() {
+        val fields = ConstrainedFields(AuthRequestDto::class.java)
+
         client.post().uri("/auth/")
                 .syncBody(AuthRequestDto("Fred", "password"))
                 .exchange()
                 .expectBody()
                 .consumeWith(document("auth",
                         requestFields(
-                                fieldWithPath("username").description("username for authentication"),
-                                fieldWithPath("password").description("raw (non encrypted) password for authentication")
+                                fields.withPath("username").description("username for authentication"),
+                                fields.withPath("password").description("raw (non encrypted) password for authentication")
                         ),
                         responseFields(
                                 fieldWithPath("token").description("Generated JWT authentication token")

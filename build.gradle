@@ -68,6 +68,8 @@ dependencies {
     testImplementation('org.junit.jupiter:junit-jupiter-api')
     testRuntime('org.junit.jupiter:junit-jupiter-engine')
     testCompile('org.springframework.restdocs:spring-restdocs-webtestclient')
+    // EL is needed to document Constraints with spring-restdocs
+    testCompile('org.glassfish:javax.el')
 }
 
 ext {

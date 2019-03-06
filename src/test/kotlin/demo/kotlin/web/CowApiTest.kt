@@ -189,6 +189,8 @@ internal class CowApiTest : ApiTest() {
 
     @Test
     fun `Cow Save doc`() {
+        val fields = ConstrainedFields(CowSaveDto::class.java)
+
         client.post().uri("/api/cows/")
                 .syncBody(CowSaveDto("Cow", LocalDateTime.of(2016, 5, 28, 13, 30)))
                 .addAuthHeader()
@@ -197,8 +199,8 @@ internal class CowApiTest : ApiTest() {
                 .expectBody()
                 .consumeWith(document("saveCow",
                         requestFields(
-                                fieldWithPath("name").description("Name of the Cow"),
-                                fieldWithPath("lastCalvingDate").description("Last calving date of the Cow").optional()
+                                fields.withPath("name").description("Name of the Cow"),
+                                fields.withPath("lastCalvingDate").description("Last calving date of the Cow").optional()
                         ),
                         responseHeaders(
                                 headerWithName("Location").description("GET URI for accessing created Cow by its ID")
