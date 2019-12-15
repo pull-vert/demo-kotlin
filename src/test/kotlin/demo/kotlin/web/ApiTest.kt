@@ -23,12 +23,9 @@ import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.restdocs.constraints.ConstraintDescriptions
 import org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint
-import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
-import org.springframework.restdocs.snippet.Attributes
 import org.springframework.restdocs.snippet.Attributes.key
 import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.util.StringUtils
 import org.springframework.web.reactive.function.client.ExchangeStrategies
@@ -36,10 +33,7 @@ import reactor.netty.http.client.HttpClient
 
 internal typealias ServerResponseError = Map<String, Any>
 
-@ExtendWith(
-        RestDocumentationExtension::class,
-        SpringExtension::class
-)
+@ExtendWith(RestDocumentationExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureRestDocs(
         uriScheme = "https",

@@ -17,8 +17,8 @@ import java.time.LocalDateTime
 
 @ExtendWith(MockitoExtension::class)
 class CowServiceTest {
-    lateinit var cowService: CowService
-    lateinit var repository: CowRepository
+    private lateinit var cowService: CowService
+    private lateinit var repository: CowRepository
 
     @BeforeEach
     private fun before(@Mock repository: CowRepository) {

@@ -35,31 +35,24 @@ repositories {
 }
 
 dependencies {
-    implementation('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
-    implementation('org.springframework.boot:spring-boot-starter-webflux')
-    implementation('com.fasterxml.jackson.module:jackson-module-kotlin')
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
-    implementation("io.netty:netty-tcnative-boringssl-static:$netty_tcnative_version") // this dependency is only required for Java 8, since java 9 ALPN is natively supported
-    implementation('org.springframework.boot:spring-boot-starter-security')
-    implementation("io.jsonwebtoken:jjwt:$jjwt_version")
-    implementation("io.github.microutils:kotlin-logging:$kotlin_logging_version")
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    implementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+    implementation "io.netty:netty-tcnative-boringssl-static:$netty_tcnative_version" // this dependency is only required for Java 8, since java 9 ALPN is natively supported
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation "io.jsonwebtoken:jjwt:$jjwt_version"
+    implementation "io.github.microutils:kotlin-logging:$kotlin_logging_version"
     implementation "io.projectreactor.kotlin:reactor-kotlin-extensions:$reactor_kotlin_extension_version"
 
-    asciidoctor('org.springframework.restdocs:spring-restdocs-asciidoctor')
+    asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
-        exclude group: 'junit', module: 'junit'
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
-    testImplementation('io.projectreactor:reactor-test')
-    testImplementation('org.junit.jupiter:junit-jupiter-params')
-    testImplementation('org.mockito:mockito-junit-jupiter')
-    testImplementation('org.junit.jupiter:junit-jupiter-api')
-    testRuntime('org.junit.jupiter:junit-jupiter-engine')
-    testImplementation('org.springframework.restdocs:spring-restdocs-webtestclient')
-    // EL is needed to document Constraints with spring-restdocs
-//    testCompile('org.glassfish:javax.el')
+    testImplementation 'io.projectreactor:reactor-test'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-webtestclient'
 }
 
 ext {

@@ -3,14 +3,11 @@ package demo.kotlin.repositories
 import demo.kotlin.entities.User
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import reactor.kotlin.test.test
 
-@ExtendWith(SpringExtension::class)
 @SpringBootTest
 class UserRepositoryTest(
         @Autowired private val userRepository: UserRepository,
