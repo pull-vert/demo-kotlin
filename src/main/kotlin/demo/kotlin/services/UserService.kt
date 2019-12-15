@@ -8,8 +8,8 @@ import demo.kotlin.security.JWTUtil
 import demo.kotlin.web.UnauthorizedStatusException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import reactor.core.publisher.switchIfEmpty
-import reactor.core.publisher.toMono
+import reactor.kotlin.core.publisher.switchIfEmpty
+import reactor.kotlin.core.publisher.toMono
 
 @Service
 class UserService(

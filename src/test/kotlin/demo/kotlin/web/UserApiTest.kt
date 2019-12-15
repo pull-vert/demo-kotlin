@@ -97,7 +97,7 @@ internal class UserApiTest : ApiTest() {
     @Test
     fun `Verify save User ok`() {
         client.post().uri("/api/users/")
-                .syncBody(UserSaveDto("William", "password_again"))
+                .bodyValue(UserSaveDto("William", "password_again"))
                 .exchange()
                 .expectStatus().isCreated
                 .expectHeader().value("location") { uri ->
@@ -120,7 +120,7 @@ internal class UserApiTest : ApiTest() {
     @Test
     fun `Verify save User with password too short bean validation fails`() {
         client.post().uri("/api/users/")
-                .syncBody(UserSaveDto("Wrong", "pass"))
+                .bodyValue(UserSaveDto("Wrong", "pass"))
                 .exchange()
                 .expectStatus().isBadRequest
                 .expectBody<ServerResponseError>()
@@ -177,7 +177,7 @@ internal class UserApiTest : ApiTest() {
         val fields = ConstrainedFields(UserSaveDto::class.java)
 
         client.post().uri("/api/users/")
-                .syncBody(UserSaveDto("User", "password_again_again"))
+                .bodyValue(UserSaveDto("User", "password_again_again"))
                 .exchange()
                 .expectStatus().isCreated
                 .expectBody()

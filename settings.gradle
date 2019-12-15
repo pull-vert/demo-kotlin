@@ -1,0 +1,9 @@
+pluginManagement {
+    plugins {
+        id 'org.jetbrains.kotlin.jvm' version "$kotlin_plugin_version"
+        id 'org.jetbrains.kotlin.plugin.spring' version "$kotlin_plugin_version"
+        id 'io.spring.dependency-management' version "$dependency_management_plugin_version"
+        id 'org.springframework.boot' version "$spring_boot_plugin_version"
+        id 'org.asciidoctor.convert' version "$asciidoctor_plugin_version"
+    }
+}

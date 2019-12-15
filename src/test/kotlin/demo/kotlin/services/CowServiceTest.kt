@@ -11,8 +11,8 @@ import org.mockito.BDDMockito.given
 import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
 import reactor.core.publisher.Mono
-import reactor.core.publisher.toMono
-import reactor.test.test
+import reactor.kotlin.core.publisher.toMono
+import reactor.kotlin.test.test
 import java.time.LocalDateTime
 
 @ExtendWith(MockitoExtension::class)

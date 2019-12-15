@@ -1,22 +1,11 @@
 import org.jetbrains.kotlin.config.KotlinCompilerVersion
 
-buildscript {
-    ext {
-        netty_tcnative_version = '2.0.20.Final'
-        jjwt_version = '0.9.1'
-        kotlin_logging_version = '1.6.25'
-    }
-    repositories {
-        mavenCentral()
-    }
-}
-
 plugins {
-    id('org.jetbrains.kotlin.jvm') version '1.3.21'
-    id('org.jetbrains.kotlin.plugin.spring') version '1.3.21'
-    id('io.spring.dependency-management') version '1.0.6.RELEASE'
-    id('org.springframework.boot') version '2.1.3.RELEASE'
-    id('org.asciidoctor.convert') version '1.5.9.2'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'org.jetbrains.kotlin.plugin.spring'
+    id 'io.spring.dependency-management'
+    id 'org.springframework.boot'
+    id 'org.asciidoctor.convert'
 }
 
 println("Using Gradle version: $gradle.gradleVersion")
@@ -46,30 +35,31 @@ repositories {
 }
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
-    compile('org.springframework.boot:spring-boot-starter-webflux')
-    compile('com.fasterxml.jackson.module:jackson-module-kotlin')
-    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    compile("org.jetbrains.kotlin:kotlin-reflect")
-    compile('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
-    compile("io.netty:netty-tcnative-boringssl-static:$netty_tcnative_version") // this dependency is only required for Java 8, since java 9 ALPN is natively supported
-    compile('org.springframework.boot:spring-boot-starter-security')
-    compile("io.jsonwebtoken:jjwt:$jjwt_version")
-    compile("io.github.microutils:kotlin-logging:$kotlin_logging_version")
+    implementation('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
+    implementation('org.springframework.boot:spring-boot-starter-webflux')
+    implementation('com.fasterxml.jackson.module:jackson-module-kotlin')
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
+    implementation("io.netty:netty-tcnative-boringssl-static:$netty_tcnative_version") // this dependency is only required for Java 8, since java 9 ALPN is natively supported
+    implementation('org.springframework.boot:spring-boot-starter-security')
+    implementation("io.jsonwebtoken:jjwt:$jjwt_version")
+    implementation("io.github.microutils:kotlin-logging:$kotlin_logging_version")
+    implementation "io.projectreactor.kotlin:reactor-kotlin-extensions:$reactor_kotlin_extension_version"
 
     asciidoctor('org.springframework.restdocs:spring-restdocs-asciidoctor')
 
-    testCompile("org.springframework.boot:spring-boot-starter-test") {
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude group: 'junit', module: 'junit'
     }
-    testCompile('io.projectreactor:reactor-test')
-    testCompile('org.junit.jupiter:junit-jupiter-params')
-    testCompile('org.mockito:mockito-junit-jupiter')
+    testImplementation('io.projectreactor:reactor-test')
+    testImplementation('org.junit.jupiter:junit-jupiter-params')
+    testImplementation('org.mockito:mockito-junit-jupiter')
     testImplementation('org.junit.jupiter:junit-jupiter-api')
     testRuntime('org.junit.jupiter:junit-jupiter-engine')
-    testCompile('org.springframework.restdocs:spring-restdocs-webtestclient')
+    testImplementation('org.springframework.restdocs:spring-restdocs-webtestclient')
     // EL is needed to document Constraints with spring-restdocs
-    testCompile('org.glassfish:javax.el')
+//    testCompile('org.glassfish:javax.el')
 }
 
 ext {
@@ -97,6 +87,6 @@ bootJar {
 
 // execute ./gradlew wrapper then remove .gradle directory when version change
 wrapper {
-    gradleVersion='5.2.1'
+    gradleVersion='6.0.1'
     distributionType=Wrapper.DistributionType.ALL
 }

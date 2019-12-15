@@ -4,7 +4,7 @@ import demo.kotlin.entities.Entity
 import demo.kotlin.repositories.IRepository
 import demo.kotlin.web.BadRequestStatusException
 import demo.kotlin.web.NotFoundStatusException
-import reactor.core.publisher.switchIfEmpty
+import reactor.kotlin.core.publisher.switchIfEmpty
 import java.util.*
 
 interface IService<T : Entity> {

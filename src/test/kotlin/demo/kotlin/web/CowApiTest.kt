@@ -93,7 +93,7 @@ internal class CowApiTest : ApiTest() {
     @Test
     fun `Verify save Cow ok`() {
         client.post().uri("/api/cows/")
-                .syncBody(CowSaveDto("Paquerette", null))
+                .bodyValue(CowSaveDto("Paquerette", null))
                 .addAuthHeader()
                 .exchange()
                 .expectStatus().isCreated
@@ -117,7 +117,7 @@ internal class CowApiTest : ApiTest() {
     @Test
     fun `Verify save Cow with name too short bean validation fails`() {
         client.post().uri("/api/cows/")
-                .syncBody(CowSaveDto("t", null))
+                .bodyValue(CowSaveDto("t", null))
                 .addAuthHeader()
                 .exchange()
                 .expectStatus().isBadRequest
@@ -135,7 +135,7 @@ internal class CowApiTest : ApiTest() {
     @Test
     fun `Verify save Cow with no name bean validation fails`() {
         client.post().uri("/api/cows/")
-                .syncBody(CowSaveDto(null, null))
+                .bodyValue(CowSaveDto(null, null))
                 .addAuthHeader()
                 .exchange()
                 .expectStatus().isBadRequest
@@ -192,7 +192,7 @@ internal class CowApiTest : ApiTest() {
         val fields = ConstrainedFields(CowSaveDto::class.java)
 
         client.post().uri("/api/cows/")
-                .syncBody(CowSaveDto("Cow", LocalDateTime.of(2016, 5, 28, 13, 30)))
+                .bodyValue(CowSaveDto("Cow", LocalDateTime.of(2016, 5, 28, 13, 30)))
                 .addAuthHeader()
                 .exchange()
                 .expectStatus().isCreated

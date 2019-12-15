@@ -16,7 +16,7 @@ internal class AuthenticationApiTest(@Autowired private val jwtUtil: JWTUtil) : 
     @Test
     fun `Verify auth ok`() {
         client.post().uri("/auth/")
-                .syncBody(AuthRequestDto("Fred", "password"))
+                .bodyValue(AuthRequestDto("Fred", "password"))
                 .exchange()
                 .expectStatus().isOk
                 .expectBody<AuthResponseDto>()
@@ -37,7 +37,7 @@ internal class AuthenticationApiTest(@Autowired private val jwtUtil: JWTUtil) : 
     @Test
     fun `Verify auth unknown user unauthorized`() {
         client.post().uri("/auth/")
-                .syncBody(AuthRequestDto("John", "password"))
+                .bodyValue(AuthRequestDto("John", "password"))
                 .exchange()
                 .expectStatus().isUnauthorized
     }
@@ -45,7 +45,7 @@ internal class AuthenticationApiTest(@Autowired private val jwtUtil: JWTUtil) : 
     @Test
     fun `Verify auth incorrect password unauthorized`() {
         client.post().uri("/auth/")
-                .syncBody(AuthRequestDto("Fred", "incorrect_password"))
+                .bodyValue(AuthRequestDto("Fred", "incorrect_password"))
                 .exchange()
                 .expectStatus().isUnauthorized
     }
@@ -53,7 +53,7 @@ internal class AuthenticationApiTest(@Autowired private val jwtUtil: JWTUtil) : 
     @Test
     fun `Verify auth no password bean validation fails`() {
         client.post().uri("/auth/")
-                .syncBody(AuthRequestDto("John", null))
+                .bodyValue(AuthRequestDto("John", null))
                 .exchange()
                 .expectStatus().isBadRequest
                 .expectBody<ServerResponseError>()
@@ -72,7 +72,7 @@ internal class AuthenticationApiTest(@Autowired private val jwtUtil: JWTUtil) : 
         val fields = ConstrainedFields(AuthRequestDto::class.java)
 
         client.post().uri("/auth/")
-                .syncBody(AuthRequestDto("Fred", "password"))
+                .bodyValue(AuthRequestDto("Fred", "password"))
                 .exchange()
                 .expectBody()
                 .consumeWith(document("auth",

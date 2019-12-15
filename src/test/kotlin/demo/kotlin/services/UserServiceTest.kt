@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import reactor.test.test
+import reactor.kotlin.test.test
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
@@ -19,7 +19,7 @@ class UserServiceTest(
 ) {
 
     @Test
-    fun `Verify save works and encodes password correcly`() {
+    fun `Verify save works and encodes password correctly`() {
         val name = "Bob"
         val rawPassword = "pass"
         userService.save(User(name, rawPassword))

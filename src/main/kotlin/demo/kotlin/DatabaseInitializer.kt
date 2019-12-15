@@ -6,7 +6,7 @@ import demo.kotlin.repositories.CowRepository
 import demo.kotlin.services.UserService
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Component
-import reactor.core.publisher.toFlux
+import reactor.kotlin.core.publisher.toFlux
 import java.time.LocalDateTime
 
 internal const val COW_MARGUERITE_UUID = "e48ccc7e-c1b8-41b8-91f5-ab5528ab292b"
