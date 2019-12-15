@@ -9,7 +9,6 @@ import demo.kotlin.security.JWTUtil
 import io.netty.handler.ssl.SslContextBuilder
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
@@ -39,7 +38,6 @@ internal typealias ServerResponseError = Map<String, Any>
         uriScheme = "https",
         uriPort = 8443
 )
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal abstract class ApiTest {
 
     protected lateinit var client: WebTestClient
@@ -55,7 +53,7 @@ internal abstract class ApiTest {
         this.jwtUtil = jwtUtil
         val sslContext = SslContextBuilder.forClient()
                 .trustManager(InsecureTrustManagerFactory.INSTANCE).build()
-        val httpClient = HttpClient.create().secure{ t -> t.sslContext(sslContext) }
+        val httpClient = HttpClient.create().secure { t -> t.sslContext(sslContext) }
         val httpConnector = ReactorClientHttpConnector(httpClient)
 
         client = WebTestClient.bindToServer(httpConnector)
@@ -74,7 +72,7 @@ internal abstract class ApiTest {
     }
 
     private fun buildAuthHeader(role: Role): String {
-        val user = when(role) {
+        val user = when (role) {
             ROLE_USER -> User("Fred", "password", authorities = mutableListOf(ROLE_USER), enabled = true)
             ROLE_ADMIN -> User("Boss", "secured_password", authorities = mutableListOf(ROLE_ADMIN), enabled = true)
         }

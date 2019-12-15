@@ -1,21 +1,29 @@
 package demo.kotlin.security
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.github.michaelbull.logging.InlineLogger
 import io.jsonwebtoken.*
-import mu.KotlinLogging
-import org.springframework.beans.factory.annotation.Value
+import io.jsonwebtoken.io.JacksonDeserializer
+import io.jsonwebtoken.io.JacksonSerializer
+import io.jsonwebtoken.security.SecurityException
 import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.stereotype.Component
 import java.util.*
-
-private val logger = KotlinLogging.logger {}
+import io.jsonwebtoken.security.Keys
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
 
 @Component
 class JWTUtil(
         @Value("\${jwt.secret}") private val secret: String,
-        @Value("\${jwt.expiration}") private val expirationTime: Long //in second
+        @Value("\${jwt.expiration}") private val expirationTime: Long, //in second
+        private val objectMapper: ObjectMapper
 ) {
 
-    private val jwtParser = Jwts.parser().setSigningKey(secret.toByteArray())
+    private val logger = InlineLogger()
+
+    private val jwtParser = Jwts.parser()
+            .deserializeJsonWith(JacksonDeserializer(objectMapper))
+            .setSigningKey(secret.toByteArray())
 
     fun getAllClaimsFromToken(token: String) = jwtParser.parseClaimsJws(token).body
 
@@ -25,7 +33,7 @@ class JWTUtil(
         val claims = mutableMapOf<String, Any>()
         claims["authorities"] = user.authorities
         claims["enabled"] = user.isEnabled
-        return doGenerateToken(user.getUsername(), claims)
+        return doGenerateToken(user.username, claims)
     }
 
     fun validateToken(token: String): Boolean {
@@ -36,36 +44,39 @@ class JWTUtil(
             val claims = getAllClaimsFromToken(token)
             val enabled = claims.getOrDefault("enabled", false) as Boolean
             if (!enabled) {
-                logger.error("Invalid JWT, User ${getUsernameFromToken(token)} is inactive")
+                logger.error { "Invalid JWT, User ${getUsernameFromToken(token)} is inactive" }
             }
             return enabled
-        } catch (ex: SignatureException) {
-            logger.error("Invalid JWT signature")
+        } catch (ex: SecurityException) {
+            logger.error { "Invalid JWT signature" }
             return false
         } catch (ex: MalformedJwtException) {
-            logger.error("Invalid JWT token")
+            logger.error { "Invalid JWT token" }
             return false
         } catch (ex: ExpiredJwtException) {
-            logger.error("Expired JWT token")
+            logger.error { "Expired JWT token" }
             return false
         } catch (ex: UnsupportedJwtException) {
-            logger.error("Unsupported JWT token")
+            logger.error { "Unsupported JWT token" }
             return false
         } catch (ex: IllegalArgumentException) {
-            logger.error("JWT claims string is empty.")
+            logger.error { "JWT claims string is empty" }
             return false
         }
     }
 
     private fun doGenerateToken(username: String, claims: Map<String, Any>): String {
         val createdDate = Date()
-        val expirationDate = Date(createdDate.getTime() + expirationTime * 1000)
+        val expirationDate = Date(createdDate.time + expirationTime * 1000)
+        val key = Keys.hmacShaKeyFor(secret.toByteArray())
+
         return Jwts.builder()
+                .serializeToJsonWith(JacksonSerializer(objectMapper))
                 .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(createdDate)
                 .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS512, secret.toByteArray())
+                .signWith(key, SignatureAlgorithm.HS512)
                 .compact()
     }
 }

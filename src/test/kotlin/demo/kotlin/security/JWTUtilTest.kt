@@ -1,24 +1,23 @@
 package demo.kotlin.security
 
-import demo.kotlin.entities.User
 import org.assertj.core.api.Assertions.assertThat
+import com.fasterxml.jackson.databind.ObjectMapper
+import demo.kotlin.entities.Role
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.TestInstance.Lifecycle
+import org.springframework.security.core.userdetails.User
 
 private const val EXPIRED_TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiZW5hYmxlIjp0cnVlLCJ" +
         "zdWIiOiJGcmVkIiwiaWF0IjoxNTQ3NTA0MTEwLCJleHAiOjE1NDc1MzI5MTB9._QOBJMLWNcFSzDwsiZbIJ5gmXG1tQZ" +
         "90jP4omKJIey84l7ZQ72sN_7WdN94XjDJsgZ4SoDJL4MtTpmy_o3wS1A"
 
-@TestInstance(Lifecycle.PER_CLASS)
 class JWTUtilTest {
 
     private lateinit var jwtUtil: JWTUtil
 
     @BeforeAll
     private fun beforeAll() {
-        jwtUtil = JWTUtil("mysecret", 1000L)
+        jwtUtil = JWTUtil("mysecretisjustlongenoughforhmac512-01234567890123456789012345678", 1000L, ObjectMapper())
     }
 
     @Test
@@ -44,5 +43,11 @@ class JWTUtilTest {
         assertThat(jwtUtil.validateToken(EXPIRED_TOKEN)).isFalse()
     }
 
-    private fun generateToken(active: Boolean = true) = jwtUtil.generateToken(User("Fred", "password", enabled = active))
+    private fun generateToken(active: Boolean = true) =
+            jwtUtil.generateToken(User.builder()
+                    .username("fred@mail.com")
+                    .password("password")
+                    .disabled(!active)
+                    .authorities(setOf(Role.ROLE_ADMIN))
+                    .build())
 }

@@ -32,6 +32,7 @@ compileTestKotlin {
 
 repositories {
     mavenCentral()
+    maven { url 'https://dl.bintray.com/michaelbull/maven' }
 }
 
 dependencies {
@@ -42,9 +43,12 @@ dependencies {
     implementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
     implementation "io.netty:netty-tcnative-boringssl-static:$netty_tcnative_version" // this dependency is only required for Java 8, since java 9 ALPN is natively supported
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation "io.jsonwebtoken:jjwt:$jjwt_version"
-    implementation "io.github.microutils:kotlin-logging:$kotlin_logging_version"
+    implementation "io.jsonwebtoken:jjwt-api:$jjwt_version"
+    implementation "io.jsonwebtoken:jjwt-jackson:$jjwt_version"
+    implementation "com.michael-bull.kotlin-inline-logger:kotlin-inline-logger-jvm:$kotlin_inline_logger_version"
     implementation "io.projectreactor.kotlin:reactor-kotlin-extensions:$reactor_kotlin_extension_version"
+
+    runtimeOnly "io.jsonwebtoken:jjwt-impl:$jjwt_version"
 
     asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 

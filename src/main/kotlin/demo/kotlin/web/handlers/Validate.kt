@@ -8,7 +8,7 @@ interface Validate {
 
     fun callValidator(any: Any) {
         val errors = validator.validate(any)
-        if (!errors.isEmpty()) {
+        if (errors.isNotEmpty()) {
             var msg = ""
             errors.forEach { error ->
                 msg += "${error.propertyPath}(${error.invalidValue}):${error.message};"

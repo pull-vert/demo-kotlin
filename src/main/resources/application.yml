@@ -8,5 +8,5 @@ server:
     enabled: true
 
 jwt:
-  secret: mysecret
+  secret: mysecretisjustlongenoughforhmac512-01234567890123456789012345678
   expiration: 28800
