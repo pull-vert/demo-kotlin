@@ -3,8 +3,8 @@ package demo.kotlin.security
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.michaelbull.logging.InlineLogger
 import io.jsonwebtoken.*
-import io.jsonwebtoken.io.JacksonDeserializer
-import io.jsonwebtoken.io.JacksonSerializer
+import io.jsonwebtoken.jackson.io.JacksonDeserializer
+import io.jsonwebtoken.jackson.io.JacksonSerializer
 import io.jsonwebtoken.security.SecurityException
 import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
@@ -21,13 +21,14 @@ class JWTUtil(
 
     private val logger = InlineLogger()
 
-    private val jwtParser = Jwts.parser()
+    private val jwtParser = Jwts.parserBuilder()
             .deserializeJsonWith(JacksonDeserializer(objectMapper))
             .setSigningKey(secret.toByteArray())
+            .build()
 
-    fun getAllClaimsFromToken(token: String) = jwtParser.parseClaimsJws(token).body
+    fun getAllClaimsFromToken(token: String): Claims = jwtParser.parseClaimsJws(token).body
 
-    fun getUsernameFromToken(token: String) = getAllClaimsFromToken(token).subject
+    fun getUsernameFromToken(token: String): String = getAllClaimsFromToken(token).subject
 
     fun generateToken(user: UserDetails): String {
         val claims = mutableMapOf<String, Any>()

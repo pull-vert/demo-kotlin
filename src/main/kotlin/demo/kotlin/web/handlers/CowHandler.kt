@@ -14,7 +14,7 @@ import javax.validation.Validator
 class CowHandler(
         override val service: CowService,
         override val validator: Validator
-): IHandler<Cow, CowGetDto, CowSaveDto> {
+) : IHandler<Cow, CowGetDto, CowSaveDto> {
 
     override fun entityToGetDto(entity: Cow) = CowGetDto(entity.name, entity.lastCalvingDate, entity.id)
 
@@ -22,7 +22,9 @@ class CowHandler(
 
     override val findByIdUrl = "/api/cows"
 
-    fun findByName(req: ServerRequest)=
-            ok().body(service.findByName(req.pathVariable("name"))
-                    .map(::entityToGetDto))
+    fun findByName(req: ServerRequest) =
+            ok().body(
+                    service.findByName(req.pathVariable("name"))
+                            .map(::entityToGetDto)
+            )
 }

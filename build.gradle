@@ -41,6 +41,11 @@ dependencies {
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     implementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+    implementation 'javax.validation:validation-api'
+    implementation 'org.hibernate.validator:hibernate-validator'
+    //implementation 'org.hibernate.validator:hibernate-validator-annotation-processor'
+    implementation 'javax.el:javax.el-api:3.0.0'
+    implementation 'org.glassfish:javax.el:3.0.0'
     implementation "io.netty:netty-tcnative-boringssl-static:$netty_tcnative_version" // this dependency is only required for Java 8, since java 9 ALPN is natively supported
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation "io.jsonwebtoken:jjwt-api:$jjwt_version"
@@ -84,6 +89,6 @@ bootJar {
 
 // execute ./gradlew wrapper then remove .gradle directory when version change
 wrapper {
-    gradleVersion='6.0.1'
+    gradleVersion='6.4.1'
     distributionType=Wrapper.DistributionType.ALL
 }
