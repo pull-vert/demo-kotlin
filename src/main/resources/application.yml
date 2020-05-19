@@ -6,6 +6,8 @@ server:
     key-store-password: secret
   http2:
     enabled: true
+  error:
+    include-message: always
 
 jwt:
   secret: mysecretisjustlongenoughforhmac512-01234567890123456789012345678

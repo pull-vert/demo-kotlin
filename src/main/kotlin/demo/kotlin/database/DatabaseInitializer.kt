@@ -1,4 +1,4 @@
-package demo.kotlin
+package demo.kotlin.database
 
 import demo.kotlin.entities.Cow
 import demo.kotlin.entities.User
