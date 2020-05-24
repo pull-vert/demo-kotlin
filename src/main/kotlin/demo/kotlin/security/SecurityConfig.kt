@@ -6,6 +6,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.web.server.SecurityWebFilterChain
 
 @Configuration
 @EnableWebFluxSecurity
@@ -22,7 +23,7 @@ class SecurityConfig(
     fun passwordEncoder() = BCryptPasswordEncoder()
 
     @Bean
-    fun securitygWebFilterChain(http: ServerHttpSecurity) =
+    fun securitygWebFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain =
             http.csrf().disable()
                     .formLogin().disable()
                     .httpBasic().disable()

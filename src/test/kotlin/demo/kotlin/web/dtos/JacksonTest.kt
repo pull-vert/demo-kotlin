@@ -2,7 +2,7 @@ package demo.kotlin.web.dtos
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import demo.kotlin.database.USER_FRED_UUID
+import demo.kotlin.USER_FRED_UUID
 import demo.kotlin.entities.Role.ROLE_USER
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

@@ -1,6 +1,5 @@
 package demo.kotlin.services
 
-import demo.kotlin.database.USER_FRED_UUID
 import demo.kotlin.entities.User
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -28,12 +27,5 @@ class UserServiceTest(
                             .matches { password -> passwordEncoder.matches(rawPassword, password) }
                     assertThat(user.isEnabled).isFalse()
                 }.verifyComplete()
-    }
-
-    @Test
-    fun `Verify deleteById is working`() {
-        userService.deleteById(USER_FRED_UUID)
-                .test()
-                .verifyComplete()
     }
 }

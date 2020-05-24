@@ -1,6 +1,6 @@
 package demo.kotlin.web
 
-import demo.kotlin.database.COW_MARGUERITE_UUID
+import demo.kotlin.COW_MARGUERITE_UUID
 import demo.kotlin.web.dtos.CowGetDto
 import demo.kotlin.web.dtos.CowSaveDto
 import org.assertj.core.api.Assertions.assertThat

@@ -1,7 +1,8 @@
 package demo.kotlin.web
 
-import demo.kotlin.database.USER_BOSS_UUID
-import demo.kotlin.database.USER_FRED_UUID
+import demo.kotlin.USER_BOSS_UUID
+import demo.kotlin.USER_FRED_UUID
+import demo.kotlin.USER_TO_DELETE_UUID
 import demo.kotlin.entities.Role.ROLE_ADMIN
 import demo.kotlin.web.dtos.UserGetDto
 import demo.kotlin.web.dtos.UserSaveDto
@@ -15,16 +16,14 @@ import org.springframework.restdocs.request.RequestDocumentation.parameterWithNa
 import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document
 import org.springframework.test.web.reactive.server.expectBody
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.reactive.function.BodyInserters
 import java.util.*
 
 internal class UserApiTest : ApiTest() {
 
-    @Transactional
     @Test
     fun `Verify delete User with authenticated ADMIN role works`() {
-        client.delete().uri("/api/users/{userId}", USER_FRED_UUID)
+        client.delete().uri("/api/users/{userId}", USER_TO_DELETE_UUID)
                 .addAuthHeader(ROLE_ADMIN)
                 .exchange()
                 .expectStatus().isNoContent

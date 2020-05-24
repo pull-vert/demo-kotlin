@@ -42,7 +42,6 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
 
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
-    implementation 'org.mongodb:mongodb-driver-sync'
     implementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
     implementation "io.netty:netty-tcnative-boringssl-static:$netty_tcnative_version" // this dependency is only required for Java 8, since java 9 ALPN is natively supported
     implementation "io.jsonwebtoken:jjwt-api:$jjwt_version"
