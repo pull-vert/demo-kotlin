@@ -29,8 +29,7 @@ compileTestKotlin {
 }
 
 repositories {
-    mavenCentral()
-    maven { url 'https://dl.bintray.com/michaelbull/maven' }
+    jcenter()
 }
 
 dependencies {
