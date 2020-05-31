@@ -13,15 +13,19 @@ class AuthenticationManager(private val jwtUtil: JWTUtil) : ReactiveAuthenticati
 
     override fun authenticate(authentication: Authentication): Mono<Authentication> {
         val authToken = authentication.credentials.toString()
-        val username = try { jwtUtil.getUsernameFromToken(authToken) } catch (e: Throwable) { null }
+        val username = try {
+            jwtUtil.getUsernameFromToken(authToken)
+        } catch (e: Throwable) {
+            null
+        }
 
-        if (null != username && jwtUtil.validateToken(authToken)) {
+        return if (null != username && jwtUtil.validateToken(authToken)) {
             val claims = jwtUtil.getAllClaimsFromToken(authToken)
             val roles = claims.get("authorities", List::class.java)
                     .map { authority -> Role.valueOf(authority as String) }
-            return UsernamePasswordAuthenticationToken(username, null, roles).toMono()
+            UsernamePasswordAuthenticationToken(username, null, roles).toMono()
         } else {
-            return Mono.empty()
+            Mono.empty()
         }
     }
 }

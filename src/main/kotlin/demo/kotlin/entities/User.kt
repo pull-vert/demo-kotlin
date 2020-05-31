@@ -12,7 +12,7 @@ data class User(
         private var authorities: MutableList<Role> = mutableListOf(Role.ROLE_USER), // Default Role : USER
         private var enabled: Boolean = false,
         private val id: String = UUID.randomUUID().toString()
-) : Entity(), UserDetails {
+) : Entity, UserDetails {
 
     // Persistable function
     @Id
