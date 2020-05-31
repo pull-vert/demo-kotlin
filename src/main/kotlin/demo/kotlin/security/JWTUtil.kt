@@ -1,7 +1,6 @@
 package demo.kotlin.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.github.michaelbull.logging.InlineLogger
 import io.jsonwebtoken.*
 import io.jsonwebtoken.jackson.io.JacksonDeserializer
 import io.jsonwebtoken.jackson.io.JacksonSerializer
@@ -9,8 +8,11 @@ import io.jsonwebtoken.security.SecurityException
 import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
 import io.jsonwebtoken.security.Keys
+import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+
+private val logger = KotlinLogging.logger {}
 
 @Component
 class JWTUtil(
@@ -18,8 +20,6 @@ class JWTUtil(
         @Value("\${jwt.expiration}") private val expirationTime: Long, //in second
         private val objectMapper: ObjectMapper
 ) {
-
-    private val logger = InlineLogger()
 
     private val jwtParser = Jwts.parserBuilder()
             .deserializeJsonWith(JacksonDeserializer(objectMapper))
