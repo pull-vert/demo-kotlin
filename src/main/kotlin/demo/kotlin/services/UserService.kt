@@ -6,9 +6,9 @@ import demo.kotlin.security.JWTUtil
 import demo.kotlin.web.UnauthorizedStatusException
 import demo.kotlin.web.dtos.AuthRequestDto
 import demo.kotlin.web.dtos.AuthResponseDto
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import reactor.kotlin.core.publisher.switchIfEmpty
 import reactor.kotlin.core.publisher.toMono
 
 @Service
@@ -16,7 +16,7 @@ class UserService(
         override val repository: UserRepository,
         private val jwtUtil: JWTUtil,
         private val passwordEncoder: PasswordEncoder
-) : IService<User> {
+) : IService<User>, ReactiveUserDetailsService {
 
     override fun save(entity: User) =
             entity.toMono()

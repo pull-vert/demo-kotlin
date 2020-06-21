@@ -1,22 +1,15 @@
 package demo.kotlin.entities
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
 
-@Document
 data class User(
         private var username: String,
         private var password: String,
         private var authorities: MutableList<Role> = mutableListOf(Role.ROLE_USER), // Default Role : USER
         private var enabled: Boolean = false,
-        private val id: String = UUID.randomUUID().toString()
+        override val id: UUID = UUID.randomUUID()
 ) : Entity, UserDetails {
-
-    // Persistable function
-    @Id
-    override fun getId() = id
 
     // UserDetails functions
     override fun getUsername() = this.username

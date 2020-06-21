@@ -84,8 +84,8 @@ bootJar {
     }
 }
 
-// execute ./gradlew wrapper then remove .gradle directory when version change
+// execute ./gradlew wrapper then delete .gradle directory when version change
 wrapper {
-    gradleVersion='6.4.1'
+    gradleVersion='6.5'
     distributionType=Wrapper.DistributionType.ALL
 }
