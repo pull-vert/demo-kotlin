@@ -10,5 +10,5 @@ import org.ufoss.kotysa.r2dbc.sqlClient
 class SpringDataConfig {
 
     @Bean
-    fun sqlClient(dbClient: DatabaseClient) = dbClient.sqlClient()
+    fun sqlClient(dbClient: DatabaseClient) = dbClient.sqlClient(tables)
 }
