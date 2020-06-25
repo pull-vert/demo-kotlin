@@ -7,8 +7,10 @@ import demo.kotlin.web.UnauthorizedStatusException
 import demo.kotlin.web.dtos.AuthRequestDto
 import demo.kotlin.web.dtos.AuthResponseDto
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 
 @Service
@@ -32,4 +34,8 @@ class UserService(
                             throw UnauthorizedStatusException()
                         }
                     }.switchIfEmpty { throw UnauthorizedStatusException() }
+
+    override fun findByUsername(username: String?): Mono<UserDetails> {
+        TODO("Not yet implemented")
+    }
 }
