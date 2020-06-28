@@ -1,6 +1,6 @@
 package demo.kotlin.web
 
-import demo.kotlin.COW_MARGUERITE_UUID
+import demo.kotlin.repositories.COW_MARGUERITE_UUID
 import demo.kotlin.web.dtos.CowGetDto
 import demo.kotlin.web.dtos.CowSaveDto
 import org.assertj.core.api.Assertions.assertThat
@@ -13,7 +13,7 @@ import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document
 import org.springframework.test.web.reactive.server.expectBody
 import org.springframework.test.web.reactive.server.expectBodyList
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 internal class CowApiTest : ApiTest() {
 
@@ -109,7 +109,7 @@ internal class CowApiTest : ApiTest() {
                                 val cow = exchangeResult.responseBody!!
                                 assertThat(cow.name).isEqualTo("Paquerette")
                                 assertThat(cow.lastCalvingDate).isNull()
-                                assertThat(cow.id).isNotEmpty()
+                                assertThat(cow.id).isNotNull()
                             }
                 }
     }
@@ -192,7 +192,7 @@ internal class CowApiTest : ApiTest() {
         val fields = ConstrainedFields(CowSaveDto::class.java)
 
         client.post().uri("/api/cows/")
-                .bodyValue(CowSaveDto("Cow", LocalDateTime.of(2016, 5, 28, 13, 30)))
+                .bodyValue(CowSaveDto("Cow", LocalDate.of(2016, 5, 28)))
                 .addAuthHeader()
                 .exchange()
                 .expectStatus().isCreated

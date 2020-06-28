@@ -2,8 +2,8 @@ package demo.kotlin.web.dtos
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import demo.kotlin.USER_FRED_UUID
 import demo.kotlin.entities.Role.ROLE_USER
+import demo.kotlin.repositories.USER_FRED_UUID
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
