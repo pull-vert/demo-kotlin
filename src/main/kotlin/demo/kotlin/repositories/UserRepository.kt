@@ -30,13 +30,11 @@ class UserRepository(override val sqlClient: ReactorSqlClient) : Repo<User>() {
                     .fetchFirst()
 
     override fun init() =
-            createTable()
-                    .then(arrayOf(fred, boss, userToDelete)
-                            .toFlux()
-                            .doOnNext { user -> logger.info { "saving user $user" } }
-                            .flatMap { user -> save(user) }
-                            .then()
-                    )
+            arrayOf(fred, boss, userToDelete)
+                    .toFlux()
+                    .doOnNext { user -> logger.info { "saving user $user" } }
+                    .flatMap { user -> save(user) }
+                    .then()
 }
 
 internal val USER_FRED_UUID = UUID.fromString("79e9eb45-2835-49c8-ad3b-c951b591bc7f")

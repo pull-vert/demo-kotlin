@@ -1,11 +1,27 @@
 package demo.kotlin.entities
 
 import org.springframework.security.core.GrantedAuthority
+import java.lang.IllegalArgumentException
 import java.util.*
 
-enum class Role(override val id: UUID = UUID.randomUUID()) : GrantedAuthority, Entity {
-    ROLE_USER, // fixme : use fixed UUID
-    ROLE_ADMIN;
+data class Role(
+        private val authority: String,
+        override val id: UUID = UUID.randomUUID()
+) : GrantedAuthority, Entity {
+    override fun getAuthority() = this.authority
 
-    override fun getAuthority() = this.name
+    companion object {
+        @JvmStatic
+        val ROLE_USER = Role("user")
+        @JvmStatic
+        val ROLE_ADMIN = Role("admin")
+
+        @JvmStatic
+        fun valueOf(authority: String) =
+                when(authority) {
+                    "user" -> ROLE_USER
+                    "admin" -> ROLE_ADMIN
+                    else -> throw IllegalArgumentException("$authority is incorrect")
+                }
+    }
 }

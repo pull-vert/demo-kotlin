@@ -31,14 +31,11 @@ class CowRepository(override val sqlClient: ReactorSqlClient) : Repo<Cow>() {
     override fun createTable() = createTableReified()
 
     override fun init() =
-            createTable()
-                    .then(deleteAll())
-                    .then(arrayOf(marguerite, laNoiraude)
-                            .toFlux()
-                            .doOnNext { cow -> logger.info { "saving cow $cow" } }
-                            .flatMap { cow -> save(cow) }
-                            .then()
-                    )
+            arrayOf(marguerite, laNoiraude)
+                    .toFlux()
+                    .doOnNext { cow -> logger.info { "saving cow $cow" } }
+                    .flatMap { cow -> save(cow) }
+                    .then()
 }
 
 internal val COW_MARGUERITE_UUID = UUID.fromString("e48ccc7e-c1b8-41b8-91f5-ab5528ab292b")

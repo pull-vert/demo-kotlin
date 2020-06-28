@@ -25,11 +25,9 @@ class RoleRepository(override val sqlClient: ReactorSqlClient) : Repo<Role>() {
     override fun createTable() = createTableReified()
 
     override fun init() =
-            createTable()
-                    .then(arrayOf(Role.ROLE_ADMIN, Role.ROLE_USER)
-                            .toFlux()
-                            .doOnNext { role -> logger.info { "saving role $role" } }
-                            .flatMap { role -> save(role) }
-                            .then()
-                    )
+            arrayOf(Role.ROLE_ADMIN, Role.ROLE_USER)
+                    .toFlux()
+                    .doOnNext { role -> logger.info { "saving role $role" } }
+                    .flatMap { role -> save(role) }
+                    .then()
 }

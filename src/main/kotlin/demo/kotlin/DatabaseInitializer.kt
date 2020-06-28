@@ -18,14 +18,23 @@ class DatabaseInitializer(
     override fun run(vararg args: String) {
         println("DatabaseInitializer start")
 
-        cowRepository.init()
+        // 1 : create tables (if not exists)
+        cowRepository.createTable()
+                .then(userRepository.createTable())
+                .then(roleRepository.createTable())
+                .then(userRoleRepository.createTable())
+
+                // 2 : delete all
+                .then(cowRepository.deleteAll())
+                .then(userRoleRepository.deleteAll())
+                .then(userRepository.deleteAll())
+                .then(roleRepository.deleteAll())
+
+                // 3 : insert test data
+                .then(cowRepository.init())
                 .then(userRepository.init())
                 .then(roleRepository.init())
                 .then(userRoleRepository.init())
                 .block()
-
-        println("cows size = " + cowRepository.findAll()
-                .collectList()
-                .block()!!.size)
     }
 }

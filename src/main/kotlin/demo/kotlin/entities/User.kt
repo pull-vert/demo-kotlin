@@ -7,5 +7,4 @@ data class User(
         var password: String,
         var enabled: Boolean = false,
         override val id: UUID = UUID.randomUUID()
-) : Entity {
-}
+) : Entity

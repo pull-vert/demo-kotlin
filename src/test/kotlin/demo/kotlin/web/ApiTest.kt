@@ -2,8 +2,8 @@ package demo.kotlin.web
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import demo.kotlin.entities.Role
-import demo.kotlin.entities.Role.ROLE_ADMIN
-import demo.kotlin.entities.Role.ROLE_USER
+import demo.kotlin.entities.Role.Companion.ROLE_ADMIN
+import demo.kotlin.entities.Role.Companion.ROLE_USER
 import demo.kotlin.security.JWTUtil
 import demo.kotlin.services.AuthenticatedUser
 import io.netty.handler.ssl.SslContextBuilder
@@ -29,6 +29,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.util.StringUtils
 import org.springframework.web.reactive.function.client.ExchangeStrategies
 import reactor.netty.http.client.HttpClient
+import java.lang.IllegalArgumentException
 
 internal typealias ServerResponseError = Map<String, Any>
 
@@ -75,9 +76,9 @@ internal abstract class ApiTest {
         val user = when (role) {
             ROLE_USER -> AuthenticatedUser("Fred", "password", mutableListOf(ROLE_USER), true)
             ROLE_ADMIN -> AuthenticatedUser("Boss", "secured_password", mutableListOf(ROLE_ADMIN), true)
+            else -> throw IllegalArgumentException()
         }
         val jwtToken = jwtUtil.generateToken(user)
-        println("generating jwt token : $jwtToken")
         return "Bearer $jwtToken"
     }
 

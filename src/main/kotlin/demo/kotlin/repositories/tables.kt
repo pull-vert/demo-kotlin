@@ -16,7 +16,7 @@ internal val tables = tables()
             }
             table<Role> {
                 column { it[Role::id].uuid() }.primaryKey()
-                column { it[Role::name].varchar() }
+                column { it[Role::getAuthority].varchar() }
             }
             table<UserRole> {
                 primaryKey(

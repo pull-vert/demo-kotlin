@@ -26,10 +26,10 @@ class UserService(
         private val passwordEncoder: PasswordEncoder
 ) : IService<User>, ReactiveUserDetailsService {
 
-    override fun save(entity: User) =
-            entity.toMono()
-                    .doOnNext { user -> user.password = passwordEncoder.encode(user.password) }
-                    .flatMap { user -> repository.save(user) }
+    override fun save(user: User): Mono<Void> {
+        user.password = passwordEncoder.encode(user.password)
+        return repository.save(user)
+    }
 
     fun auth(authRequestDto: AuthRequestDto) =
             findByUsername(authRequestDto.username)
