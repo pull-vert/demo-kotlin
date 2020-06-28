@@ -2,9 +2,9 @@ package demo.kotlin.services
 
 import demo.kotlin.entities.Entity
 import demo.kotlin.repositories.Repo
+import demo.kotlin.web.BadRequestStatusException
 import demo.kotlin.web.NotFoundStatusException
 import reactor.kotlin.core.publisher.switchIfEmpty
-import reactor.kotlin.core.publisher.toMono
 import java.util.*
 
 interface IService<T : Entity> {
@@ -12,9 +12,7 @@ interface IService<T : Entity> {
     val repository: Repo<T>
 
     fun findById(id: String) =
-            id.toMono()
-                    .map { uuid -> UUID.fromString(uuid) }
-                    .flatMap { uuid -> repository.findById(uuid) }
+            repository.findById(id.toUuid())
                     .switchIfEmpty { throw NotFoundStatusException() }
 
     fun findAll() = repository.findAll()
@@ -22,10 +20,15 @@ interface IService<T : Entity> {
     fun save(entity: T) = repository.save(entity)
 
     fun deleteById(id: String) =
-            id.toMono()
-                    .map { uuid -> UUID.fromString(uuid) }
-                    .flatMap { uuid -> repository.deleteById(uuid) }
+            repository.deleteById(id.toUuid())
                     .then()
 
     fun deleteAll() = repository.deleteAll()
+
+    private fun String.toUuid() =
+            try {
+                UUID.fromString(this)
+            } catch (e: Throwable) {
+                throw BadRequestStatusException(e.localizedMessage)
+            }
 }
