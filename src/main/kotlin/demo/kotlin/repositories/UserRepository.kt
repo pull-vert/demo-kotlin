@@ -4,7 +4,7 @@ import demo.kotlin.entities.User
 import mu.KotlinLogging
 import org.springframework.stereotype.Repository
 import org.ufoss.kotysa.r2dbc.ReactorSqlClient
-import reactor.kotlin.core.publisher.toFlux
+import reactor.core.publisher.Mono
 import java.util.*
 
 private val logger = KotlinLogging.logger {}
@@ -29,12 +29,9 @@ class UserRepository(override val sqlClient: ReactorSqlClient) : Repo<User>() {
                     .where { it[User::username] eq username }
                     .fetchFirst()
 
-    override fun init() =
-            arrayOf(fred, boss, userToDelete)
-                    .toFlux()
-                    .doOnNext { user -> logger.info { "saving user $user" } }
-                    .flatMap { user -> save(user) }
-                    .then()
+    override fun init(): Mono<Void> {
+        throw NotImplementedError()
+    }
 }
 
 internal val USER_FRED_UUID = UUID.fromString("79e9eb45-2835-49c8-ad3b-c951b591bc7f")

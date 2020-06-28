@@ -24,11 +24,11 @@ interface IService<T : Entity> {
                     .then()
 
     fun deleteAll() = repository.deleteAll()
-
-    private fun String.toUuid() =
-            try {
-                UUID.fromString(this)
-            } catch (e: Throwable) {
-                throw BadRequestStatusException(e.localizedMessage)
-            }
 }
+
+internal fun String.toUuid() =
+        try {
+            UUID.fromString(this)
+        } catch (e: Throwable) {
+            throw BadRequestStatusException(e.localizedMessage)
+        }

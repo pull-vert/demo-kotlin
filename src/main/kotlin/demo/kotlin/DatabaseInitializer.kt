@@ -4,6 +4,7 @@ import demo.kotlin.repositories.CowRepository
 import demo.kotlin.repositories.RoleRepository
 import demo.kotlin.repositories.UserRepository
 import demo.kotlin.repositories.UserRoleRepository
+import demo.kotlin.services.UserService
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Component
 
@@ -12,7 +13,8 @@ class DatabaseInitializer(
         private val cowRepository: CowRepository,
         private val userRepository: UserRepository,
         private val roleRepository: RoleRepository,
-        private val userRoleRepository: UserRoleRepository
+        private val userRoleRepository: UserRoleRepository,
+        private val userService: UserService
 ) : CommandLineRunner {
 
     override fun run(vararg args: String) {
@@ -32,7 +34,7 @@ class DatabaseInitializer(
 
                 // 3 : insert test data
                 .then(cowRepository.init())
-                .then(userRepository.init())
+                .then(userService.init())
                 .then(roleRepository.init())
                 .then(userRoleRepository.init())
                 .block()
