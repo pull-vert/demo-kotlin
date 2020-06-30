@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import demo.kotlin.entities.Role
 import demo.kotlin.entities.Role.Companion.ROLE_ADMIN
 import demo.kotlin.entities.Role.Companion.ROLE_USER
+import demo.kotlin.repositories.CowRepository
 import demo.kotlin.security.JWTUtil
 import demo.kotlin.services.AuthenticatedUser
 import io.netty.handler.ssl.SslContextBuilder
@@ -43,15 +44,18 @@ internal abstract class ApiTest {
 
     protected lateinit var client: WebTestClient
     private lateinit var jwtUtil: JWTUtil
+    protected lateinit var cowRepository: CowRepository
 
     @BeforeAll
     fun before(
             @Autowired jwtUtil: JWTUtil,
             @Autowired restDocumentation: RestDocumentationContextProvider,
             @Autowired objectMapper: ObjectMapper,
+            @Autowired cowRepository: CowRepository,
             @LocalServerPort port: Int
     ) {
         this.jwtUtil = jwtUtil
+        this.cowRepository = cowRepository
         val sslContext = SslContextBuilder.forClient()
                 .trustManager(InsecureTrustManagerFactory.INSTANCE).build()
         val httpClient = HttpClient.create().secure { t -> t.sslContext(sslContext) }

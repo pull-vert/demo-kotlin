@@ -25,12 +25,12 @@ class UserRoleRepository(private val sqlClient: ReactorSqlClient) {
                     .fetchAll()
 
     fun init() =
-            arrayOf(fredUser, bossAdmin)
+            arrayOf(
+                    UserRole(USER_FRED_UUID, Role.ROLE_USER.id),
+                    UserRole(USER_BOSS_UUID, Role.ROLE_ADMIN.id)
+            )
                     .toFlux()
                     .doOnNext { userRole -> logger.info { "saving userRole $userRole" } }
                     .flatMap { userRole -> save(userRole) }
                     .then()
 }
-
-internal val fredUser = UserRole(USER_FRED_UUID, Role.ROLE_USER.id)
-internal val bossAdmin = UserRole(USER_BOSS_UUID, Role.ROLE_ADMIN.id)

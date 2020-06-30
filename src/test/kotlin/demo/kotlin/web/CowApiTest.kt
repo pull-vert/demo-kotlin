@@ -110,6 +110,9 @@ internal class CowApiTest : ApiTest() {
                                 assertThat(cow.name).isEqualTo("Paquerette")
                                 assertThat(cow.lastCalvingDate).isNull()
                                 assertThat(cow.id).isNotNull()
+                                // must delete this cow
+                                cowRepository.deleteById(cow.id)
+                                        .block()
                             }
                 }
     }
@@ -205,6 +208,10 @@ internal class CowApiTest : ApiTest() {
                         responseHeaders(
                                 headerWithName("Location").description("GET URI for accessing created Cow by its ID")
                         )))
+        // must delete this cow
+        cowRepository.findByName("Cow")
+                .flatMap { cow -> cowRepository.deleteById(cow.id) }
+                .block()
     }
 
     /**

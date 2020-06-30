@@ -2,9 +2,6 @@ package demo.kotlin.services
 
 import demo.kotlin.entities.User
 import demo.kotlin.repositories.*
-import demo.kotlin.repositories.boss
-import demo.kotlin.repositories.fred
-import demo.kotlin.repositories.userToDelete
 import demo.kotlin.security.JWTUtil
 import demo.kotlin.web.UnauthorizedStatusException
 import demo.kotlin.web.dtos.AuthRequestDto
@@ -55,7 +52,11 @@ class UserService(
                     .flatMap(::authenticatedUserByUser)
 
     fun init() =
-            arrayOf(fred, boss, userToDelete)
+            arrayOf(
+                    User("Fred", "password", id = USER_FRED_UUID, enabled = true),
+                    User("Boss", "secured_password", id = USER_BOSS_UUID, enabled = true),
+                    User("to_delete", "to_delete", id = USER_TO_DELETE_UUID)
+            )
                     .toFlux()
                     .doOnNext { user -> logger.info { "saving user $user" } }
                     .flatMap { user -> save(user) }

@@ -31,7 +31,10 @@ class CowRepository(override val sqlClient: ReactorSqlClient) : Repo<Cow>() {
     override fun createTable() = createTableReified()
 
     override fun init() =
-            arrayOf(marguerite, laNoiraude)
+            arrayOf(
+                    Cow("Marguerite", LocalDate.of(2017, 9, 28), id = COW_MARGUERITE_UUID),
+                    Cow("La Noiraude")
+            )
                     .toFlux()
                     .doOnNext { cow -> logger.info { "saving cow $cow" } }
                     .flatMap { cow -> save(cow) }
@@ -39,5 +42,3 @@ class CowRepository(override val sqlClient: ReactorSqlClient) : Repo<Cow>() {
 }
 
 internal val COW_MARGUERITE_UUID = UUID.fromString("e48ccc7e-c1b8-41b8-91f5-ab5528ab292b")
-internal val marguerite = Cow("Marguerite", LocalDate.of(2017, 9, 28), id = COW_MARGUERITE_UUID)
-internal val laNoiraude = Cow("La Noiraude")
