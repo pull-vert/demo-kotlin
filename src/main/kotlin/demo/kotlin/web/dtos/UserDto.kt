@@ -1,6 +1,7 @@
 package demo.kotlin.web.dtos
 
 import demo.kotlin.entities.Role
+import java.util.*
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Size
 
@@ -16,7 +17,7 @@ data class UserSaveDto(
 
 data class UserGetDto(
         val username: String,
-        val authorities: List<Role>,
+        val authorities: Collection<Role>,
         val enabled: Boolean,
-        val id: String
+        val id: UUID
 ) : IDto

@@ -52,9 +52,13 @@ keytool -genkey -keyalg RSA -alias selfsigned -keystore keystore.jks -storepass 
 * Note : all fields for Request DTO must be nullable to prevent Jackson deserialize error if param is null. Bean validation will take care of returning a nice error to API client
 * Add constraints documentation in Spring Restdocs based on Bean validation annotations
 
+### [step 7 : R2DBC + Kotysa](https://github.com/pull-vert/demo-kotlin/tree/step7-r2dbc-with-kotysa)
+* inspired by : [spring with r2dbc](https://spring.io/guides/gs/accessing-data-r2dbc/)
+* uses [Kotysa SqlClient](https://github.com/ufoss-org/kotysa)
+
 ## Kotlin with Functional bean registration
 ### [step 2.1 : functional bean registration](https://github.com/pull-vert/demo-kotlin/tree/step2.1-functional-bean-registration)
-inspired by : [kofu-reactive-mongodb-sample](https://github.com/spring-projects/spring-fu/tree/master/samples/kofu-reactive-mongodb)
+inspired by : [kofu-reactive-mongodb-sample](https://github.com/spring-projects-experimental/spring-fu/tree/master/samples/kofu-reactive-mongodb)
 * No more Spring annotations
 * Configuration.kt : declare functional bean registration
 

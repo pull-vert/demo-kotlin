@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 import reactor.kotlin.test.test
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 @ExtendWith(MockitoExtension::class)
 class CowServiceTest {
@@ -28,7 +28,7 @@ class CowServiceTest {
 
     @Test
     fun `Verify findBySlug return one value`() {
-        val cow = Cow("Marguerite", LocalDateTime.of(2017, 9, 28, 13, 30))
+        val cow = Cow("Marguerite", LocalDate.of(2017, 9, 28))
         val name = "Marguerite"
         given(repository.findByName(name))
                 .willReturn(cow.toMono())

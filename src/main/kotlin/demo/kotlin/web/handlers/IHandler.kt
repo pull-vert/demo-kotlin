@@ -45,5 +45,5 @@ inline fun <T : Entity, GET_DTO : IDto, reified SAVE_DTO : IDto> IHandler<T, GET
         req.bodyToMono<SAVE_DTO>()
                 .doOnNext(::callValidator)
                 .map(::saveDtoToEntity)
-                .flatMap { entity -> service.save(entity) }
+                .flatMap { entity -> service.save(entity).thenReturn(entity) }
                 .flatMap { entity -> created(URI.create("$findByIdUrl/${entity.id}")).build() }

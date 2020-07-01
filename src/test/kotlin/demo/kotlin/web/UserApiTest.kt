@@ -1,9 +1,8 @@
 package demo.kotlin.web
 
-import demo.kotlin.USER_BOSS_UUID
-import demo.kotlin.USER_FRED_UUID
-import demo.kotlin.USER_TO_DELETE_UUID
-import demo.kotlin.entities.Role.ROLE_ADMIN
+import demo.kotlin.entities.Role.Companion.ROLE_ADMIN
+import demo.kotlin.repositories.USER_BOSS_UUID
+import demo.kotlin.repositories.USER_TO_DELETE_UUID
 import demo.kotlin.web.dtos.UserGetDto
 import demo.kotlin.web.dtos.UserSaveDto
 import org.assertj.core.api.Assertions.assertThat
@@ -110,7 +109,7 @@ internal class UserApiTest : ApiTest() {
                             .consumeWith { exchangeResult ->
                                 val user = exchangeResult.responseBody!!
                                 assertThat(user.username).isEqualTo("William")
-                                assertThat(user.id).isNotEmpty()
+                                assertThat(user.id).isNotNull()
                                 assertThat(user.enabled).isFalse()
                             }
                 }
