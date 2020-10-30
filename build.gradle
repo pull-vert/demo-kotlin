@@ -12,7 +12,7 @@ println("Using Gradle version: $gradle.gradleVersion")
 println("Using Kotlin compiler version: $KotlinCompilerVersion.VERSION")
 
 group = 'demo.kotlin'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 
 compileKotlin {
     kotlinOptions {
@@ -30,6 +30,7 @@ compileTestKotlin {
 
 repositories {
     jcenter()
+    maven { url 'https://repo.spring.io/milestone' }
 }
 
 dependencies {
@@ -37,12 +38,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-
     implementation 'org.springframework.data:spring-data-r2dbc'
-    implementation "org.ufoss.kotysa:kotysa-spring-data-r2dbc:$kotysa_version"
+    implementation "org.ufoss.kotysa:kotysa-spring-r2dbc:$kotysa_version"
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
-    implementation "io.netty:netty-tcnative-boringssl-static:$netty_tcnative_version" // this dependency is only required for Java 8, since java 9 ALPN is natively supported
+    // this dependency is only required for Java 8, since java 9 ALPN is natively supported
+    implementation 'io.netty:netty-tcnative-boringssl-static'
     implementation "io.jsonwebtoken:jjwt-api:$jjwt_version"
     implementation "io.jsonwebtoken:jjwt-jackson:$jjwt_version"
     implementation "io.github.microutils:kotlin-logging:$kotlin_logging_version"
@@ -84,8 +84,9 @@ bootJar {
     }
 }
 
-// execute ./gradlew wrapper then delete .gradle directory when version change
+// when version changes :
+// -> execute ./gradlew wrapper, then delete .gradle directory, then execute ./gradlew wrapper again
 wrapper {
-    gradleVersion='6.5.1'
+    gradleVersion='6.7'
     distributionType=Wrapper.DistributionType.ALL
 }
