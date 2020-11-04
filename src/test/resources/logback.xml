@@ -8,7 +8,7 @@
     </appender>
 
     <logger name="demo.kotlin" level="info"/>
-    <logger name="org.mongodb.driver.protocol" level="debug"/>
+    <logger name="org.ufoss.kotysa" level="DEBUG"/>
 
     <root level="error">
         <appender-ref ref="console"/>

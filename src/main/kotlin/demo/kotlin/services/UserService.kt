@@ -6,16 +6,16 @@ import demo.kotlin.security.JWTUtil
 import demo.kotlin.web.UnauthorizedStatusException
 import demo.kotlin.web.dtos.AuthRequestDto
 import demo.kotlin.web.dtos.AuthResponseDto
-import mu.KotlinLogging
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.ufoss.kolog.Logger
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.switchIfEmpty
 import reactor.kotlin.core.publisher.toFlux
 
-private val logger = KotlinLogging.logger {}
+private val logger = Logger.of<UserService>()
 
 @Service
 class UserService(

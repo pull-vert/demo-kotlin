@@ -8,11 +8,11 @@ import io.jsonwebtoken.security.SecurityException
 import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
 import io.jsonwebtoken.security.Keys
-import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import org.ufoss.kolog.Logger
 
-private val logger = KotlinLogging.logger {}
+private val logger = Logger.of<JWTUtil>()
 
 @Component
 class JWTUtil(

@@ -2,13 +2,13 @@ package demo.kotlin.repositories
 
 import demo.kotlin.entities.Role
 import demo.kotlin.entities.UserRole
-import mu.KotlinLogging
 import org.springframework.stereotype.Repository
+import org.ufoss.kolog.Logger
 import org.ufoss.kotysa.r2dbc.ReactorSqlClient
 import reactor.kotlin.core.publisher.toFlux
 import java.util.*
 
-private val logger = KotlinLogging.logger {}
+private val logger = Logger.of<UserRoleRepository>()
 
 @Repository
 class UserRoleRepository(private val sqlClient: ReactorSqlClient) {

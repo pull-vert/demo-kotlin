@@ -1,14 +1,14 @@
 package demo.kotlin.repositories
 
 import demo.kotlin.entities.Cow
-import mu.KotlinLogging
 import org.springframework.stereotype.Repository
+import org.ufoss.kolog.Logger
 import org.ufoss.kotysa.r2dbc.ReactorSqlClient
 import reactor.kotlin.core.publisher.toFlux
 import java.time.LocalDate
 import java.util.*
 
-private val logger = KotlinLogging.logger {}
+private val logger = Logger.of<CowRepository>()
 
 @Repository
 class CowRepository(override val sqlClient: ReactorSqlClient) : Repo<Cow>() {
