@@ -24,7 +24,7 @@ class UserRepository(override val sqlClient: ReactorSqlClient) : Repo<User>() {
     fun findByUsername(username: String) =
             sqlClient.select<User>()
                     .where { it[User::username] eq username }
-                    .fetchFirst()
+                    .fetchOne()
 
     override fun init(): Mono<Void> {
         throw NotImplementedError()

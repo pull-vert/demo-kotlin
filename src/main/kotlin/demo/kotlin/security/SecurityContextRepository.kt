@@ -1,6 +1,7 @@
 package demo.kotlin.security
 
 import org.springframework.http.HttpHeaders
+import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContext
 import org.springframework.security.core.context.SecurityContextImpl
@@ -10,7 +11,7 @@ import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
 
 @Component
-class SecurityContextRepository(private val authManager: AuthenticationManager) : ServerSecurityContextRepository {
+class SecurityContextRepository(private val authManager: ReactiveAuthenticationManager) : ServerSecurityContextRepository {
 
     override fun save(swe: ServerWebExchange, sc: SecurityContext) = throw UnsupportedOperationException("Not supported yet.")
 
@@ -18,12 +19,12 @@ class SecurityContextRepository(private val authManager: AuthenticationManager) 
         val request = swe.request
         val authHeader = request.headers.getFirst(HttpHeaders.AUTHORIZATION)
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+        return if (authHeader != null && authHeader.startsWith("Bearer ")) {
             val authToken = authHeader.substring(7)
             val auth = UsernamePasswordAuthenticationToken(authToken, authToken)
-            return authManager.authenticate(auth).map { authentication -> SecurityContextImpl(authentication) }
+            authManager.authenticate(auth).map { authentication -> SecurityContextImpl(authentication) }
         } else {
-            return Mono.empty()
+            Mono.empty()
         }
     }
 }

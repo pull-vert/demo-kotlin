@@ -24,7 +24,8 @@ class SecurityConfig(
 
     @Bean
     fun securitygWebFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain =
-            http.csrf().disable()
+            http
+                    .csrf().disable()
                     .formLogin().disable()
                     .httpBasic().disable()
                     .csrf().disable()
@@ -33,7 +34,7 @@ class SecurityConfig(
                     .securityContextRepository(securityContextRepository)
                     .authorizeExchange()
                     .pathMatchers(HttpMethod.OPTIONS).permitAll()
-                    .pathMatchers(HttpMethod.POST,"/auth", "/api/users").permitAll()
+                    .pathMatchers(HttpMethod.POST, "/auth", "/api/users").permitAll()
                     .pathMatchers(HttpMethod.DELETE, "/api/users/{userId}").hasRole("ADMIN")
                     .pathMatchers("/api/**").hasRole("USER")
                     .anyExchange().authenticated()
