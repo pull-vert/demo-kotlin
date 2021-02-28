@@ -2,45 +2,33 @@ package demo.kotlin.repositories
 
 import demo.kotlin.entities.Entity
 import org.ufoss.kotysa.r2dbc.ReactorSqlClient
-import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.util.*
 
-abstract class Repo<T : Entity> {
+interface Repo<T : Entity, U : ENTITY<T>> {
 
-    internal abstract val sqlClient: ReactorSqlClient
+    val sqlClient: ReactorSqlClient
+    val table: U
 
-    fun save(entity: T) = sqlClient.insert(entity)
+    fun save(entity: T) = sqlClient insert entity
 
-    abstract fun findAll(): Flux<T>
+    fun findAll() = sqlClient selectAllFrom table
 
-    abstract fun findById(id: UUID): Mono<T>
+    fun findById(id: UUID) =
+            (sqlClient selectFrom table
+                    where table.id eq id
+                    ).fetchOne()
 
-    abstract fun init(): Mono<Void>
+    fun countAll() = sqlClient selectCountAllFrom table
 
-    abstract fun count(): Mono<Long>
+    fun deleteAll() = sqlClient deleteAllFrom table
 
-    abstract fun deleteAll(): Mono<Int>
+    fun deleteById(id: UUID) =
+            (sqlClient deleteFrom table
+                    where table.id eq id
+                    ).execute()
 
-    abstract fun deleteById(id: UUID): Mono<Int>
+    fun createTable() = sqlClient createTable table
 
-    abstract fun createTable(): Mono<Void>
+    fun init(): Mono<Void>
 }
-
-internal inline fun <reified T : Entity> Repo<T>.findAllReified() = sqlClient.selectAll<T>()
-
-internal inline fun <reified T : Entity> Repo<T>.countReified() = sqlClient.countAll<T>()
-
-internal inline fun <reified T : Entity> Repo<T>.findByIdReified(id: UUID) =
-        sqlClient.select<T>()
-                .where { it[Entity::id] eq id }
-                .fetchOne()
-
-internal inline fun <reified T : Entity> Repo<T>.deleteAllReified() = sqlClient.deleteAllFromTable<T>()
-
-internal inline fun <reified T : Entity> Repo<T>.deleteByIdReified(id: UUID) =
-        sqlClient.deleteFromTable<T>()
-                .where { it[Entity::id] eq id }
-                .execute()
-
-internal inline fun <reified T : Entity> Repo<T>.createTableReified() = sqlClient.createTable<T>()

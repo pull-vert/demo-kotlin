@@ -24,7 +24,7 @@ class UserService(
         private val userRoleRepository: UserRoleRepository,
         private val jwtUtil: JWTUtil,
         private val passwordEncoder: PasswordEncoder
-) : IService<User>, ReactiveUserDetailsService {
+) : IService<User, USER>, ReactiveUserDetailsService {
 
     override fun save(entity: User): Mono<Void> {
         entity.password = passwordEncoder.encode(entity.password)

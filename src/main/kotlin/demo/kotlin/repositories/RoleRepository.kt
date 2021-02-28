@@ -5,24 +5,13 @@ import org.springframework.stereotype.Repository
 import org.ufoss.kolog.Logger
 import org.ufoss.kotysa.r2dbc.ReactorSqlClient
 import reactor.kotlin.core.publisher.toFlux
-import java.util.*
 
 private val logger = Logger.of<RoleRepository>()
 
 @Repository
-class RoleRepository(override val sqlClient: ReactorSqlClient) : Repo<Role>() {
+class RoleRepository(override val sqlClient: ReactorSqlClient) : Repo<Role, ROLE> {
 
-    override fun findAll() = findAllReified()
-
-    override fun findById(id: UUID) = findByIdReified(id)
-
-    override fun count() = countReified()
-
-    override fun deleteAll() = deleteAllReified()
-
-    override fun deleteById(id: UUID) = deleteByIdReified(id)
-
-    override fun createTable() = createTableReified()
+    override val table = ROLE
 
     override fun init() =
             arrayOf(Role.ROLE_ADMIN, Role.ROLE_USER)

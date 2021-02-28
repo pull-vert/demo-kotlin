@@ -1,6 +1,7 @@
 package demo.kotlin.web.handlers
 
 import demo.kotlin.entities.Cow
+import demo.kotlin.repositories.COW
 import demo.kotlin.services.CowService
 import demo.kotlin.web.dtos.CowGetDto
 import demo.kotlin.web.dtos.CowSaveDto
@@ -14,7 +15,7 @@ import javax.validation.Validator
 class CowHandler(
         override val service: CowService,
         override val validator: Validator
-) : IHandler<Cow, CowGetDto, CowSaveDto> {
+) : IHandler<Cow, COW, CowGetDto, CowSaveDto> {
 
     override fun entityToGetDto(entity: Cow) = CowGetDto(entity.name, entity.lastCalvingDate, entity.id)
 

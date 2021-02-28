@@ -13,16 +13,17 @@ private val logger = Logger.of<UserRoleRepository>()
 @Repository
 class UserRoleRepository(private val sqlClient: ReactorSqlClient) {
 
-    fun deleteAll() = sqlClient.deleteAllFromTable<UserRole>()
+    fun deleteAll() = sqlClient deleteAllFrom USER_ROLE
 
-    fun save(entity: UserRole) = sqlClient.insert(entity)
+    fun save(entity: UserRole) = sqlClient insert entity
 
-    fun createTable() = sqlClient.createTable<UserRole>()
+    fun createTable() = sqlClient createTable USER_ROLE
 
     fun findRoleIdsByUserId(userId: UUID) =
-            sqlClient.select { it[UserRole::roleId] }
-                    .where { it[UserRole::userId] eq userId }
-                    .fetchAll()
+            (sqlClient select USER_ROLE.roleId
+                    from USER_ROLE
+                    where USER_ROLE.userId eq userId
+                    ).fetchAll()
 
     fun init() =
             arrayOf(

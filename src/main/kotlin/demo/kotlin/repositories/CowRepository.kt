@@ -11,24 +11,14 @@ import java.util.*
 private val logger = Logger.of<CowRepository>()
 
 @Repository
-class CowRepository(override val sqlClient: ReactorSqlClient) : Repo<Cow>() {
+class CowRepository(override val sqlClient: ReactorSqlClient) : Repo<Cow, COW> {
+
+    override val table = COW
 
     fun findByName(name: String) =
-            sqlClient.select<Cow>()
-                    .where { it[Cow::name] eq name }
-                    .fetchFirst()
-
-    override fun findAll() = findAllReified()
-
-    override fun findById(id: UUID) = findByIdReified(id)
-
-    override fun count() = countReified()
-
-    override fun deleteAll() = deleteAllReified()
-
-    override fun deleteById(id: UUID) = deleteByIdReified(id)
-
-    override fun createTable() = createTableReified()
+            (sqlClient selectFrom COW
+                    where COW.name eq name
+                    ).fetchFirst()
 
     override fun init() =
             arrayOf(

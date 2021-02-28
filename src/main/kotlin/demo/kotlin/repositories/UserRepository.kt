@@ -7,24 +7,14 @@ import reactor.core.publisher.Mono
 import java.util.*
 
 @Repository
-class UserRepository(override val sqlClient: ReactorSqlClient) : Repo<User>() {
+class UserRepository(override val sqlClient: ReactorSqlClient) : Repo<User, USER> {
 
-    override fun findAll() = findAllReified()
-
-    override fun findById(id: UUID) = findByIdReified(id)
-
-    override fun count() = countReified()
-
-    override fun deleteAll() = deleteAllReified()
-
-    override fun deleteById(id: UUID) = deleteByIdReified(id)
-
-    override fun createTable() = createTableReified()
+    override val table = USER
 
     fun findByUsername(username: String) =
-            sqlClient.select<User>()
-                    .where { it[User::username] eq username }
-                    .fetchOne()
+            (sqlClient selectFrom USER
+                    where USER.username eq username
+                    ).fetchOne()
 
     override fun init(): Mono<Void> {
         throw NotImplementedError()
