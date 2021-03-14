@@ -30,7 +30,6 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.util.StringUtils
 import org.springframework.web.reactive.function.client.ExchangeStrategies
 import reactor.netty.http.client.HttpClient
-import java.lang.IllegalArgumentException
 
 internal typealias ServerResponseError = Map<String, Any>
 
@@ -91,8 +90,9 @@ internal abstract class ApiTest {
      * a jwt token HTTP Header -> Authorization : Bearer JwtToken
      * Can be used only in Tests extending [ApiTest]
      */
-    protected fun WebTestClient.RequestHeadersSpec<*>.addAuthHeader(role: Role = ROLE_USER) =
-            this.header(HttpHeaders.AUTHORIZATION, buildAuthHeader(role))
+    protected fun WebTestClient.RequestHeadersSpec<*>.addAuthHeader(
+            role: Role = ROLE_USER
+    ): WebTestClient.RequestHeadersSpec<*> = this.header(HttpHeaders.AUTHORIZATION, buildAuthHeader(role))
 
     protected class ConstrainedFields internal constructor(input: Class<*>) {
 
