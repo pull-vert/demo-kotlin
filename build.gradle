@@ -5,7 +5,7 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.spring'
     id 'io.spring.dependency-management'
     id 'org.springframework.boot'
-    id 'org.asciidoctor.convert'
+    id 'org.asciidoctor.jvm.convert'
 }
 
 println("Using Gradle version: $gradle.gradleVersion")
@@ -28,8 +28,12 @@ compileTestKotlin {
     }
 }
 
+configurations {
+    asciidoctorExt
+}
+
 repositories {
-    jcenter()
+    mavenCentral()
     maven { url 'https://repo.spring.io/milestone' }
 }
 
@@ -52,7 +56,7 @@ dependencies {
     runtimeOnly 'io.r2dbc:r2dbc-h2'
     runtimeOnly "io.jsonwebtoken:jjwt-impl:$jjwt_version"
 
-    asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -74,6 +78,7 @@ test {
 }
 
 asciidoctor {
+    configurations 'asciidoctorExt'
     inputs.dir snippetsDir
     dependsOn test
 }
@@ -88,6 +93,6 @@ bootJar {
 // when version changes :
 // -> execute ./gradlew wrapper, then delete .gradle directory, then execute ./gradlew wrapper again
 wrapper {
-    gradleVersion='6.8.3'
+    gradleVersion='7.0.2'
     distributionType=Wrapper.DistributionType.ALL
 }

@@ -28,7 +28,7 @@ interface Repo<T : Entity, U : ENTITY<T>> {
                     where table.id eq id
                     ).execute()
 
-    fun createTable() = sqlClient createTable table
+    fun createTable() = sqlClient createTableIfNotExists table
 
     fun init(): Mono<Void>
 }

@@ -17,7 +17,7 @@ class UserRoleRepository(private val sqlClient: ReactorSqlClient) {
 
     fun save(entity: UserRole) = sqlClient insert entity
 
-    fun createTable() = sqlClient createTable USER_ROLE
+    fun createTable() = sqlClient createTableIfNotExists USER_ROLE
 
     fun findRoleIdsByUserId(userId: UUID) =
             (sqlClient select USER_ROLE.roleId
