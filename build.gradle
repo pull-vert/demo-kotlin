@@ -10,6 +10,7 @@ plugins {
 
 println("Using Gradle version: $gradle.gradleVersion")
 println("Using Kotlin compiler version: $KotlinCompilerVersion.VERSION")
+println("Using Java compiler version: ${JavaVersion.current()}")
 
 group = 'demo.kotlin'
 version = '0.0.1'
