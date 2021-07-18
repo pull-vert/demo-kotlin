@@ -18,14 +18,12 @@ version = '0.0.1'
 compileKotlin {
     kotlinOptions {
         freeCompilerArgs = ["-Xjsr305=strict"]
-        jvmTarget = "1.8"
     }
 }
 
 compileTestKotlin {
     kotlinOptions {
         freeCompilerArgs = ["-Xjsr305=strict"]
-        jvmTarget = "1.8"
     }
 }
 
@@ -94,6 +92,6 @@ bootJar {
 // when version changes :
 // -> execute ./gradlew wrapper, then delete .gradle directory, then execute ./gradlew wrapper again
 wrapper {
-    gradleVersion='7.0.2'
+    gradleVersion='7.1.1'
     distributionType=Wrapper.DistributionType.ALL
 }
