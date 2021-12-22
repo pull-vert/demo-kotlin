@@ -23,14 +23,12 @@ internal class AuthenticationApiTest(@Autowired private val jwtUtil: JWTUtil) : 
                 .consumeWith { exchangeResult ->
                     val authResponse = exchangeResult.responseBody!!
                     assertThat(authResponse.token)
-                            .isNotEmpty()
+                            .isNotEmpty
                             .matches { token -> jwtUtil.validateToken(token) }
-                            .satisfies {token ->
-                                val claims = jwtUtil.getAllClaimsFromToken(token)
-                                val roles = claims.get("authorities", List::class.java)
-                                        .map { authority -> Role.valueOf(authority as String) }
-                                assertThat(roles).containsOnly(Role.ROLE_USER)
-                            }
+                    val claims = jwtUtil.getAllClaimsFromToken(authResponse.token)
+                    val roles = claims.get("authorities", List::class.java)
+                        .map { authority -> Role.valueOf(authority as String) }
+                    assertThat(roles).containsOnly(Role.ROLE_USER)
                 }
     }
 
