@@ -1,10 +1,4 @@
 pluginManagement {
-    repositories {
-        // for spring milestones
-        maven { url "https://repo.spring.io/milestone" }
-        // for GA versions
-        gradlePluginPortal()
-    }
     plugins {
         id 'org.jetbrains.kotlin.jvm' version "$kotlin_plugin_version"
         id 'org.jetbrains.kotlin.plugin.spring' version "$kotlin_plugin_version"
