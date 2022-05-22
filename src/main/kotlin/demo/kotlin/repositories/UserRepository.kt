@@ -2,7 +2,7 @@ package demo.kotlin.repositories
 
 import demo.kotlin.entities.User
 import org.springframework.stereotype.Repository
-import org.ufoss.kotysa.r2dbc.ReactorSqlClient
+import org.ufoss.kotysa.spring.r2dbc.ReactorSqlClient
 import reactor.core.publisher.Mono
 import java.util.*
 

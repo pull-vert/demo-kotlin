@@ -18,7 +18,7 @@ object ROLE : H2Table<Role>(), ENTITY<Role> {
     val authority = varchar(Role::getAuthority)
 }
 
-object USER : H2Table<User>(), ENTITY<User> {
+object USER : H2Table<User>("Users"), ENTITY<User> {
     override val id = uuid(User::id)
             .primaryKey()
     val username = varchar(User::username)
