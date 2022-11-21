@@ -15,7 +15,7 @@ class CowRepositoryTest(@Autowired private val cowRepository: CowRepository) {
                 .test()
                 .consumeNextWith { cow ->
                     assertThat(cow.name).isEqualTo("Marguerite")
-                    assertThat(cow.lastCalvingDate).isNotNull()
+                    assertThat(cow.lastCalvingDate).isNotNull
                     assertThat(cow.id).isNotNull()
                 }.verifyComplete()
     }

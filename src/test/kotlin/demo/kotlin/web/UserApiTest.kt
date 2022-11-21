@@ -109,7 +109,7 @@ internal class UserApiTest : ApiTest() {
                             .consumeWith { exchangeResult ->
                                 val user = exchangeResult.responseBody!!
                                 assertThat(user.username).isEqualTo("William")
-                                assertThat(user.id).isNotNull()
+                                assertThat(user.id).isNotNull
                                 assertThat(user.enabled).isFalse()
                             }
                 }

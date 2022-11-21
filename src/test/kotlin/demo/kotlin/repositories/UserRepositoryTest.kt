@@ -15,7 +15,7 @@ class UserRepositoryTest(@Autowired private val userRepository: UserRepository) 
                 .test()
                 .consumeNextWith { user ->
                     assertThat(user.username).isEqualTo("Fred")
-                    assertThat(user.password).isNotNull()
+                    assertThat(user.password).isNotNull
                     assertThat(user.id).isNotNull()
                 }.verifyComplete()
     }

@@ -3,7 +3,7 @@ package demo.kotlin.repositories
 import demo.kotlin.entities.Cow
 import org.springframework.stereotype.Repository
 import org.ufoss.kolog.Logger
-import org.ufoss.kotysa.spring.r2dbc.ReactorSqlClient
+import org.ufoss.kotysa.ReactorSqlClient
 import reactor.kotlin.core.publisher.toFlux
 import java.time.LocalDate
 import java.util.*

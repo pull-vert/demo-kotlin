@@ -69,7 +69,7 @@ internal class CowApiTest : ApiTest() {
                 .consumeWith { exchangeResult ->
                     val cow = exchangeResult.responseBody!!
                     assertThat(cow.name).isEqualTo("Marguerite")
-                    assertThat(cow.lastCalvingDate).isNotNull()
+                    assertThat(cow.lastCalvingDate).isNotNull
                     assertThat(cow.id).isEqualTo(COW_MARGUERITE_UUID)
                 }
     }

@@ -4,7 +4,7 @@ import demo.kotlin.entities.Role
 import demo.kotlin.entities.UserRole
 import org.springframework.stereotype.Repository
 import org.ufoss.kolog.Logger
-import org.ufoss.kotysa.spring.r2dbc.ReactorSqlClient
+import org.ufoss.kotysa.ReactorSqlClient
 import reactor.kotlin.core.publisher.toFlux
 import java.util.*
 

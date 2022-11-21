@@ -21,12 +21,6 @@ compileKotlin {
     }
 }
 
-compileTestKotlin {
-    kotlinOptions {
-        freeCompilerArgs = ["-Xjsr305=strict"]
-    }
-}
-
 configurations {
     asciidoctorExt
 }
