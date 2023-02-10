@@ -15,6 +15,12 @@ println("Using Java compiler version: ${JavaVersion.current()}")
 group = 'demo.kotlin'
 version = '0.0.1'
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
+
 compileKotlin {
     kotlinOptions {
         freeCompilerArgs = ["-Xjsr305=strict"]
