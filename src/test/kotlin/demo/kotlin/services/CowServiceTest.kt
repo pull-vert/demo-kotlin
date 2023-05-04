@@ -21,7 +21,7 @@ class CowServiceTest {
     private lateinit var repository: CowRepository
 
     @BeforeEach
-    private fun before(@Mock repository: CowRepository) {
+    fun before(@Mock repository: CowRepository) {
         this.repository = repository
         this.cowService = CowService(repository)
     }

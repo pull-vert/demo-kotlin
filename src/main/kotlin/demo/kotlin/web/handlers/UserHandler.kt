@@ -9,7 +9,7 @@ import org.springframework.core.ParameterizedTypeReference
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
-import javax.validation.Validator
+import jakarta.validation.Validator
 
 @Component
 class UserHandler(

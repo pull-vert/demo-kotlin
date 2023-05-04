@@ -16,7 +16,7 @@ class JWTUtilTest {
     private lateinit var jwtUtil: JWTUtil
 
     @BeforeAll
-    private fun beforeAll() {
+    fun beforeAll() {
         jwtUtil = JWTUtil("mysecretisjustlongenoughforhmac512-01234567890123456789012345678", 1000L, ObjectMapper())
     }
 

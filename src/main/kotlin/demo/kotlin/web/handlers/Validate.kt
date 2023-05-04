@@ -1,7 +1,7 @@
 package demo.kotlin.web.handlers
 
 import demo.kotlin.web.BadRequestStatusException
-import javax.validation.Validator
+import jakarta.validation.Validator
 
 interface Validate {
     val validator: Validator

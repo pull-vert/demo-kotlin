@@ -17,7 +17,7 @@ version = '0.0.1'
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 
@@ -44,8 +44,6 @@ dependencies {
     implementation 'org.springframework.data:spring-data-r2dbc'
     implementation "org.ufoss.kotysa:kotysa-spring-r2dbc:$kotysa_version"
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
-    // this dependency is only required for Java 8, since java 9 ALPN is natively supported
-    implementation 'io.netty:netty-tcnative-boringssl-static'
     implementation "io.jsonwebtoken:jjwt-api:$jjwt_version"
     implementation "io.jsonwebtoken:jjwt-jackson:$jjwt_version"
     implementation "org.ufoss.kolog:kolog:$kolog_version"
@@ -92,6 +90,6 @@ bootJar {
 // when version changes :
 // -> execute ./gradlew wrapper, then delete .gradle directory, then execute ./gradlew wrapper again
 wrapper {
-    gradleVersion='7.6'
+    gradleVersion='8.1.1'
     distributionType=Wrapper.DistributionType.ALL
 }

@@ -1,6 +1,6 @@
 package demo.kotlin.web.dtos
 
-import javax.validation.constraints.NotEmpty
+import jakarta.validation.constraints.NotEmpty
 
 data class AuthRequestDto(
         @field:NotEmpty

@@ -2,8 +2,8 @@ package demo.kotlin.web.dtos
 
 import java.time.LocalDate
 import java.util.*
-import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.Size
+import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.Size
 
 data class CowSaveDto(
         @field:NotEmpty
