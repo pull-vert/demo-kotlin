@@ -11,8 +11,8 @@ import org.springframework.security.web.server.SecurityWebFilterChain
 @Configuration
 @EnableWebFluxSecurity
 class SecurityConfig(
-        private val authenticationManager: AuthenticationManager,
-        private val securityContextRepository: SecurityContextRepository
+    private val authenticationManager: AuthenticationManager,
+    private val securityContextRepository: SecurityContextRepository
 ) {
 
     /**
@@ -24,19 +24,20 @@ class SecurityConfig(
 
     @Bean
     fun securityWebFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain =
-            http
-                    .csrf().disable()
-                    .formLogin().disable()
-                    .httpBasic().disable()
-                    .csrf().disable()
-                    .logout().disable()
-                    .authenticationManager(authenticationManager)
-                    .securityContextRepository(securityContextRepository)
-                    .authorizeExchange()
+        http
+            .csrf { csrf -> csrf.disable() }
+            .formLogin { formLogin -> formLogin.disable() }
+            .httpBasic { httpBasic -> httpBasic.disable() }
+            .logout { logout -> logout.disable() }
+            .authenticationManager(authenticationManager)
+            .securityContextRepository(securityContextRepository)
+            .authorizeExchange { authorizeExchange ->
+                authorizeExchange
                     .pathMatchers(HttpMethod.OPTIONS).permitAll()
                     .pathMatchers(HttpMethod.POST, "/auth/", "/api/users/").permitAll()
                     .pathMatchers(HttpMethod.DELETE, "/api/users/{userId}").hasRole("ADMIN")
                     .pathMatchers("/api/**").hasRole("USER")
                     .anyExchange().authenticated()
-                    .and().build()
+            }
+            .build()
 }
